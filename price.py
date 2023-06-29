@@ -69,7 +69,7 @@ def fetch_price_data_u_preview_page(postnumber=0):
         postnumber = lastpricepostnumber
         session = requests
 
-    retry_limit = args.retry
+    retry_limit = args.retry if args.retry else 10  # default to ten
     retry_delay = 5
 
     for retry_count in range(retry_limit):
