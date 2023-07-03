@@ -12,6 +12,13 @@
 - https://t.me/s/nerkhedollarr
 - https://t.me/s/dolaretehran20
 
+## TODO List
+
+- [ ] graphical interface for rate change
+- [ ] handle proxy servers
+- [ ] refactor modes algorithm
+- [ ] have a nice terminal UI for displaying rates and stuff
+
 ## آموزش استفاده
 
 ```
@@ -35,4 +42,5 @@ options:
   --save-results   Saves results in json format [optional]
 
 happy checking the currency :)
+``
 ```

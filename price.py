@@ -6,11 +6,17 @@ from bs4 import BeautifulSoup
 from parse import args
 from requests import Session
 import logging
+import os
 
 logger = logging.getLogger("dolarlog")
 
 session = Session()
 lastpricepostnumber = 0
+os.environ["HTTPS_PROXY"] = "http://localhost:20171"
+os.environ["HTTP_PROXY"] = "http://localhost:20171"
+
+timeout = args.timeout if args.timeout else 10
+retry_limit = args.retry if args.retry else 10  # default to ten
 
 
 class priceInfo:
@@ -42,10 +48,13 @@ class priceInfo:
         return groups
 
 
-def is_connection_stable(server, delay):
+def is_connection_stable(server):
     try:
         logger.info("testing")
-        requests.head("https://" + server, timeout=delay)
+        requests.head(
+            "https://" + server,
+            timeout=timeout,
+        )
         return True
     except:
         return False
@@ -69,9 +78,6 @@ def fetch_price_data_u_preview_page(postnumber=0):
         postnumber = lastpricepostnumber
         session = requests
 
-    retry_limit = args.retry if args.retry else 10  # default to ten
-    retry_delay = 5
-
     for retry_count in range(retry_limit):
         try:
             # TODO: handle network resets and minor error that might cause the whole connection
@@ -80,16 +86,16 @@ def fetch_price_data_u_preview_page(postnumber=0):
             response = session.post(
                 f"https://t.me/s/{args.channel_id}?before={str(postnumber)}",
                 headers=headers,
-                timeout=10,
+                timeout=timeout,
             ).text
             break
         except requests.exceptions.RequestException as e:
-            # logger.error(e)
+            logger.error(e)
             logger.info("failed to connect")
             # Continuously check the connection stability
-            if not is_connection_stable("t.me", delay=retry_delay):
+            if not is_connection_stable("t.me"):
                 logger.critical("Connection is not stable. Retrying in 5 seconds...")
-                if retry_count + 1 >= args.retry:
+                if retry_count + 1 >= retry_limit:
                     exit(1)
 
     # time.sleep(5)

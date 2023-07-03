@@ -19,6 +19,12 @@ parser.add_argument("-live", action="store_true", help="Run in live mode")
 
 parser.add_argument("-count", type=int, help="Run counter with the specified number")
 
+parser.add_argument(
+    "--timeout",
+    type=int,
+    help="timeout for connection to t.me"
+
+)
 
 parser.add_argument(
     "--channel-id",
