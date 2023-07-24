@@ -14,11 +14,6 @@
 
 ## TODO List
 
-- [ ] graphical interface for rate change
-- [ ] handle proxy servers
-- [ ] refactor modes algorithm
-- [ ] have a nice terminal UI for displaying rates and stuff
-
 ## آموزش استفاده
 
 ```

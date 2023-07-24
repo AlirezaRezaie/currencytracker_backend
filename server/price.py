@@ -15,8 +15,15 @@ lastpricepostnumber = 0
 os.environ["HTTPS_PROXY"] = "http://localhost:20171"
 os.environ["HTTP_PROXY"] = "http://localhost:20171"
 
+known_channels = ["dollar_tehran3bze", "nerkhedollarr"]
+
 timeout = args.timeout if args.timeout else 10
 retry_limit = args.retry if args.retry else 10  # default to ten
+channel_id = args.channel_id if args.channel_id else known_channels[1]
+
+
+# TODO : the price code gets channel from args.channel_id
+# change it to also operate with server incoming data of id
 
 
 class priceInfo:
@@ -74,7 +81,7 @@ def fetch_price_data_u_preview_page(postnumber=0):
         "Connection": "keep-alive",
         "Content-Length": "0",
     }
-    if args.count:
+    if args.mode == "count":
         postnumber = lastpricepostnumber
         session = requests
 
@@ -84,10 +91,11 @@ def fetch_price_data_u_preview_page(postnumber=0):
             # to close
             logger.info("connecting...")
             response = session.post(
-                f"https://t.me/s/{args.channel_id}?before={str(postnumber)}",
+                f"https://t.me/s/{channel_id}?before={str(postnumber)}",
                 headers=headers,
                 timeout=timeout,
             ).text
+
             break
         except requests.exceptions.RequestException as e:
             logger.error(e)
@@ -102,6 +110,7 @@ def fetch_price_data_u_preview_page(postnumber=0):
     # Decompress the compressed data (gzip encoding)
     # doesnt actually decodes gzip to html but it works for now
     evaluated_data = ast.literal_eval(response)
+
     html_data = evaluated_data.replace("\\", "")
     soup = BeautifulSoup(html_data, "html.parser")
 

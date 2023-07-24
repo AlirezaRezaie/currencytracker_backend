@@ -21,10 +21,6 @@ if args.verbose:
     logger.setLevel(logging.INFO)
 
 
-if not args.channel_id:
-    # set the default
-    args.channel_id = "dollar_tehran3bze"
-
 if args.use_api:
     logger.info("--use-api option enabled")
 
@@ -33,10 +29,10 @@ if args.save_results:
 
 # handle keyboard interrupt
 try:
-    if args.live:
+    if args.mode == "live":
         logger.info("Running in live mode")
         run_live()
-    elif args.count:
+    elif args.mode == "count":
         run_counter(args.count)
     else:
         parser.print_help()

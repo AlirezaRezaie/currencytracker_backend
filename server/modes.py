@@ -17,10 +17,10 @@ def get_index(list, item):
 
 
 # TODO : write an extra method which both modes can share
-def run_live():
+def run_live(emmitter_callback, change_queue):
     # calls when new price received
-    def update_price_printer(latest_price):
-        print(latest_price.text + "\07")
+    # def update_price_printer(latest_price):
+    #    print(latest_price.text + "\07")
 
     prev_fetch = []
     last_price = None
@@ -38,8 +38,11 @@ def run_live():
 
             for price in new_prices:
                 if not price == last_price:
-                    update_price_printer(price)
+                    did_change = True
+                    emmitter_callback(price.get_data())
                     last_price = price
+                else:
+                    did_change = False
 
         else:
             logging.error("something went wrong")
@@ -69,3 +72,9 @@ def run_counter(count):
 
     for price in full_prices:
         print(price.get_data())
+
+    server_ret = list(map(lambda price: price.get_data(), full_prices))
+    print(server_ret)
+    print("hello")
+    # TODO: to the price class add a method that gives json formatted data
+    return server_ret

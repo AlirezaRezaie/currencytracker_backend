@@ -14,17 +14,14 @@ parser = argparse.ArgumentParser(
 parser.add_argument(
     "-v", "--verbose", dest="verbose", action="store_true", help="Enable verbose mode"
 )
+# Add main modes as subparsers
+subparsers = parser.add_subparsers(dest="mode", help="Main modes")
+count_parser = subparsers.add_parser("count", help="Count mode")
+live_parser = subparsers.add_parser("live", help="Live mode")
 
-parser.add_argument("-live", action="store_true", help="Run in live mode")
+parser.add_argument("--gui", action="store_true", help="turn on gui mode")
 
-parser.add_argument("-count", type=int, help="Run counter with the specified number")
-
-parser.add_argument(
-    "--timeout",
-    type=int,
-    help="timeout for connection to t.me"
-
-)
+parser.add_argument("--timeout", type=int, help="timeout for connection to t.me")
 
 parser.add_argument(
     "--channel-id",
