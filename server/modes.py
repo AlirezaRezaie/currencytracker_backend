@@ -17,20 +17,16 @@ def get_index(list, item):
 
 
 # TODO : write an extra method which both modes can share
-def run_live(emmitter_callback, change_queue):
-    # calls when new price received
-    # def update_price_printer(latest_price):
-    #    print(latest_price.text + "\07")
-
+def run_live(emmitter_callback):
+    server_mode = "live"
     prev_fetch = []
     last_price = None
     while True:
-        curr_fetch = extract_prices(fetch_func())
+        curr_fetch = extract_prices(fetch_func(server_mode=server_mode))
         if not prev_fetch:
             prev_fetch = curr_fetch
 
         # determine last message
-
         last_price_in_curr_fetch = get_index(curr_fetch, prev_fetch[-1])
 
         if last_price_in_curr_fetch:
@@ -38,11 +34,8 @@ def run_live(emmitter_callback, change_queue):
 
             for price in new_prices:
                 if not price == last_price:
-                    did_change = True
                     emmitter_callback(price.get_data())
                     last_price = price
-                else:
-                    did_change = False
 
         else:
             logging.error("something went wrong")
@@ -55,11 +48,15 @@ def run_live(emmitter_callback, change_queue):
         prev_fetch = curr_fetch
 
 
-def run_counter(count):
+def run_counter(
+    count,
+):
+    priceInfo.lastpricepostnumber = 0
+    server_mode = "count"
     full_prices = []
-
     while True:
-        msgs = extract_prices(fetch_func())
+        msgs = extract_prices(fetch_func(server_mode=server_mode))
+
         for msg in msgs:
             full_prices.insert(0, msg)
             logger.info(f"accumulated {len(full_prices)} prices")
@@ -70,11 +67,7 @@ def run_counter(count):
         if count == len(full_prices):
             break
 
-    for price in full_prices:
-        print(price.get_data())
-
     server_ret = list(map(lambda price: price.get_data(), full_prices))
-    print(server_ret)
-    print("hello")
+
     # TODO: to the price class add a method that gives json formatted data
     return server_ret

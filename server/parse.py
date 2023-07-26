@@ -19,8 +19,6 @@ subparsers = parser.add_subparsers(dest="mode", help="Main modes")
 count_parser = subparsers.add_parser("count", help="Count mode")
 live_parser = subparsers.add_parser("live", help="Live mode")
 
-parser.add_argument("--gui", action="store_true", help="turn on gui mode")
-
 parser.add_argument("--timeout", type=int, help="timeout for connection to t.me")
 
 parser.add_argument(

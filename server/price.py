@@ -8,10 +8,10 @@ from requests import Session
 import logging
 import os
 
+
 logger = logging.getLogger("dolarlog")
 
 session = Session()
-lastpricepostnumber = 0
 os.environ["HTTPS_PROXY"] = "http://localhost:20171"
 os.environ["HTTP_PROXY"] = "http://localhost:20171"
 
@@ -19,14 +19,21 @@ known_channels = ["dollar_tehran3bze", "nerkhedollarr"]
 
 timeout = args.timeout if args.timeout else 10
 retry_limit = args.retry if args.retry else 10  # default to ten
-channel_id = args.channel_id if args.channel_id else known_channels[1]
+channel_id = args.channel_id if args.channel_id else known_channels[0]
 
 
 # TODO : the price code gets channel from args.channel_id
 # change it to also operate with server incoming data of id
 
+# TODO : probably need to add this feature that prevents from the host blocking our
+# ip because of request flood
+# we need to connect and then disconnect to the host or switch proxy
+
 
 class priceInfo:
+    lastpricepostnumber = 0
+    lastprice = None
+
     def __init__(self, parsed, fulltext, posttime, postnumber) -> None:
         action, price, exchtype = parsed
         self.price = price
@@ -71,8 +78,8 @@ def fetch_price_data_u_tg_api(apikey=""):
     raise NotImplementedError
 
 
-def fetch_price_data_u_preview_page(postnumber=0):
-    global session, lastpricepostnumber
+def fetch_price_data_u_preview_page(server_mode=None, postnumber=0):
+    global session
     headers = {
         "Accept": "text/javascript",
         "X-Requested-With": "XMLHttpRequest",
@@ -81,8 +88,9 @@ def fetch_price_data_u_preview_page(postnumber=0):
         "Connection": "keep-alive",
         "Content-Length": "0",
     }
-    if args.mode == "count":
-        postnumber = lastpricepostnumber
+    mode = args.mode if args.mode else server_mode
+    if mode == "count":
+        postnumber = priceInfo.lastpricepostnumber
         session = requests
 
     for retry_count in range(retry_limit):
@@ -98,6 +106,7 @@ def fetch_price_data_u_preview_page(postnumber=0):
 
             break
         except requests.exceptions.RequestException as e:
+            # TODO : change this retry method to also fit the server
             logger.error(e)
             logger.info("failed to connect")
             # Continuously check the connection stability
@@ -106,11 +115,9 @@ def fetch_price_data_u_preview_page(postnumber=0):
                 if retry_count + 1 >= retry_limit:
                     exit(1)
 
-    # time.sleep(5)
     # Decompress the compressed data (gzip encoding)
     # doesnt actually decodes gzip to html but it works for now
     evaluated_data = ast.literal_eval(response)
-
     html_data = evaluated_data.replace("\\", "")
     soup = BeautifulSoup(html_data, "html.parser")
 
@@ -132,7 +139,6 @@ def fetch_price_data_u_preview_page(postnumber=0):
                 },
             )["data-post"].split("/")[1]
             msg_info = msg.find("time", {"class": "time"}).get_text()
-
             tg_message_obj["text"] = msg_text
             tg_message_obj["number"] = msg_number
             tg_message_obj["info"] = msg_info
@@ -141,7 +147,9 @@ def fetch_price_data_u_preview_page(postnumber=0):
         except Exception as e:
             logger.debug("is not desired format")
 
-    lastpricepostnumber = messages[0]["number"]
+    if mode == "count":
+        priceInfo.lastpricepostnumber = messages[0]["number"]
+
     return messages
 
 
@@ -164,5 +172,4 @@ def extract_prices(messages, count=10):
                 break
         else:
             logger.debug(f"{price['text']} is not a price message")
-
     return list(reversed(prices))
