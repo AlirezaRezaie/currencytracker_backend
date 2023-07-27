@@ -1,33 +1,37 @@
 import sys
-import queue
-import multiprocessing
-from PyQt5.QtCore import Qt, QThread, pyqtSignal
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel
-import atexit
+import threading
+import asyncio
+import websockets
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QVBoxLayout, QWidget
+from PyQt5.QtCore import Qt, pyqtSignal, QObject
 
 
-# queue handler listens for data on queue on
-# a seperate thread forever and sets it to label
-class QueueListener(QThread):
-    # this signal is connected to main app update text method
-    update_signal = pyqtSignal(str)
+class DataUpdater(QObject):
+    data_received = pyqtSignal(str)
 
-    def __init__(self, queue):
-        super().__init__()
-        self.queue = queue
 
-    def run(self):
+async def websocket_task(data_updater):
+    uri = "ws://localhost:8000/live"
+    async with websockets.connect(uri) as websocket:
         while True:
-            if not self.queue.empty():
-                item = self.queue.get()
-                self.update_signal.emit(item)
+            data = await websocket.recv()
+            # Process the received data
+            print("Received:", data)
+            # Emit the signal with the received data
+            data_updater.data_received.emit(data)
 
 
-class MyApp(QWidget):
-    def __init__(self, queue):
+def start_websocket_thread(data_updater):
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(websocket_task(data_updater))
+
+
+class MainWindow(QMainWindow):
+    def __init__(self):
         super().__init__()
-        self.queue = queue
-        self.setWindowTitle("Queue Listener App")
+        self.setWindowTitle("WebSocket Example")
+        self.setGeometry(100, 100, 400, 200)
         layout = QVBoxLayout()
 
         self.label = QLabel()
@@ -41,34 +45,34 @@ class MyApp(QWidget):
 
         self.setLayout(layout)
         self.show()
+        layout.addWidget(self.label)
 
-    def update_text(self, text):
-        self.label.setText(text)
+        central_widget = QWidget()
+        central_widget.setLayout(layout)
+        self.setCentralWidget(central_widget)
+
+        # Create a DataUpdater instance and connect its signal to update the UI
+        self.data_updater = DataUpdater()
+        self.data_updater.data_received.connect(self.update_ui)
+
+        # Start the WebSocket thread when the main window is shown
+        self.websocket_thread = threading.Thread(
+            target=start_websocket_thread, args=(self.data_updater,)
+        )
+        self.websocket_thread.start()
+
+    def update_ui(self, data):
+        # Update the UI with the received data
+        self.label.setText("Received: " + data)
+
+    def closeEvent(self, event):
+        # Clean up the WebSocket thread before closing the application
+        self.websocket_thread.join()
+        event.accept()
 
 
-def cleanup_subprocess(process):
-    if process.is_alive():
-        process.terminate()
-        process.join()
-
-
-def qapp_proc(queue):
-    app = QApplication([])
-    window = MyApp(queue)
-    window.setFixedSize(800, 500)  # Set the width and height in pixels
-
-    listener = QueueListener(queue)
-    listener.update_signal.connect(window.update_text)
-    listener.start()
-
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
     sys.exit(app.exec_())
-
-
-def init_gui():
-    queue_obj = multiprocessing.Queue()
-    process = multiprocessing.Process(target=qapp_proc, args=(queue_obj,))
-    atexit.register(cleanup_subprocess, process)
-
-    process.start()
-
-    return queue_obj, process
