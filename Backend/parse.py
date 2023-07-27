@@ -16,7 +16,12 @@ parser.add_argument(
 )
 # Add main modes as subparsers
 subparsers = parser.add_subparsers(dest="mode", help="Main modes")
+
 count_parser = subparsers.add_parser("count", help="Count mode")
+count_parser.add_argument(
+    metavar="COUNT", dest="count", type=int, help="An integer argument for count mode"
+)
+
 live_parser = subparsers.add_parser("live", help="Live mode")
 
 parser.add_argument("--timeout", type=int, help="timeout for connection to t.me")
@@ -29,9 +34,16 @@ parser.add_argument(
 )
 
 parser.add_argument(
+    "--proxy",
+    type=str,
+    metavar="PROXY",
+    help="set the http proxy [optional]",
+)
+
+parser.add_argument(
     "--retry",
     type=int,
-    metavar="TIMES",
+    metavar="REPEAT",
     help="times to retry the connection before exiting program (for slow networks default:5 ) [optional]",
 )
 parser.add_argument(

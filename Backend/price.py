@@ -8,18 +8,28 @@ from requests import Session
 import logging
 import os
 
-
 logger = logging.getLogger("dolarlog")
 
 session = Session()
-os.environ["HTTPS_PROXY"] = "http://localhost:20171"
-os.environ["HTTP_PROXY"] = "http://localhost:20171"
+
+http_proxy = "http://localhost:20171" if not args.proxy else args.proxy
+
+os.environ["HTTPS_PROXY"] = http_proxy
+os.environ["HTTP_PROXY"] = http_proxy
+
+try:
+    check_proxy = requests.get("https://example.com")
+    print("proxy is working")
+except requests.exceptions.ProxyError:
+    print(f"proxy {http_proxy} is not working")
+    exit(0)
+
 
 known_channels = ["dollar_tehran3bze", "nerkhedollarr"]
 
 timeout = args.timeout if args.timeout else 10
 retry_limit = args.retry if args.retry else 10  # default to ten
-channel_id = args.channel_id if args.channel_id else known_channels[0]
+channel_id = args.channel_id if args.channel_id else known_channels[1]
 
 
 # TODO : the price code gets channel from args.channel_id
