@@ -33,7 +33,9 @@ try:
         logger.info("Running in live mode")
         run_live(lambda price: print(price))
     elif args.mode == "count":
-        run_counter(args.count)
+        prices = run_counter(args.count)
+        for price in prices:
+            print(price)
     else:
         parser.print_help()
 except KeyboardInterrupt:
