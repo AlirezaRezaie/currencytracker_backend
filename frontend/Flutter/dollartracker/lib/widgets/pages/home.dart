@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -15,10 +16,12 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
+    String host = dotenv.env['SERVER_HOST'] ?? 'localhost';
     super.initState();
     // Replace 'ws://your_websocket_url' with your actual WebSocket server URL.
-    channel = IOWebSocketChannel.connect('ws://192.168.1.6:8000/live');
+    channel = IOWebSocketChannel.connect('ws://$host:8000/live');
     channel.stream.listen((data) {
+      print(data);
       setState(() {
         receivedData = data;
       });
