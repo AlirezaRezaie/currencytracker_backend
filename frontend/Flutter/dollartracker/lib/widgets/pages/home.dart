@@ -19,7 +19,7 @@ class _HomeState extends State<Home> {
     String host = dotenv.env['SERVER_HOST'] ?? 'localhost';
     super.initState();
     // Replace 'ws://your_websocket_url' with your actual WebSocket server URL.
-    channel = IOWebSocketChannel.connect('ws://$host:8000/live');
+    channel = IOWebSocketChannel.connect(host);
     channel.stream.listen((data) {
       print(data);
       setState(() {
