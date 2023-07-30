@@ -30,7 +30,7 @@ for proxy in proxy_list:
 
         check_proxy = requests.get(
             "https://t.me",
-            timeout=5,
+            timeout=10,
         )
         print("Internet is working")
         break

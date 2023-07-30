@@ -5,8 +5,16 @@ import threading
 import queue
 from price import priceInfo
 import os
+from pydantic import BaseModel, conint
+
 
 app = FastAPI()
+
+
+class Item(BaseModel):
+    value: conint(ge=10)
+
+
 change_queue = queue.Queue()
 connected_clients = set()
 
@@ -18,6 +26,7 @@ async def send_data_to_clients(new_data):
 
 def price_callback(price):
     priceInfo.lastprice = price
+    print(price)
     asyncio.run(send_data_to_clients(price))
 
 
@@ -35,8 +44,8 @@ async def websocket_endpoint(websocket: WebSocket):
 
 
 @app.get("/counter")
-async def get_live_counter(count: int) -> str:
-    return str(run_counter(count))
+async def get_live_counter(count: Item) -> str:
+    return str(run_counter(count.value))
 
 
 @app.on_event("startup")

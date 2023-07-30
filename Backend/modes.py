@@ -68,6 +68,7 @@ def run_counter(
             break
 
     server_ret = list(map(lambda price: price.get_data(), full_prices))
-
+    for i in server_ret:
+        print(i)
     # TODO: to the price class add a method that gives json formatted data
     return server_ret
