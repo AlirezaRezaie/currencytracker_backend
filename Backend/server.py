@@ -4,6 +4,7 @@ from modes import run_counter, run_live
 import threading
 import queue
 from price import priceInfo
+import os
 
 app = FastAPI()
 change_queue = queue.Queue()
@@ -47,4 +48,9 @@ async def startup_event():
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=os.getenv("PORT", default=5000),
+        log_level="info",
+    )
