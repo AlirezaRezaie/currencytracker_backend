@@ -12,21 +12,32 @@ logger = logging.getLogger("dolarlog")
 
 session = Session()
 
-try:
-    print("checking the internet connection wait for 10 seconds maximum...")
-    check_proxy = requests.get("https://t.me", timeout=5)
-    print("internet is working")
-except:
-    print(f"you need to connect vpn or proxy (setting up custome proxy...)")
-    if args.proxy:
-        print(f"using custom {args.proxy}")
-        http_proxy = "http://localhost:20171" if args.proxy == "default" else args.proxy
+proxy_list = ["no proxy", args.proxy, "http://localhost:20171"]
 
-        os.environ["HTTPS_PROXY"] = http_proxy
-        os.environ["HTTP_PROXY"] = http_proxy
-    else:
-        print("you didnt set the --proxy argument so no dollar price for you :(")
-        exit()
+for proxy in proxy_list:
+    try:
+        if proxy and not proxy == "no proxy":
+            os.environ["HTTPS_PROXY"] = proxy
+            os.environ["HTTP_PROXY"] = proxy
+        elif not proxy:
+            print(
+                "You didn't set the --proxy argument. Choosing a custom proxy for you ❤️"
+            )
+            raise
+        print(
+            f"Checking internet connection with {proxy} (Please wait for a maximum of 10 seconds...)"
+        )
+
+        check_proxy = requests.get(
+            "https://t.me",
+            timeout=5,
+        )
+        print("Internet is working")
+        break
+    except:
+        print(
+            f"Failed connecting 😢 (Picking{' another' if proxy_list.index(proxy) > 0 else ''} proxy...)"
+        )
 
 
 known_channels = ["dollar_tehran3bze", "nerkhedollarr"]
