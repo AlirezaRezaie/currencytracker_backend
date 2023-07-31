@@ -142,7 +142,11 @@ def fetch_price_data_u_preview_page(server_mode=None, postnumber=0):
 
     # Decompress the compressed data (gzip encoding)
     # doesnt actually decodes gzip to html but it works for now
-    evaluated_data = ast.literal_eval(response)
+    try:
+        evaluated_data = ast.literal_eval(response)
+    except:
+        evaluated_data = response
+        print("parser error critical!!!!!!!!!!!!1")
     html_data = evaluated_data.replace("\\", "")
     soup = BeautifulSoup(html_data, "html.parser")
 
