@@ -63,7 +63,7 @@ class priceInfo:
         action, price, exchtype = parsed
         self.price = price
         self.action = action
-        self.action = exchtype
+        self.exchtype = exchtype
         # TODO: it gives UTC turn it into iran local time
         self.posttime = posttime
         self.text = fulltext
@@ -77,6 +77,14 @@ class priceInfo:
 
     def get_data(self):
         return (self.text, self.posttime, self.postnumber)
+
+    def get_json_data(self):
+        json = {}
+        json["action"] = self.action
+        json["price"] = self.price
+        json["exchtype"] = self.exchtype
+        json["posttime"] = self.posttime
+        return json
 
     @staticmethod
     def parse_price_info(price_text) -> tuple:

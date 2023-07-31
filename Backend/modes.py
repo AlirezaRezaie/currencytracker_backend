@@ -34,7 +34,7 @@ def run_live(emmitter_callback):
 
             for price in new_prices:
                 if not price == last_price:
-                    emmitter_callback(price.get_data())
+                    emmitter_callback(price)
                     last_price = price
 
         else:

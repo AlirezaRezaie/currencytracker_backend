@@ -31,7 +31,7 @@ if args.save_results:
 try:
     if args.mode == "live":
         logger.info("Running in live mode")
-        run_live(lambda price: print(price))
+        run_live(lambda price: print(price.get_json_data()))
     elif args.mode == "count":
         prices = run_counter(args.count)
         for price in prices:
