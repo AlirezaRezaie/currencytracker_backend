@@ -22,30 +22,34 @@ def run_live(emmitter_callback):
     prev_fetch = []
     last_price = None
     while True:
-        curr_fetch = extract_prices(fetch_func(server_mode=server_mode))
-        if not prev_fetch:
+        try:
+            curr_fetch = extract_prices(fetch_func(server_mode=server_mode))
+            if not prev_fetch:
+                prev_fetch = curr_fetch
+
+            # determine last message
+            last_price_in_curr_fetch = get_index(curr_fetch, prev_fetch[-1])
+
+            if last_price_in_curr_fetch:
+                new_prices = curr_fetch[last_price_in_curr_fetch:]
+
+                for price in new_prices:
+                    if not price == last_price:
+                        emmitter_callback(price)
+                        last_price = price
+
+            else:
+                logging.error("something went wrong")
+
+            """
+            if "پایان معاملات" in last[-1].text:
+                print("deals closed good night")
+                break
+            """
             prev_fetch = curr_fetch
 
-        # determine last message
-        last_price_in_curr_fetch = get_index(curr_fetch, prev_fetch[-1])
-
-        if last_price_in_curr_fetch:
-            new_prices = curr_fetch[last_price_in_curr_fetch:]
-
-            for price in new_prices:
-                if not price == last_price:
-                    emmitter_callback(price)
-                    last_price = price
-
-        else:
-            logging.error("something went wrong")
-
-        """
-        if "پایان معاملات" in last[-1].text:
-            print("deals closed good night")
-            break
-        """
-        prev_fetch = curr_fetch
+        except Exception as e:
+            print("run live mode error:", e)
 
 
 def run_counter(
