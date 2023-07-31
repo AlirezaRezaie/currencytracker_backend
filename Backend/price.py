@@ -44,7 +44,7 @@ known_channels = ["dollar_tehran3bze", "nerkhedollarr"]
 
 timeout = args.timeout if args.timeout else 10
 retry_limit = args.retry if args.retry else 10  # default to ten
-channel_id = args.channel_id if args.channel_id else known_channels[0]
+channel_id = args.channel_id if args.channel_id else known_channels[1]
 
 
 # TODO : the price code gets channel from args.channel_id
