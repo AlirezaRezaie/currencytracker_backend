@@ -24,7 +24,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     String host = dotenv.env['SERVER_HOST'] ?? 'localhost';
     super.initState();
     // Replace 'ws://your_websocket_url' with your actual WebSocket server URL.
-    _connectToWebSocket(host);
+    _connectToWebSocket("$host/live/dollar_tehran3bze");
 
     // Initialize the animation controller
     _controller = AnimationController(
@@ -125,33 +125,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       );
                     },
                   ),
-                  isConnecting
-                      ? Text(
-                          "Connecting...",
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        )
-                      : SizedBox(),
-                  errorMessage.isNotEmpty
-                      ? Text(
-                          errorMessage,
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      : SizedBox(),
                 ],
               ),
             ),
           ),
         ),
         Container(
-          child: const Column(
+          child: Column(
             children: [
               Text(
-                "Hell",
+                isConnecting ? "connecting.." : "connected",
                 style: TextStyle(color: Colors.amber),
               )
             ],
