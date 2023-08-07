@@ -21,7 +21,7 @@ async def send_data_to_clients(new_data, channel):
 
 def price_callback(price, channel):
     priceInfo.channels[channel]["last_price"] = price
-
+    print(price)
     asyncio.run(send_data_to_clients(price, channel))
 
 
