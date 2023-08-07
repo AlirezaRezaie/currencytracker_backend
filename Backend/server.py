@@ -6,35 +6,35 @@ from price import priceInfo
 import os
 import json
 
+from network import network_stability_check
+
 app = FastAPI()
 
-
-connected_clients = set()
-
-
-async def send_data_to_clients(new_data):
-    for client in connected_clients:
-        await client.send_text(json.dumps(new_data.get_json_data()))
+clients_in_channels = {}
+# TODO : have a mechanism to close the threads (channels) that noone uses
 
 
-def price_callback(price):
-    priceInfo.lastprice = price
-    print(price.get_data())
-    asyncio.run(send_data_to_clients(price))
+async def send_data_to_clients(new_data, channel):
+    for client in clients_in_channels[channel]:
+        await client.send_text(json.dumps(new_data))
 
 
-@app.websocket("/live")
-async def websocket_endpoint(websocket: WebSocket):
-    print("hi")
+def price_callback(price, channel):
+    priceInfo.channels[channel]["last_price"] = price
+
+    asyncio.run(send_data_to_clients(price, channel))
+
+
+@app.websocket("/live/{id}")
+async def websocket_endpoint(websocket: WebSocket, id: str):
     await websocket.accept()
-    print("accept user")
     try:
-        connected_clients.add(websocket)
-        await websocket.send_text(json.dumps(priceInfo.lastprice.get_json_data()))
+        clients_in_channels[id].add(websocket)
+        await websocket.send_text(json.dumps(priceInfo.channels[id]["last_price"]))
         while True:
             _ = await websocket.receive_text()
     except Exception as e:
-        connected_clients.remove(websocket)
+        clients_in_channels[id].remove(websocket)
         print(f"server error {e}")
 
 
@@ -45,14 +45,25 @@ async def get_live_counter(count: int) -> str:
 
 @app.on_event("startup")
 async def startup_event():
-    t = threading.Thread(target=run_live, args=(price_callback,))
-    t.start()
+    id1 = "dollar_tehran3bze"
+    id2 = "nerkhedollarr"
+
+    t1 = threading.Thread(target=run_live, args=(price_callback, id1))
+    t2 = threading.Thread(target=run_live, args=(price_callback, id2))
+
+    clients_in_channels[id1] = set()
+    clients_in_channels[id2] = set()
+
+    t1.start()
+    t2.start()
 
 
 if __name__ == "__main__":
     import uvicorn
 
-    print(os.getenv("PORT"))
+    network_stability_check()
+
+    print("env port is set to:", os.getenv("PORT"))
     uvicorn.run(
         "server:app",
         host="0.0.0.0",
