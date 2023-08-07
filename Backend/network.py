@@ -12,7 +12,7 @@ session = Session()
 
 
 def network_stability_check(proxy=None):
-    proxy_list = ["http://localhost:20171", proxy, "no proxy"]
+    proxy_list = ["no proxy", proxy, "http://localhost:20171"]
 
     for proxy in proxy_list:
         try:
