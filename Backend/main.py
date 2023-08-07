@@ -1,5 +1,6 @@
 from modes import *
-from parse import args, parser
+from clparser import args, parser
+from network import network_stability_check, FetchRate
 import logging
 
 # Create a logger instance
@@ -27,13 +28,21 @@ if args.use_api:
 if args.save_results:
     logger.info("--save-results option enabled")
 
+network_stability_check(args.proxy)
+
+
+def simple_price_logger(price, channel):
+    print(price)
+
+
+# TODO : instead of sending all args seperatly send an args object
 # handle keyboard interrupt
 try:
     if args.mode == "live":
         logger.info("Running in live mode")
-        run_live(lambda price: print(price.get_json_data()))
+        run_live(simple_price_logger, args)
     elif args.mode == "count":
-        prices = run_counter(args.count)
+        prices = run_counter(args)
         for price in prices:
             print(price)
     else:
