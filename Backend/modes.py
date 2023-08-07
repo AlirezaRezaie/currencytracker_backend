@@ -1,65 +1,53 @@
-from price import *
-from parse import args
-import logging
-
-logger = logging.getLogger("dolarlog")
-if args.use_api:
-    fetch_func = fetch_price_data_u_tg_api
-else:
-    fetch_func = fetch_price_data_u_preview_page
+from network import fetch_price_data_u_preview_page as fetch_function
+from network import priceInfo
+from price import extract_prices
+from logs import logger
 
 
-def get_index(list, item):
-    for element in list:
-        if element == item:
-            return list.index(element)
-    return False
-
-
-# TODO : write an extra method which both modes can share
-def run_live(emmitter_callback):
+def run_live(emmitter_callback, channel_ID, args=None):
     server_mode = "live"
     prev_fetch = []
     last_price = None
     while True:
         try:
-            curr_fetch = extract_prices(fetch_func(server_mode=server_mode))
+            curr_fetch = extract_prices(fetch_function(channel_ID, server_mode, args))
             if not prev_fetch:
                 prev_fetch = curr_fetch
 
-            # determine last message
-            last_price_in_curr_fetch = get_index(curr_fetch, prev_fetch[-1])
+            # determine last message in the current fetch
+            for price in curr_fetch:
+                if price == prev_fetch[-1]:
+                    last_price_in_curr_fetch = curr_fetch.index(price)
+
+            # last_price_in_curr_fetch = get_index(curr_fetch, prev_fetch[-1])
 
             if last_price_in_curr_fetch:
                 new_prices = curr_fetch[last_price_in_curr_fetch:]
 
                 for price in new_prices:
                     if not price == last_price:
-                        emmitter_callback(price)
+                        to_user = price.get_json_data()
+                        # check if end transaction
+                        if price.action == "پایان معاملات":
+                            to_user = price.text
+                        emmitter_callback(to_user, channel_ID)
                         last_price = price
 
             else:
-                logging.error("something went wrong")
+                logger.error("something went wrong")
 
-            """
-            if "پایان معاملات" in last[-1].text:
-                print("deals closed good night")
-                break
-            """
             prev_fetch = curr_fetch
 
         except Exception as e:
             print("run live mode error:", e)
 
 
-def run_counter(
-    count,
-):
-    priceInfo.lastpricepostnumber = 0
+def run_counter(count, channel_ID, args=None):
+    priceInfo.channels[channel_ID]["last_price_post_number"] = 0
     server_mode = "count"
     full_prices = []
     while True:
-        msgs = extract_prices(fetch_func(server_mode=server_mode))
+        msgs = extract_prices(fetch_function(channel_ID, server_mode, args))
 
         for msg in msgs:
             full_prices.insert(0, msg)
@@ -72,7 +60,4 @@ def run_counter(
             break
 
     server_ret = list(map(lambda price: price.get_data(), full_prices))
-    for i in server_ret:
-        print(i)
-    # TODO: to the price class add a method that gives json formatted data
     return server_ret
