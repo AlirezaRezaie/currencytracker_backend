@@ -3,16 +3,10 @@ import asyncio
 import threading
 import os
 import json
-
 import sys
 import os
 
-
-contents = os.listdir("/app")  # List the contents of the parent directory
-
-print(contents)
 sys.path.append("../")
-print(sys.path)
 from core.network import network_stability_check
 from core.price import priceInfo
 from core.modes import run_counter, run_live

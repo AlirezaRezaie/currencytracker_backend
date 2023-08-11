@@ -2,9 +2,9 @@ import sys
 
 sys.path.append("../")
 
-from core.modes import *
+from backend.core.modes import *
 from clparser import args, parser
-from core.network import network_stability_check, FetchRate
+from backend.core.network import network_stability_check, FetchRate
 import logging
 
 
