@@ -124,7 +124,7 @@ def fetch_price_data_u_preview_page(
             # Continuously check the connection stability
             if not is_connection_stable("t.me", timeout=timeout):
                 logger.critical("Connection is not stable. Retrying in 5 seconds...")
-                if retry_count + 1 >= args.retry_limit:
+                if retry_count + 1 >= args.retry:
                     exit(1)
 
     # Decompress the compressed data (gzip encoding)
