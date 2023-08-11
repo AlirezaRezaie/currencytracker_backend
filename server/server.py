@@ -5,7 +5,14 @@ import os
 import json
 
 import sys
+import os
 
+parent_directory = os.path.abspath(
+    ".."
+)  # Get the absolute path of the parent directory
+contents = os.listdir(parent_directory)  # List the contents of the parent directory
+
+print(contents)
 sys.path.append("../")
 print(sys.path)
 from core.network import network_stability_check
