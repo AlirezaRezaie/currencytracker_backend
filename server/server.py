@@ -1,14 +1,27 @@
 from fastapi import FastAPI, WebSocket
 import asyncio
-from modes import run_counter, run_live
 import threading
-from price import priceInfo
 import os
 import json
 
-from network import network_stability_check
+import sys
+
+sys.path.append("../")
+
+from core.network import network_stability_check
+from core.price import priceInfo
+from core.modes import run_counter, run_live
 
 app = FastAPI()
+
+
+class Arg:
+    def __init__(self, channel_id, timeout=None, retry=None, fetchrate=None):
+        self.channel_id = channel_id
+        self.timeout = timeout
+        self.retry = retry
+        self.fetchrate = fetchrate
+
 
 clients_in_channels = {}
 # TODO : have a mechanism to close the threads (channels) that noone uses
@@ -48,8 +61,11 @@ async def startup_event():
     id1 = "dollar_tehran3bze"
     id2 = "nerkhedollarr"
 
-    t1 = threading.Thread(target=run_live, args=(price_callback, id1))
-    t2 = threading.Thread(target=run_live, args=(price_callback, id2))
+    arg1 = Arg(id1)
+    arg2 = Arg(id2)
+
+    t1 = threading.Thread(target=run_live, args=(price_callback, arg1))
+    t2 = threading.Thread(target=run_live, args=(price_callback, arg2))
 
     clients_in_channels[id1] = set()
     clients_in_channels[id2] = set()

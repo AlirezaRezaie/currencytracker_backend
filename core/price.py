@@ -79,4 +79,5 @@ def extract_prices(messages, count=10):
                 break
         else:
             logger.debug(f"{price['text']} is not a price message")
+
     return list(reversed(prices))

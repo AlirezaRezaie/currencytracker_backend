@@ -1,19 +1,18 @@
-from network import fetch_price_data_u_preview_page as fetch_function
-from network import priceInfo
-from price import extract_prices
-from logs import logger
+from core.network import fetch_price_data_u_preview_page as fetch_function
+from core.network import priceInfo
+from core.price import extract_prices
+from core.logs import logger
 
 
-def run_live(emmitter_callback, channel_ID, args=None):
+def run_live(emmitter_callback, args=None):
     server_mode = "live"
     prev_fetch = []
     last_price = None
     while True:
         try:
-            curr_fetch = extract_prices(fetch_function(channel_ID, server_mode, args))
+            curr_fetch = extract_prices(fetch_function(server_mode, args))
             if not prev_fetch:
                 prev_fetch = curr_fetch
-
             # determine last message in the current fetch
             for price in curr_fetch:
                 if price == prev_fetch[-1]:
@@ -30,7 +29,7 @@ def run_live(emmitter_callback, channel_ID, args=None):
                         # check if end transaction
                         if price.action == "پایان معاملات":
                             to_user = price.text
-                        emmitter_callback(to_user, channel_ID)
+                        emmitter_callback(to_user, args.channel_id)
                         last_price = price
 
             else:
@@ -42,21 +41,21 @@ def run_live(emmitter_callback, channel_ID, args=None):
             print("run live mode error:", e)
 
 
-def run_counter(count, channel_ID, args=None):
-    priceInfo.channels[channel_ID]["last_price_post_number"] = 0
+def run_counter(args):
+    priceInfo.channels[args.channel_id]["last_price_post_number"] = 0
     server_mode = "count"
     full_prices = []
     while True:
-        msgs = extract_prices(fetch_function(channel_ID, server_mode, args))
+        msgs = extract_prices(fetch_function(server_mode, args))
 
         for msg in msgs:
             full_prices.insert(0, msg)
             logger.info(f"accumulated {len(full_prices)} prices")
 
-            if count == len(full_prices):
+            if args.count == len(full_prices):
                 break
 
-        if count == len(full_prices):
+        if args.count == len(full_prices):
             break
 
     server_ret = list(map(lambda price: price.get_data(), full_prices))

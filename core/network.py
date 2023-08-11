@@ -3,8 +3,8 @@ import ast
 from bs4 import BeautifulSoup
 import os
 from time import time
-from logs import logger
-from price import priceInfo
+from core.logs import logger
+from core.price import priceInfo
 
 from requests import Session
 
@@ -12,7 +12,7 @@ session = Session()
 
 
 def network_stability_check(proxy=None):
-    proxy_list = ["no proxy", proxy, "http://localhost:20171"]
+    proxy_list = ["http://localhost:20171", proxy, "no proxy"]
 
     for proxy in proxy_list:
         try:
@@ -28,7 +28,7 @@ def network_stability_check(proxy=None):
                 f"Checking internet connection with {proxy} (Please wait for a maximum of 10 seconds...)"
             )
 
-            check_proxy = requests.get(
+            requests.get(
                 "https://t.me",
                 timeout=10,
             )
@@ -78,16 +78,15 @@ def fetch_price_data_u_tg_api(apikey=""):
 
 
 def fetch_price_data_u_preview_page(
-    channelID,
     server_mode,
     args,
     postnumber=0,
 ):
     global session
 
-    timeout = args.timeout if args else 10
-    retry_limit = args.retry_limit if args else 10
-    fetchrate = args.fetchrate if args else False
+    timeout = args.timeout if args.timeout else 10
+    retry_limit = args.retry if args.retry else 10
+    fetchrate = args.fetchrate if args.fetchrate else False
 
     headers = {
         "Accept": "text/javascript",
@@ -99,7 +98,7 @@ def fetch_price_data_u_preview_page(
     }
 
     if server_mode == "count":
-        postnumber = priceInfo.channels[channelID]["last_price_post_number"]
+        postnumber = priceInfo.channels[args.channel_id]["last_price_post_number"]
         session = requests
 
     for retry_count in range(retry_limit):
@@ -109,10 +108,11 @@ def fetch_price_data_u_preview_page(
             logger.info("connecting...")
             t1 = int(time())
             response = session.post(
-                f"https://t.me/s/{channelID}?before={str(postnumber)}",
+                f"https://t.me/s/{args.channel_id}?before={str(postnumber)}",
                 headers=headers,
                 timeout=timeout,
             ).text
+
             t2 = int(time())
             if fetchrate:
                 fr.set_rate(t2 - t1)
@@ -124,14 +124,14 @@ def fetch_price_data_u_preview_page(
             # Continuously check the connection stability
             if not is_connection_stable("t.me", timeout=timeout):
                 logger.critical("Connection is not stable. Retrying in 5 seconds...")
-                if retry_count + 1 >= retry_limit:
+                if retry_count + 1 >= args.retry_limit:
                     exit(1)
 
     # Decompress the compressed data (gzip encoding)
     # doesnt actually decodes gzip to html but it works for now
     try:
         evaluated_data = ast.literal_eval(response)
-    except:
+    except Exception as e:
         evaluated_data = response
         print("parser error critical!!!!!!!!!!!!1")
     html_data = evaluated_data.replace("\\", "")
@@ -164,6 +164,8 @@ def fetch_price_data_u_preview_page(
             logger.debug("is not desired format")
 
     if server_mode == "count":
-        priceInfo.channels[channelID]["last_price_post_number"] = messages[0]["number"]
+        priceInfo.channels[args.channel_id]["last_price_post_number"] = messages[0][
+            "number"
+        ]
 
     return messages

@@ -1,7 +1,12 @@
-from modes import *
+import sys
+
+sys.path.append("../")
+
+from core.modes import *
 from clparser import args, parser
-from network import network_stability_check, FetchRate
+from core.network import network_stability_check, FetchRate
 import logging
+
 
 # Create a logger instance
 logger = logging.getLogger("dolarlog")
@@ -20,10 +25,6 @@ logger.addHandler(console_handler)
 
 if args.verbose:
     logger.setLevel(logging.INFO)
-
-
-if args.use_api:
-    logger.info("--use-api option enabled")
 
 if args.save_results:
     logger.info("--save-results option enabled")
