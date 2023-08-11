@@ -1,7 +1,7 @@
-from core.network import fetch_price_data_u_preview_page as fetch_function
-from core.network import priceInfo
-from core.price import extract_prices
-from core.logs import logger
+from network import fetch_price_data_u_preview_page as fetch_function
+from network import priceInfo
+from price import extract_prices
+from logs import logger
 
 
 def run_live(emmitter_callback, args=None):

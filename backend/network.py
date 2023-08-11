@@ -3,8 +3,8 @@ import ast
 from bs4 import BeautifulSoup
 import os
 from time import time
-from core.logs import logger
-from core.price import priceInfo
+from logs import logger
+from price import priceInfo
 
 from requests import Session
 

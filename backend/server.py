@@ -3,13 +3,11 @@ import asyncio
 import threading
 import os
 import json
-import sys
 import os
 
-sys.path.append("../")
-from core.network import network_stability_check
-from core.price import priceInfo
-from core.modes import run_counter, run_live
+from network import network_stability_check
+from price import priceInfo
+from modes import run_counter, run_live
 
 app = FastAPI()
 
