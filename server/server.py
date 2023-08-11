@@ -5,7 +5,12 @@ import os
 import json
 
 import sys
+import os
 
+
+contents = os.listdir("/app")  # List the contents of the parent directory
+
+print(contents)
 sys.path.append("../")
 print(sys.path)
 from core.network import network_stability_check
