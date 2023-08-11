@@ -7,7 +7,7 @@ import json
 import sys
 
 sys.path.append("../")
-
+print(sys.path)
 from core.network import network_stability_check
 from core.price import priceInfo
 from core.modes import run_counter, run_live
