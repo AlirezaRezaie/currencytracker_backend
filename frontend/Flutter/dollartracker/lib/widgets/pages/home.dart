@@ -17,8 +17,9 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     // Replace 'ws://your_websocket_url' with your actual WebSocket server URL.
-    channel = IOWebSocketChannel.connect('ws://192.168.1.6:8000/live');
+    channel = IOWebSocketChannel.connect('ws://10.0.2.2:8000/live');
     channel.stream.listen((data) {
+      print(data);
       setState(() {
         receivedData = data;
       });
@@ -38,18 +39,18 @@ class _HomeState extends State<Home> {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Padding(
-          padding: EdgeInsets.only(right: 20, left: 20),
+          padding: const EdgeInsets.only(right: 20, left: 20),
           child: Container(
             decoration: BoxDecoration(
-                color: Color.fromARGB(255, 0, 151, 230),
+                color: const Color.fromARGB(255, 0, 151, 230),
                 borderRadius: BorderRadius.circular(10)),
             child: Padding(
-              padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+              padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
               child: Column(
                 children: [
                   Text(
                     receivedData,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold),
                   )
                 ],
@@ -57,15 +58,13 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
-        Container(
-          child: const Column(
-            children: [
-              Text(
-                "Hell",
-                style: TextStyle(color: Colors.amber),
-              )
-            ],
-          ),
+        const Column(
+          children: [
+            Text(
+              "Hell",
+              style: TextStyle(color: Color.fromARGB(255, 237, 237, 237)),
+            )
+          ],
         ),
       ],
     );

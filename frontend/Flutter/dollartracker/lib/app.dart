@@ -13,18 +13,30 @@ class MyApp extends StatelessWidget {
         elevation: 0,
         title: const Text(
           "Dashboard",
-          style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+          style: TextStyle(color: Color.fromARGB(255, 237, 237, 237)),
         ),
       ),
-      backgroundColor: Color.fromARGB(148, 23, 4, 231),
+      backgroundColor: const Color.fromARGB(255, 23, 23, 23),
       body: const Home(),
       bottomNavigationBar: CurvedNavigationBar(
-        color: const Color.fromARGB(255, 223, 249, 251),
+        color: const Color.fromARGB(255, 237, 237, 237),
         backgroundColor: const Color.fromARGB(0, 255, 255, 255),
         items: const [
-          Icon(Icons.home, size: 30),
-          Icon(Icons.add, size: 30),
-          Icon(Icons.menu_outlined, size: 30),
+          Icon(
+            Icons.home,
+            size: 30,
+            color: Color.fromARGB(255, 68, 68, 68),
+          ),
+          Icon(
+            Icons.add,
+            size: 30,
+            color: Color.fromARGB(255, 68, 68, 68),
+          ),
+          Icon(
+            Icons.menu_outlined,
+            size: 30,
+            color: Color.fromARGB(255, 68, 68, 68),
+          ),
         ],
         onTap: (index) {
           //Handle button tap
