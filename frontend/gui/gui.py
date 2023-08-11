@@ -11,7 +11,7 @@ class DataUpdater(QObject):
 
 
 async def websocket_task(data_updater):
-    uri = "ws://localhost:8000/live"
+    uri = "ws://localhost:8000/live/dollar_tehran3bze"
     async with websockets.connect(uri) as websocket:
         while True:
             data = await websocket.recv()

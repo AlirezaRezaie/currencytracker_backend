@@ -31,6 +31,7 @@ parser.add_argument(
     type=str,
     metavar="ID",
     help="which dollar Telegram channel to use [optional]",
+    required=True,
 )
 
 parser.add_argument(
@@ -46,16 +47,22 @@ parser.add_argument(
     metavar="REPEAT",
     help="times to retry the connection before exiting program (for slow networks default:5 ) [optional]",
 )
-parser.add_argument(
-    "--use-api",
-    action="store_true",
-    help="Uses Telegram's official API as the fetch method instead of web scrape [optional]",
-)
+# parser.add_argument(
+#    "--use-api",
+#    action="store_true",
+#    help="Uses Telegram's official API as the fetch method instead of web scrape [optional]",
+# )
 
 parser.add_argument(
     "--save-results",
     action="store_true",
     help="Saves results in json format [optional]",
+)
+
+parser.add_argument(
+    "--fetchrate",
+    action="store_true",
+    help="debug network monitor",
 )
 
 args = parser.parse_args()
