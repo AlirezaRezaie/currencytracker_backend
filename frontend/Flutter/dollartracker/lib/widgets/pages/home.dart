@@ -113,16 +113,19 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   AnimatedBuilder(
                     animation: _animation,
                     builder: (context, child) {
-                      return Text(
-                        receivedData,
-                        style: TextStyle(
-                          color: const Color.fromARGB(255, 61, 57, 57),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 60 +
-                              (_animation.value *
-                                  20), // Change the font size range as needed
-                        ),
-                      );
+                      return FittedBox(
+                          fit: BoxFit
+                              .scaleDown, // Adjust the fit according to your needs
+                          child: Text(
+                            receivedData,
+                            style: TextStyle(
+                                fontSize: 60 +
+                                    (_animation.value *
+                                        20)), // Start with a reasonable default font size
+                            maxLines: 2, // Adjust as needed
+                            textAlign:
+                                TextAlign.center, // Adjust alignment as needed
+                          ));
                     },
                   ),
                 ],
