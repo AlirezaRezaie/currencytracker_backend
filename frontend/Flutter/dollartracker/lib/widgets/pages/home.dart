@@ -109,17 +109,20 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         padding: EdgeInsets.only(bottom: 3),
                         child: Text(
                           // the name of the user
-                          "Hi, Anna!",
-                          style: GoogleFonts.abel(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                          "سلام بچه گل",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontFamily: 'IransansBlack'),
                         ),
                       ),
                       Text(
-                        "Welcome back",
-                        style: GoogleFonts.manrope(
-                            color: Color.fromARGB(219, 255, 255, 255)),
+                        "خوش آمدی",
+                        style: TextStyle(
+                          color: Color.fromARGB(219, 255, 255, 255),
+                          fontSize: 10,
+                          fontFamily: 'IransansBlack',
+                        ),
                       )
                     ],
                   ),
@@ -141,15 +144,136 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                "مارکت",
-                style: GoogleFonts.manrope(
+                "ارز های محبوب",
+                style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
-                  fontSize: 30,
+                  fontSize: 25,
+                  fontFamily: 'IransansBlack',
                 ),
               ),
             ],
           ),
+          SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      const Color.fromARGB(255, 245, 78, 97),
+                      Color.fromARGB(255, 117, 9, 22)
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    stops: [0.0, 1.0],
+                  ),
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                padding:
+                    EdgeInsets.only(top: 35, right: 45, bottom: 35, left: 45),
+                child: Column(
+                  mainAxisAlignment:
+                      MainAxisAlignment.center, // Center the content vertically
+                  crossAxisAlignment: CrossAxisAlignment
+                      .center, // Center the content horizontally
+                  children: [
+                    Text(
+                      "قیمت مستقیم صرافی",
+                      style: TextStyle(
+                        color: Color.fromARGB(173, 255, 255, 255),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 9,
+                        fontFamily: 'Iransans',
+                      ),
+                    ),
+                    Text(
+                      "🇪🇺 یورو",
+                      style: TextStyle(
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25,
+                          fontFamily: 'IransansBlack'),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 5),
+                      child: Row(
+                        children: [
+                          Text(
+                            "500/000",
+                            style: GoogleFonts.aladin(
+                              color: const Color.fromARGB(255, 255, 255, 255),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      const Color.fromARGB(255, 112, 151, 252),
+                      Color.fromARGB(255, 9, 35, 101)
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    stops: [0.0, 1.0],
+                  ),
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                padding:
+                    EdgeInsets.only(top: 35, right: 45, bottom: 35, left: 45),
+                child: Column(
+                  mainAxisAlignment:
+                      MainAxisAlignment.center, // Center the content vertically
+                  crossAxisAlignment: CrossAxisAlignment
+                      .center, // Center the content horizontally
+                  children: [
+                    Text(
+                      "قیمت مستقیم صرافی",
+                      style: TextStyle(
+                        color: Color.fromARGB(173, 255, 255, 255),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 9,
+                        fontFamily: 'Iransans',
+                      ),
+                    ),
+                    Text(
+                      "🇺🇸 دلار",
+                      style: TextStyle(
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25,
+                          fontFamily: 'IransansBlack'),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 5),
+                      child: Row(
+                        children: [
+                          Text(
+                            "500/000",
+                            style: GoogleFonts.aladin(
+                              color: const Color.fromARGB(255, 255, 255, 255),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );
