@@ -28,7 +28,7 @@ def run_live(emmitter_callback, args=None):
                         to_user = price.get_json_data()
                         # check if end transaction
                         if price.action == "پایان معاملات":
-                            to_user = price.text
+                            to_user["price"] = price.text
                         emmitter_callback(to_user, args.channel_id)
                         last_price = price
 
