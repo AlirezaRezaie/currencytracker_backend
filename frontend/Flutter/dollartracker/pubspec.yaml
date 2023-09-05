@@ -37,6 +37,9 @@ dependencies:
   curved_navigation_bar: ^1.0.3
   web_socket_channel: ^2.4.0
   flutter_dotenv: ^5.1.0
+  google_fonts: ^5.1.0
+  bootstrap_icons: ^1.10.5+2
+  hidden_drawer_menu: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -66,7 +69,6 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

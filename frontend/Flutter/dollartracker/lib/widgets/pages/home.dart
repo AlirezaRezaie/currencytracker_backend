@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:bootstrap_icons/bootstrap_icons.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert'; // Import this package for jsonDecode
 
 class Home extends StatefulWidget {
@@ -16,25 +18,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   String receivedData = '';
   bool isConnecting = false;
   String errorMessage = '';
-  late AnimationController _controller;
-  late Animation<double> _animation;
 
   @override
   void initState() {
-    String host = dotenv.env['SERVER_HOST'] ?? 'localhost';
+    // String host = dotenv.env['SERVER_HOST'] ?? 'localhost';
     super.initState();
     // Replace 'ws://your_websocket_url' with your actual WebSocket server URL.
-    _connectToWebSocket("$host/live/dollar_tehran3bze");
-
-    // Initialize the animation controller
-    _controller = AnimationController(
-      vsync: this,
-      duration:
-          const Duration(milliseconds: 500), // Change the duration as needed
-    );
-
-    // Initialize the animation
-    _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
+    _connectToWebSocket("ws://10.0.2.2:5000/live/nerkhedollarr");
   }
 
   void _connectToWebSocket(String host) async {
@@ -52,8 +42,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         // Check if the 'price' field exists and is a numeric value
         if (jsonData.containsKey('price')) {
           // Update the animation when the price changes
-          _controller.reset();
-          _controller.forward();
+
           setState(() {
             receivedData =
                 jsonData['price']; // Format the price to two decimal places
@@ -89,58 +78,80 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   void dispose() {
     channel.sink.close();
-    _controller.dispose(); // Dispose the animation controller
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(right: 20, left: 20),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Color.fromARGB(255, 0, 151, 230),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-              child: Column(
+    // add some padding to make space
+    return Padding(
+      padding: const EdgeInsets.only(top: 30, right: 10, left: 10),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              IconButton(
+                  // here you can add functionality for the icon
+                  onPressed: () {},
+                  icon: Icon(
+                    BootstrapIcons.list,
+                    color: Colors.white,
+                    size: 30,
+                  )),
+              Row(
                 children: [
-                  AnimatedBuilder(
-                    animation: _animation,
-                    builder: (context, child) {
-                      return Text(
-                        receivedData,
-                        style: TextStyle(
-                          color: const Color.fromARGB(255, 61, 57, 57),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 60 +
-                              (_animation.value *
-                                  20), // Change the font size range as needed
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 3),
+                        child: Text(
+                          // the name of the user
+                          "Hi, Anna!",
+                          style: GoogleFonts.abel(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
-                      );
-                    },
+                      ),
+                      Text(
+                        "Welcome back",
+                        style: GoogleFonts.manrope(
+                            color: Color.fromARGB(219, 255, 255, 255)),
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 12),
+                    child: CircleAvatar(
+                      radius: 27.0,
+                      // user profile
+                      backgroundImage: NetworkImage(
+                          'http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcRlinunhNqurn4hIJDnknNiB1DJ27akcg37NDplUl4ZtVBj3VOP6wkBEdjkZ24LFt4k4bq9k07Q6eTyMsDGECtNc3XZNCjtNwm51WD43CI'),
+                    ),
                   ),
                 ],
               ),
-            ),
-          ),
-        ),
-        Container(
-          child: Column(
-            children: [
-              Text(
-                isConnecting ? "connecting.." : "connected",
-                style: TextStyle(color: Colors.amber),
-              )
             ],
           ),
-        ),
-      ],
+          SizedBox(height: 40),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                "مارکت",
+                style: GoogleFonts.manrope(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 30,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
