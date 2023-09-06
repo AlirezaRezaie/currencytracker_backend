@@ -86,191 +86,187 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     // add some padding to make space
-    return Padding(
-      padding: const EdgeInsets.only(top: 30, right: 10, left: 10),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
             children: [
-              IconButton(
-                  // here you can add functionality for the icon
-                  onPressed: () {},
-                  icon: Icon(
-                    BootstrapIcons.list,
-                    color: Colors.white,
-                    size: 30,
-                  )),
+              SizedBox(
+                height: 30,
+              ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                  IconButton(
+                      // here you can add functionality for the icon
+                      onPressed: () {},
+                      icon: Icon(
+                        BootstrapIcons.list,
+                        color: Colors.white,
+                        size: 30,
+                      )),
+                  Row(
                     children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 3),
+                            child: Text(
+                              // the name of the user
+                              "سلام بچه گل",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontFamily: 'IransansBlack'),
+                            ),
+                          ),
+                          Text(
+                            "خوش آمدی",
+                            style: TextStyle(
+                              color: Color.fromARGB(219, 255, 255, 255),
+                              fontSize: 10,
+                              fontFamily: 'IransansBlack',
+                            ),
+                          )
+                        ],
+                      ),
                       Padding(
-                        padding: EdgeInsets.only(bottom: 3),
-                        child: Text(
-                          // the name of the user
-                          "سلام بچه گل",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontFamily: 'IransansBlack'),
+                        padding: EdgeInsets.only(left: 12),
+                        child: CircleAvatar(
+                          radius: 25,
+                          // user profile
+                          backgroundImage: NetworkImage(
+                              'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Chris_Hemsworth_by_Gage_Skidmore_2_%28cropped%29.jpg/220px-Chris_Hemsworth_by_Gage_Skidmore_2_%28cropped%29.jpg'),
                         ),
                       ),
-                      Text(
-                        "خوش آمدی",
-                        style: TextStyle(
-                          color: Color.fromARGB(219, 255, 255, 255),
-                          fontSize: 10,
-                          fontFamily: 'IransansBlack',
-                        ),
-                      )
                     ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 12),
-                    child: CircleAvatar(
-                      radius: 27.0,
-                      // user profile
-                      backgroundImage: NetworkImage(
-                          'http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcRt7JLIi2G3ioqZgtLjL_wIwxiBKZ0R03ebcbbHFiIrAlFxMqTl-yCgWRT1ILTGA_ObuRm-N4Pk1hb2q8oH-qbaO1mIC2-4ng8rR0pmQVo'),
+                ],
+              ),
+              SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          "ارز های محبوب",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 22,
+                            fontFamily: 'IransansBlack',
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم",
+                          style: TextStyle(
+                            color: const Color.fromARGB(190, 255, 255, 255),
+                            fontWeight: FontWeight.w400,
+                            fontSize: 10,
+                            fontFamily: 'Iransans',
+                          ),
+                          textDirection: TextDirection.rtl,
+                        ),
+                      ],
                     ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  PriceBox(
+                    title: "🇪🇺 یورو",
+                    price: "500/000",
+                    firstColor: Color.fromARGB(255, 60, 80, 250),
+                    secondColor: Color.fromARGB(255, 60, 78, 246),
+                  ),
+                  PriceBox(
+                    title: "🇺🇸 دلار",
+                    price: "500/000",
+                    firstColor: Color.fromARGB(255, 60, 80, 250),
+                    secondColor: Color.fromARGB(255, 60, 78, 246),
                   ),
                 ],
               ),
             ],
           ),
-          SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width / 2,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      "ارز های محبوب",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 22,
-                        fontFamily: 'IransansBlack',
-                      ),
-                    ),
-                    Text(
-                      "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم",
-                      style: TextStyle(
-                        color: const Color.fromARGB(190, 255, 255, 255),
-                        fontWeight: FontWeight.w400,
-                        fontSize: 10,
-                        fontFamily: 'Iransans',
-                      ),
-                      textDirection: TextDirection.rtl,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 50,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              PriceBox(
-                title: "🇪🇺 یورو",
-                price: "500/000",
-                firstColor: Color.fromARGB(255, 245, 78, 97),
-                secondColor: Color.fromARGB(255, 117, 9, 22),
-              ),
-              PriceBox(
-                title: "🇺🇸 دلار",
-                price: "500/000",
-                firstColor: Color.fromARGB(255, 112, 151, 252),
-                secondColor: Color.fromARGB(255, 9, 35, 101),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 40,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                "جدید ترین آپدیت های قیمت",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15,
-                  fontFamily: 'IransansBlack',
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 5),
-                child: Icon(
-                  Icons.bar_chart_rounded,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Expanded(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(40), topRight: Radius.circular(40)),
-              child: Container(
+        ),
+        SizedBox(
+          height: 40,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              "جدید ترین آپدیت های قیمت",
+              style: TextStyle(
                 color: Colors.white,
-                child: Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 196, 209, 225),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      alignment: Alignment.center,
-                      margin: const EdgeInsets.only(top: 12.0),
-                      height: 4.0,
-                      width: MediaQuery.of(context).size.width * 0.2,
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
+                fontFamily: 'IransansBlack',
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 5),
+              child: Icon(
+                Icons.bar_chart_rounded,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Expanded(
+          child: ClipRRect(
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(40), topRight: Radius.circular(40)),
+            child: Container(
+              color: Color.fromARGB(255, 27, 28, 34),
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 196, 209, 225),
+                      borderRadius: BorderRadius.circular(50),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 30, right: 40, left: 40),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Menu",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),
-                          Icon(
-                            Icons.more_horiz_outlined,
-                          ),
-                        ],
-                      ),
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.only(top: 12.0),
+                    height: 4.0,
+                    width: MediaQuery.of(context).size.width * 0.2,
+                  ),
+                  Expanded(
+                    child: ListView(
+                      padding: const EdgeInsets.all(25),
+                      children: const [
+                        NewUpdatesTable(title: "دلار", subtitle: "صعودی",imageLink: "", persent: 45,),
+                        NewUpdatesTable(title: "دلار", subtitle: "صعودی",imageLink: "", persent: 65,),
+                        NewUpdatesTable(title: "دلار", subtitle: "صعودی",imageLink: "", persent: 0.25,),
+                        NewUpdatesTable(title: "دلار", subtitle: "صعودی",imageLink: "", persent: 2,),
+                      ],
                     ),
-                    Expanded(
-                      child: ListView(
-                        padding: const EdgeInsets.all(40),
-                        children: const [NewUpdatesTable()],
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
