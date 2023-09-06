@@ -89,7 +89,7 @@ flutter:
         - asset: fonts/IRANSansDN.ttf
     - family: IransansBlack
       fonts:
-        - asset: fonts/IRANSans_Black.ttf
+        - asset: fonts/IRANSans_Medium.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

@@ -1,9 +1,9 @@
+import 'package:dollartracker/widgets/utilities/new_updates_table.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
 
 import '../utilities/price_box.dart'; // Import this package for jsonDecode
@@ -141,23 +141,41 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               ),
             ],
           ),
-          SizedBox(height: 40),
+          SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text(
-                "ارز های محبوب",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 25,
-                  fontFamily: 'IransansBlack',
+              Container(
+                width: MediaQuery.of(context).size.width / 2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      "ارز های محبوب",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 22,
+                        fontFamily: 'IransansBlack',
+                      ),
+                    ),
+                    Text(
+                      "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم",
+                      style: TextStyle(
+                        color: const Color.fromARGB(190, 255, 255, 255),
+                        fontWeight: FontWeight.w400,
+                        fontSize: 10,
+                        fontFamily: 'Iransans',
+                      ),
+                      textDirection: TextDirection.rtl,
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
           SizedBox(
-            height: 20,
+            height: 50,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -175,7 +193,82 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 secondColor: Color.fromARGB(255, 9, 35, 101),
               ),
             ],
-          )
+          ),
+          SizedBox(
+            height: 40,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                "جدید ترین آپدیت های قیمت",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 15,
+                  fontFamily: 'IransansBlack',
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 5),
+                child: Icon(
+                  Icons.bar_chart_rounded,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Expanded(
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(40), topRight: Radius.circular(40)),
+              child: Container(
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 196, 209, 225),
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      alignment: Alignment.center,
+                      margin: const EdgeInsets.only(top: 12.0),
+                      height: 4.0,
+                      width: MediaQuery.of(context).size.width * 0.2,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 30, right: 40, left: 40),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Menu",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          Icon(
+                            Icons.more_horiz_outlined,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: ListView(
+                        padding: const EdgeInsets.all(40),
+                        children: const [NewUpdatesTable()],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
