@@ -36,12 +36,16 @@ def simple_price_logger(price, channel):
     print(price)
 
 
+def simple_error_handler(msg):
+    print(msg)
+
+
 # TODO : instead of sending all args seperatly send an args object
 # handle keyboard interrupt
 try:
     if args.mode == "live":
         logger.info("Running in live mode")
-        run_live(simple_price_logger, args)
+        run_live(simple_price_logger, simple_error_handler, args)
     elif args.mode == "count":
         prices = run_counter(args)
         for price in prices:

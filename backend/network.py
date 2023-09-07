@@ -80,7 +80,6 @@ def fetch_price_data_u_tg_api(apikey=""):
 def fetch_price_data_u_preview_page(
     server_mode,
     args,
-    postnumber=0,
 ):
     global session
 
@@ -97,8 +96,9 @@ def fetch_price_data_u_preview_page(
         "Content-Length": "0",
     }
 
+    postnumber = priceInfo.channels_last_post_number[args.channel_id]
+
     if server_mode == "count":
-        postnumber = priceInfo.channels[args.channel_id]["last_price_post_number"]
         session = requests
 
     for retry_count in range(retry_limit):
@@ -112,7 +112,6 @@ def fetch_price_data_u_preview_page(
                 headers=headers,
                 timeout=timeout,
             ).text
-
             t2 = int(time())
             if fetchrate:
                 fr.set_rate(t2 - t1)
@@ -163,9 +162,7 @@ def fetch_price_data_u_preview_page(
         except Exception as e:
             logger.debug("is not desired format")
 
-    if server_mode == "count":
-        priceInfo.channels[args.channel_id]["last_price_post_number"] = messages[0][
-            "number"
-        ]
+    if len(messages) > 0:
+        priceInfo.channels_last_post_number[args.channel_id] = messages[0]["number"]
 
     return messages
