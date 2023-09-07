@@ -4,50 +4,64 @@ from price import extract_prices
 from logs import logger
 
 
-def run_live(emmitter_callback, args=None):
+def run_live(emmitter_callback, error_callback, stop_event, args=None):
     server_mode = "live"
     prev_fetch = []
     last_price = None
-    while True:
-        try:
-            curr_fetch = extract_prices(fetch_function(server_mode, args))
-            if not prev_fetch:
-                prev_fetch = curr_fetch
-            # determine last message in the current fetch
-            for price in curr_fetch:
-                if price == prev_fetch[-1]:
-                    last_price_in_curr_fetch = curr_fetch.index(price)
+    while not stop_event.is_set():
+        curr_fetch = None
+        priceInfo.channels_last_post_number[args.channel_id] = 0
+        while True:
+            curr_fetch_nullable = extract_prices(
+                fetch_function(
+                    server_mode,
+                    args,
+                )
+            )
+            curr_fetch_nullable.reverse()
+            if curr_fetch_nullable:
+                curr_fetch = curr_fetch_nullable
+                break
 
-            # last_price_in_curr_fetch = get_index(curr_fetch, prev_fetch[-1])
-
-            if last_price_in_curr_fetch:
-                new_prices = curr_fetch[last_price_in_curr_fetch:]
-
-                for price in new_prices:
-                    if not price == last_price:
-                        to_user = price.get_json_data()
-                        # check if end transaction
-                        if price.action == "پایان معاملات":
-                            to_user["price"] = price.text
-                        emmitter_callback(to_user, args.channel_id)
-                        last_price = price
-
-            else:
-                logger.error("something went wrong")
-
+        if not prev_fetch:
             prev_fetch = curr_fetch
+        # determine last message in the current fetch
+        for price in curr_fetch:
+            if price == prev_fetch[-1]:
+                last_price_in_curr_fetch = curr_fetch.index(price)
 
-        except Exception as e:
-            print("run live mode error:", e)
+        # last_price_in_curr_fetch = get_index(curr_fetch, prev_fetch[-1])
+
+        if not type(curr_fetch) == list:
+            stop_event.set()
+            print("breaking the live loop")
+            error_callback(args.channel_id)
+            break
+
+        if last_price_in_curr_fetch is not None:
+            new_prices = curr_fetch[last_price_in_curr_fetch:]
+
+            for price in new_prices:
+                if not price == last_price:
+                    price.calculate_and_set_rate_of_change(last_price)
+                    to_user = price.get_json_data()
+                    emmitter_callback(to_user, args.channel_id)
+                    last_price = price
+
+        else:
+            logger.error("something went wrong")
+
+        prev_fetch = curr_fetch
+
+    print("loop FINISH")
 
 
 def run_counter(args):
-    priceInfo.channels[args.channel_id]["last_price_post_number"] = 0
+    priceInfo.channels_last_post_number[args.channel_id] = 0
     server_mode = "count"
     full_prices = []
     while True:
         msgs = extract_prices(fetch_function(server_mode, args))
-
         for msg in msgs:
             full_prices.insert(0, msg)
             logger.info(f"accumulated {len(full_prices)} prices")
