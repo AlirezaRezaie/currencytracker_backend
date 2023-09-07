@@ -29,7 +29,7 @@ class PriceBox extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(25),
       ),
-      padding: EdgeInsets.only(top: 35, right: 45, bottom: 35, left: 45),
+      padding: EdgeInsets.only(top: 20, right: 45, bottom: 20, left: 45),
       child: Column(
         mainAxisAlignment:
             MainAxisAlignment.center, // Center the content vertically

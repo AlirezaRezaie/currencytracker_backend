@@ -1,3 +1,4 @@
+import 'package:dollartracker/widgets/utilities/Chart/chart.dart';
 import 'package:dollartracker/widgets/utilities/new_updates_table.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
@@ -5,7 +6,6 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'dart:convert';
-
 import '../utilities/price_box.dart'; // Import this package for jsonDecode
 
 class Home extends StatefulWidget {
@@ -20,6 +20,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   String receivedData = '';
   bool isConnecting = false;
   String errorMessage = '';
+  List chartData = [
+    30500.0,
+    40500.0,
+    50500.0,
+    55500.0,
+  ];
 
   @override
   void initState() {
@@ -146,44 +152,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   ),
                 ],
               ),
-              SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width / 2,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          "ارز های محبوب",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 22,
-                            fontFamily: 'IransansBlack',
-                          ),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم",
-                          style: TextStyle(
-                            color: const Color.fromARGB(190, 255, 255, 255),
-                            fontWeight: FontWeight.w400,
-                            fontSize: 10,
-                            fontFamily: 'Iransans',
-                          ),
-                          textDirection: TextDirection.rtl,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
               SizedBox(
-                height: 50,
+                height: 20,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -202,32 +172,23 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   ),
                 ],
               ),
+              SizedBox(height: 30),
+              Container(
+                height: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: const Color.fromARGB(255, 27, 28, 34),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Chart(data: chartData),
+                ),
+              ),
             ],
           ),
         ),
         SizedBox(
-          height: 40,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(
-              "جدید ترین آپدیت های قیمت",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-                fontSize: 15,
-                fontFamily: 'IransansBlack',
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 5),
-              child: Icon(
-                Icons.bar_chart_rounded,
-                color: Colors.white,
-              ),
-            ),
-          ],
+          height: 20,
         ),
         SizedBox(
           height: 20,
@@ -240,24 +201,64 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               color: Color.fromARGB(255, 27, 28, 34),
               child: Column(
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 196, 209, 225),
-                      borderRadius: BorderRadius.circular(50),
+                  Padding(
+                    padding: EdgeInsets.only(top: 2, bottom: 5),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 196, 209, 225),
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      alignment: Alignment.center,
+                      margin: const EdgeInsets.only(top: 12.0),
+                      height: 4.0,
+                      width: MediaQuery.of(context).size.width * 0.2,
                     ),
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.only(top: 12.0),
-                    height: 4.0,
-                    width: MediaQuery.of(context).size.width * 0.2,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "جدید ترین آپدیت های قیمت",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            fontFamily: 'IransansBlack',
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   Expanded(
                     child: ListView(
                       padding: const EdgeInsets.all(25),
                       children: const [
-                        NewUpdatesTable(title: "دلار", subtitle: "صعودی",imageLink: "", persent: 45,),
-                        NewUpdatesTable(title: "دلار", subtitle: "صعودی",imageLink: "", persent: 65,),
-                        NewUpdatesTable(title: "دلار", subtitle: "صعودی",imageLink: "", persent: 0.25,),
-                        NewUpdatesTable(title: "دلار", subtitle: "صعودی",imageLink: "", persent: 2,),
+                        NewUpdatesTable(
+                          title: "دلار",
+                          subtitle: "صعودی",
+                          imageLink: "",
+                          persent: 45,
+                        ),
+                        NewUpdatesTable(
+                          title: "دلار",
+                          subtitle: "صعودی",
+                          imageLink: "",
+                          persent: 65,
+                        ),
+                        NewUpdatesTable(
+                          title: "دلار",
+                          subtitle: "صعودی",
+                          imageLink: "",
+                          persent: 0.25,
+                        ),
+                        NewUpdatesTable(
+                          title: "دلار",
+                          subtitle: "صعودی",
+                          imageLink: "",
+                          persent: 2,
+                        ),
                       ],
                     ),
                   ),
