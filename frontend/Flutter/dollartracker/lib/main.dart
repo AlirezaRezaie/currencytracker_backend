@@ -3,7 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'app.dart';
 
 void main() async {
-  // await dotenv.load();
+  await dotenv.load(fileName: ".env");
   runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
     home: MyApp(),
