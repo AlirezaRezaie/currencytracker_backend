@@ -55,6 +55,7 @@ class Task:
         self.stop_event.set()
         self.task.join()
         self.task = None
+        tasks.remove(self)
         print("task removed because lack of users")
 
 
@@ -66,7 +67,6 @@ def get_task(id):
 
 
 def disconnect_websocket(task, websocket):
-    print("client disconnected")
     task.users.remove(websocket)
     if len(task.users) < 1:
         task.stop()
