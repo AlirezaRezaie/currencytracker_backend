@@ -31,10 +31,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    // String host = dotenv.env['SERVER_HOST'] ?? 'localhost';
+    String? host = dotenv.env['LOCAL_HOST'];
     super.initState();
     // Replace 'ws://your_websocket_url' with your actual WebSocket server URL.
-    _connectToWebSocket("ws://10.0.2.2:5000/live/nerkhedollarr");
+    _connectToWebSocket("$host/live/nerkhedollarr");
   }
 
   void _connectToWebSocket(String host) async {
