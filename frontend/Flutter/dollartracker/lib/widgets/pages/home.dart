@@ -1,6 +1,7 @@
 import 'package:dollartracker/widgets/utilities/Chart/chart.dart';
 import 'package:dollartracker/widgets/utilities/new_updates_table.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -18,6 +19,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late WebSocketChannel channel;
   String receivedData = '';
+  double changeRate = 0;
   bool isConnecting = false;
   String errorMessage = '';
   List chartData = [
@@ -50,7 +52,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         // Check if the 'price' field exists and is a numeric value
         if (jsonData.containsKey('price')) {
           // Update the animation when the price changes
-
+          print(jsonData);
           setState(() {
             receivedData =
                 jsonData['price']; // Format the price to two decimal places
@@ -99,56 +101,35 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           child: Column(
             children: [
               SizedBox(
-                height: 30,
+                height: 40,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  CircleAvatar(
+                    radius: 25,
+                    // user profile
+                    backgroundImage: NetworkImage(
+                        'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Chris_Hemsworth_by_Gage_Skidmore_2_%28cropped%29.jpg/220px-Chris_Hemsworth_by_Gage_Skidmore_2_%28cropped%29.jpg'),
+                  ),
+                  Text(
+                    "Currency Wave",
+                    style: GoogleFonts.aladin(
+                      color: const Color.fromARGB(255, 255, 255, 255),
+                      fontSize: 25,
+                    ),
+                  ),
                   IconButton(
-                      // here you can add functionality for the icon
-                      onPressed: () {},
-                      icon: Icon(
-                        BootstrapIcons.list,
-                        color: Colors.white,
-                        size: 30,
-                      )),
-                  Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 3),
-                            child: Text(
-                              // the name of the user
-                              "سلام بچه گل",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontFamily: 'IransansBlack'),
-                            ),
-                          ),
-                          Text(
-                            "خوش آمدی",
-                            style: TextStyle(
-                              color: Color.fromARGB(219, 255, 255, 255),
-                              fontSize: 10,
-                              fontFamily: 'IransansBlack',
-                            ),
-                          )
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 12),
-                        child: CircleAvatar(
-                          radius: 25,
-                          // user profile
-                          backgroundImage: NetworkImage(
-                              'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Chris_Hemsworth_by_Gage_Skidmore_2_%28cropped%29.jpg/220px-Chris_Hemsworth_by_Gage_Skidmore_2_%28cropped%29.jpg'),
-                        ),
-                      ),
-                    ],
+                    // here you can add functionality for the icon
+                    onPressed: () {
+                      Scaffold.of(context).openEndDrawer();
+                    },
+                    icon: Icon(
+                      BootstrapIcons.list,
+                      color: Colors.white,
+                      size: 30,
+                    ),
                   ),
                 ],
               ),
@@ -160,38 +141,70 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 children: [
                   PriceBox(
                     title: "🇪🇺 یورو",
-                    price: "500/000",
+                    price: "57/000",
                     firstColor: Color.fromARGB(255, 60, 80, 250),
                     secondColor: Color.fromARGB(255, 60, 78, 246),
                   ),
                   PriceBox(
                     title: "🇺🇸 دلار",
-                    price: "500/000",
+                    price: "50/000",
                     firstColor: Color.fromARGB(255, 60, 80, 250),
                     secondColor: Color.fromARGB(255, 60, 78, 246),
                   ),
                 ],
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 20),
               Container(
-                height: 200,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   color: const Color.fromARGB(255, 27, 28, 34),
                 ),
-                child: Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Chart(data: chartData),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(top: 6),
+                      child: Text(
+                        "قیمت دلار امروز",
+                        style: TextStyle(
+                            color: Colors.white, fontFamily: "IransansBlack"),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        right: 15,
+                        left: 15,
+                        top: 10,
+                        bottom: 20,
+                      ),
+                      child: Container(
+                        height: 150,
+                        child: Padding(
+                          padding: EdgeInsets.all(5),
+                          child: Chart(data: chartData),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
             ],
           ),
         ),
         SizedBox(
-          height: 20,
+          height: 10,
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Container(
+            height: 50,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              color: Color.fromARGB(255, 60, 80, 250),
+            ),
+          ),
         ),
         SizedBox(
-          height: 20,
+          height: 10,
         ),
         Expanded(
           child: ClipRRect(

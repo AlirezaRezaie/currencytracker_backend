@@ -29,9 +29,14 @@ class Chart extends StatelessWidget {
         ),
         borderData: FlBorderData(
           show: true,
-          border: Border.all(color: const Color.fromARGB(40, 255, 255, 255), width: 2),
+          border: Border.all(
+              color: const Color.fromARGB(40, 255, 255, 255), width: 2),
         ),
-        
+        lineTouchData: LineTouchData(
+            touchTooltipData: LineTouchTooltipData(
+          tooltipBgColor: Color.fromARGB(255, 35, 36, 42),
+          
+        )),
         lineBarsData: [
           LineChartBarData(
               spots: [
@@ -57,6 +62,9 @@ class Chart extends StatelessWidget {
         ],
         maxX: 24,
         minX: 0,
+        titlesData: FlTitlesData(
+          show: false
+        )
       ),
       duration: Duration(milliseconds: 500),
       curve: Curves.linear,
