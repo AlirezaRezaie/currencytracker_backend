@@ -1,7 +1,7 @@
 # CurrencyWave project
 
 <p float="left">
-  <img src="images/logo.jpg" alt="view of the web app" height="500" width="600"/>
+  <img src="images/logo.jpg" alt="view of the web app" height="300" width="300"/>
   <img src="images/mockup.png"  width="300" />
 </p>
 
