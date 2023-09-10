@@ -1,6 +1,9 @@
 # CurrencyWave project
 
-![our Logo!](logo.jpg)
+<p float="left">
+  <img src="images/logo.jpg" alt="view of the web app" height="450" width="400"/>
+  <img src="images/mockup.png"  width="300" />
+</p>
 
 ## برنامه نمایش نرخ روزانه دلار تهران به صورت زنده
 
