@@ -18,7 +18,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late WebSocketChannel channel;
-  String receivedData = '';
+  int receivedData = 0;
   double changeRate = 0;
   bool isConnecting = false;
   String errorMessage = '';
@@ -52,7 +52,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         // Check if the 'price' field exists and is a numeric value
         if (jsonData.containsKey('price')) {
           // Update the animation when the price changes
-          print(jsonData);
           setState(() {
             receivedData =
                 jsonData['price']; // Format the price to two decimal places
@@ -141,13 +140,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 children: [
                   PriceBox(
                     title: "🇪🇺 یورو",
-                    price: "57/000",
+                    price: receivedData,
                     firstColor: Color.fromARGB(255, 60, 80, 250),
                     secondColor: Color.fromARGB(255, 60, 78, 246),
                   ),
                   PriceBox(
                     title: "🇺🇸 دلار",
-                    price: "50/000",
+                    price: receivedData,
                     firstColor: Color.fromARGB(255, 60, 80, 250),
                     secondColor: Color.fromARGB(255, 60, 78, 246),
                   ),
