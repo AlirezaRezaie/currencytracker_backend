@@ -20,6 +20,7 @@ class _CurrencySelectorState extends State<CurrencySelector> {
     return DropdownButton(
       value: current_currency,
       dropdownColor: Color.fromARGB(255, 27, 28, 34),
+      borderRadius: BorderRadius.circular(12),
       icon: Icon(Icons.menu_rounded),
       style: TextStyle(color: Colors.white),
       items: widget.listOfCurrency
