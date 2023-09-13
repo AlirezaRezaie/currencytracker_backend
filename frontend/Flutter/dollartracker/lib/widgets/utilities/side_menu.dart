@@ -66,7 +66,7 @@ class SideMenu extends StatelessWidget {
             ),
             MenuItem(
               title: "تبدیل ارز",
-              icon: BootstrapIcons.house_fill,
+              icon: BootstrapIcons.clipboard2_data_fill,
               color: currentRoute == "/calculator"
                   ? Color.fromARGB(255, 60, 80, 250)
                   : Color.fromARGB(255, 27, 28, 34),
@@ -91,10 +91,12 @@ class SideMenu extends StatelessWidget {
               routName: "home",
             ),
             MenuItem(
-              title: "صفحه اصلی",
-              icon: BootstrapIcons.house_fill,
-              color: Color.fromARGB(255, 27, 28, 34),
-              routName: "home",
+              title: "درباره ما",
+              icon: BootstrapIcons.person_fill,
+              color: currentRoute == "/about"
+                  ? Color.fromARGB(255, 60, 80, 250)
+                  : Color.fromARGB(255, 27, 28, 34),
+              routName: "about",
             ),
           ],
         ),

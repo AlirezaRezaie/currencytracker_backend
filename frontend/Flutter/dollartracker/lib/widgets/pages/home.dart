@@ -98,36 +98,38 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       backgroundColor: Color.fromARGB(255, 15, 15, 16),
       body: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              children: [
-                Header(
-                  profileImage:
-                      'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg/220px-Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    PriceBox(
-                      title: "🇪🇺 یورو",
-                      price: receivedData,
-                      firstColor: Color.fromARGB(255, 60, 80, 250),
-                      secondColor: Color.fromARGB(255, 60, 78, 246),
-                    ),
-                    PriceBox(
-                      title: "🇺🇸 دلار",
-                      price: receivedData,
-                      firstColor: Color.fromARGB(255, 60, 80, 250),
-                      secondColor: Color.fromARGB(255, 60, 78, 246),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Container(
+          Column(
+            children: [
+              Header(
+                backgroundColor: const Color.fromARGB(0, 0, 0, 0),
+                color: Colors.white,
+                profileImage:
+                    'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg/220px-Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  PriceBox(
+                    title: "🇪🇺 یورو",
+                    price: receivedData,
+                    firstColor: Color.fromARGB(255, 60, 80, 250),
+                    secondColor: Color.fromARGB(255, 60, 78, 246),
+                  ),
+                  PriceBox(
+                    title: "🇺🇸 دلار",
+                    price: receivedData,
+                    firstColor: Color.fromARGB(255, 60, 80, 250),
+                    secondColor: Color.fromARGB(255, 60, 78, 246),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     color: const Color.fromARGB(255, 27, 28, 34),
@@ -160,8 +162,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           SizedBox(
             height: 10,

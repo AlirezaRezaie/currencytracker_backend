@@ -1,3 +1,4 @@
+import 'package:dollartracker/widgets/pages/about.dart';
 import 'package:dollartracker/widgets/pages/currency_calculator.dart';
 import 'package:dollartracker/widgets/pages/home.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +8,11 @@ void main() async {
   await dotenv.load(fileName: ".env");
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    initialRoute: '/calculator',
+    initialRoute: '/about',
     routes: {
       "/home": (context) => Home(),
       '/calculator': (context) => CurrencyCalculator(),
+      '/about': (context) => AboutPage()
     },
   ));
 }
