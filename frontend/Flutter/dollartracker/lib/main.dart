@@ -7,7 +7,7 @@ void main() async {
   await dotenv.load(fileName: ".env");
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    initialRoute: '/home',
+    initialRoute: '/calculator',
     routes: {
       "/home": (context) => Home(),
       '/calculator': (context) => CurrencyCalculator(),

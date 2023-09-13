@@ -30,7 +30,7 @@ class Header extends StatelessWidget {
               ),
             ),
             Text(
-              "Currency Wave",
+              "Currency Tracker",
               style: GoogleFonts.aladin(
                 color: const Color.fromARGB(255, 255, 255, 255),
                 fontSize: 25,
