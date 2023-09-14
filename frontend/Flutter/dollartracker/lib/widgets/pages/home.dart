@@ -222,6 +222,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     Expanded(
                       child: ListView(
                         padding: const EdgeInsets.all(25),
+                        physics: BouncingScrollPhysics(),
                         children: const [
                           NewUpdatesTable(
                             title: "دلار",

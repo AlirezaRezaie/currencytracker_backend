@@ -58,8 +58,8 @@ class _NewsPageState extends State<NewsPage> {
           ),
           Expanded(
             child: ListView(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              physics: ClampingScrollPhysics(),
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              physics: BouncingScrollPhysics(),
               children: [
                 NewsCard(
                   thumbnail: "assets/about_background.jpg",
