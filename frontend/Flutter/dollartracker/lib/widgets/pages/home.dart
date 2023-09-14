@@ -171,10 +171,23 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 10),
             child: Container(
+              width: 360,
               height: 50,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 color: Color.fromARGB(255, 60, 80, 250),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "قیمت دلار امروز",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: "IransansBlack",
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

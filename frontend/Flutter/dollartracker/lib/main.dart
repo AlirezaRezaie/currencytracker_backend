@@ -9,7 +9,7 @@ void main() async {
   await dotenv.load(fileName: ".env");
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    initialRoute: '/news',
+    initialRoute: '/home',
     routes: {
       "/home": (context) => Home(),
       '/calculator': (context) => CurrencyCalculator(),
