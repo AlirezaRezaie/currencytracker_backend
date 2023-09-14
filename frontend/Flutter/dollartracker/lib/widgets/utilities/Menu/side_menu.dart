@@ -81,10 +81,12 @@ class SideMenu extends StatelessWidget {
               routName: "news",
             ),
             MenuItem(
-              title: "صفحه اصلی",
+              title: "ارز اختصاصی",
               icon: BootstrapIcons.house_fill,
-              color: Color.fromARGB(255, 27, 28, 34),
-              routName: "home",
+              color: currentRoute == "/special_currency"
+                  ? Color.fromARGB(255, 60, 80, 250)
+                  : Color.fromARGB(255, 27, 28, 34),
+              routName: "special_currency",
             ),
             MenuItem(
               title: "درباره ما",

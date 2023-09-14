@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../utilities/Menu/side_menu.dart';
+import '../../utilities/Menu/side_menu.dart';
 
 class NewsPostPage extends StatelessWidget {
   final String image, title, content, readTime;

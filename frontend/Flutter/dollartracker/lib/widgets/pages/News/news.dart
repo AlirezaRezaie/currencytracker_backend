@@ -1,10 +1,10 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
-import 'package:dollartracker/widgets/pages/news_post.dart';
+import 'package:dollartracker/widgets/pages/News/news_post.dart';
 import 'package:dollartracker/widgets/utilities/header.dart';
 import 'package:dollartracker/widgets/utilities/news_card.dart';
 import 'package:flutter/material.dart';
 
-import '../utilities/Menu/side_menu.dart';
+import '../../utilities/Menu/side_menu.dart';
 
 class NewsPage extends StatefulWidget {
   const NewsPage({super.key});

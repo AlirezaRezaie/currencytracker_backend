@@ -60,6 +60,8 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                               'JPY',
                               'AUD',
                             ],
+                            width: 100,
+                            height: 60,
                           )
                         ],
                       ),
@@ -74,6 +76,9 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                       ),
                     ),
                   ],
+                ),
+                SizedBox(
+                  height: 10,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -90,6 +95,8 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                               'JPY',
                               'AUD',
                             ],
+                            width: 100,
+                            height: 60,
                           )
                         ],
                       ),
@@ -105,13 +112,17 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                     ),
                   ],
                 ),
+                SizedBox(
+                  height: 10,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      width: 80,
-                      height: 65,
+                      width: 110,
+                      height: 60,
+                      padding: EdgeInsets.only(left: 8),
                       child: TextField(
                         keyboardType: TextInputType.number,
                         inputFormatters: [
