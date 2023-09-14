@@ -183,7 +183,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                           fontFamily: 'IransansBlack',
                         ),
                       ),
-                    )
+                    ),
                   ],
                 )
               ],

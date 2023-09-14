@@ -19,7 +19,7 @@ class AboutPage extends StatelessWidget {
               bottomRight: Radius.circular(70),
             ),
             child: Container(
-              height: 400,
+              height: 300,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/about_background.jpg'),
@@ -35,8 +35,212 @@ class AboutPage extends StatelessWidget {
                     profileImage:
                         "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Dwayne_Johnson_2014_%28cropped%29.jpg/640px-Dwayne_Johnson_2014_%28cropped%29.jpg",
                   ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    "درباره کارنسی ترکر ",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      fontFamily: 'IransansBlack',
+                    ),
+                  ),
                   SizedBox(
-                    height: 50,
+                    height: 20,
+                  ),
+                  Directionality(
+                    textDirection: TextDirection.rtl,
+                    child: Text(
+                      "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد کتابهای زیادی در شصت و سه درصد گذشته حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد ",
+                      style: TextStyle(
+                        color: const Color.fromARGB(200, 255, 255, 255),
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12,
+                        fontFamily: 'IransansBlack',
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 60,
+                  ),
+                  Text(
+                    "راه های ارتباطی با ما ",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                      fontFamily: 'IransansBlack',
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(right: 10),
+                        child: SizedBox(
+                          width: 180,
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all(
+                                EdgeInsets.only(
+                                  right: 20,
+                                  left: 20,
+                                  top: 10,
+                                  bottom: 10,
+                                ),
+                              ),
+                              backgroundColor: MaterialStateProperty.all(
+                                Color.fromARGB(255, 60, 80, 250),
+                              ),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(8), // Border radius
+                                ),
+                              ),
+                            ),
+                            child: Text(
+                              "آدرس گیت هاب",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                                fontFamily: 'IransansBlack',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 180,
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.all(
+                              EdgeInsets.only(
+                                right: 20,
+                                left: 20,
+                                top: 10,
+                                bottom: 10,
+                              ),
+                            ),
+                            backgroundColor: MaterialStateProperty.all(
+                              Color.fromARGB(255, 60, 80, 250),
+                            ),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(8), // Border radius
+                              ),
+                            ),
+                          ),
+                          child: Text(
+                            "تماس با توسعه دهنده",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                              fontFamily: 'IransansBlack',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(right: 10),
+                        child: SizedBox(
+                          width: 180,
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all(
+                                EdgeInsets.only(
+                                  right: 20,
+                                  left: 20,
+                                  top: 10,
+                                  bottom: 10,
+                                ),
+                              ),
+                              backgroundColor: MaterialStateProperty.all(
+                                Color.fromARGB(255, 60, 80, 250),
+                              ),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(8), // Border radius
+                                ),
+                              ),
+                            ),
+                            child: Text(
+                              "آیدی تلگرام",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                                fontFamily: 'IransansBlack',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 180,
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.all(
+                              EdgeInsets.only(
+                                right: 20,
+                                left: 20,
+                                top: 10,
+                                bottom: 10,
+                              ),
+                            ),
+                            backgroundColor: MaterialStateProperty.all(
+                              Color.fromARGB(255, 60, 80, 250),
+                            ),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(8), // Border radius
+                              ),
+                            ),
+                          ),
+                          child: Text(
+                            "ایمیل توسعه دهنده",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                              fontFamily: 'IransansBlack',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

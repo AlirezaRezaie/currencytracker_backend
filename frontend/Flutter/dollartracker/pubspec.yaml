@@ -41,6 +41,7 @@ dependencies:
   bootstrap_icons: ^1.10.5+2
   fl_chart: ^0.63.0
   animated_digit: ^3.2.3
+  url_launcher: ^6.1.8
 
 dev_dependencies:
   flutter_test:

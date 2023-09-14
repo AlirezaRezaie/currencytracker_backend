@@ -85,12 +85,6 @@ class SideMenu extends StatelessWidget {
               routName: "home",
             ),
             MenuItem(
-              title: "صفحه اصلی",
-              icon: BootstrapIcons.house_fill,
-              color: Color.fromARGB(255, 27, 28, 34),
-              routName: "home",
-            ),
-            MenuItem(
               title: "درباره ما",
               icon: BootstrapIcons.person_fill,
               color: currentRoute == "/about"
