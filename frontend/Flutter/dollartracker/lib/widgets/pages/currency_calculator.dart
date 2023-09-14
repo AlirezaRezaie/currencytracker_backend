@@ -65,7 +65,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                       ),
                     ),
                     Text(
-                      " : ارز مورد نظر همراه با تعداد انتخواب کنید",
+                      " : ارز مورد نظر را انتخواب کنید",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w400,
