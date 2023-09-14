@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
-
 import '../utilities/header.dart';
 import '../utilities/Menu/side_menu.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final String phone_number = "tel:09172737360";
+    final String github_url = "https://github.com/MRAdibi";
+    final String email_address = "mailto:m.r.adibi125@gmail.com";
+    final String telegram_address = "https://t.me/bachekhobb";
+
     return Scaffold(
       endDrawer: SideMenu(),
       backgroundColor: Color.fromARGB(255, 15, 15, 16),
@@ -95,7 +100,9 @@ class AboutPage extends StatelessWidget {
                         child: SizedBox(
                           width: 180,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              launch(github_url);
+                            },
                             style: ButtonStyle(
                               padding: MaterialStateProperty.all(
                                 EdgeInsets.only(
@@ -130,7 +137,9 @@ class AboutPage extends StatelessWidget {
                       SizedBox(
                         width: 180,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            launch(phone_number);
+                          },
                           style: ButtonStyle(
                             padding: MaterialStateProperty.all(
                               EdgeInsets.only(
@@ -174,7 +183,9 @@ class AboutPage extends StatelessWidget {
                         child: SizedBox(
                           width: 180,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              launch(telegram_address);
+                            },
                             style: ButtonStyle(
                               padding: MaterialStateProperty.all(
                                 EdgeInsets.only(
@@ -209,7 +220,9 @@ class AboutPage extends StatelessWidget {
                       SizedBox(
                         width: 180,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            launch(email_address);
+                          },
                           style: ButtonStyle(
                             padding: MaterialStateProperty.all(
                               EdgeInsets.only(
