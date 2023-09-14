@@ -1,7 +1,8 @@
 import 'package:dollartracker/widgets/utilities/currency_selector.dart';
 import 'package:dollartracker/widgets/utilities/header.dart';
-import 'package:dollartracker/widgets/utilities/side_menu.dart';
+import 'package:dollartracker/widgets/utilities/Menu/side_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CurrencyCalculator extends StatefulWidget {
   const CurrencyCalculator({super.key});
@@ -47,18 +48,21 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        CurrencySelector(
-                          listOfCurrency: [
-                            'USD',
-                            'EUR',
-                            'GBP',
-                            'JPY',
-                            'AUD',
-                          ],
-                        )
-                      ],
+                    Padding(
+                      padding: EdgeInsets.only(left: 8),
+                      child: Row(
+                        children: [
+                          CurrencySelector(
+                            listOfCurrency: [
+                              'USD',
+                              'EUR',
+                              'GBP',
+                              'JPY',
+                              'AUD',
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                     Text(
                       " : ارز مورد نظر همراه با تعداد انتخواب کنید",
@@ -74,18 +78,21 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        CurrencySelector(
-                          listOfCurrency: [
-                            'USD',
-                            'EUR',
-                            'GBP',
-                            'JPY',
-                            'AUD',
-                          ],
-                        )
-                      ],
+                    Padding(
+                      padding: EdgeInsets.only(left: 8),
+                      child: Row(
+                        children: [
+                          CurrencySelector(
+                            listOfCurrency: [
+                              'USD',
+                              'EUR',
+                              'GBP',
+                              'JPY',
+                              'AUD',
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                     Text(
                       " : ارز دوم را انتخواب کنید",
@@ -98,20 +105,47 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                     ),
                   ],
                 ),
-                TextField(
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Color.fromARGB(255, 27, 28, 34),
-                    hintTextDirection: TextDirection.rtl,
-                    hintText: "تعداد مورد نظر",
-                    hintStyle: TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 80,
+                      height: 65,
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter
+                              .digitsOnly, // Allow only digits (0-9)
+                        ],
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Color.fromARGB(255, 27, 28, 34),
+                          hintTextDirection: TextDirection.rtl,
+                          hintText: "مثال: 12",
+                          hintStyle: TextStyle(
+                            color: Color.fromARGB(150, 255, 255, 255),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
                     ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                    Text(
+                      " : مقدار ارز مورد نظر",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        fontFamily: 'IransansBlack',
+                      ),
                     ),
-                  ),
+                  ],
                 ),
                 SizedBox(
                   height: 20,

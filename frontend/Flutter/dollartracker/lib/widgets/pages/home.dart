@@ -7,7 +7,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
 import '../utilities/price_box.dart';
-import '../utilities/side_menu.dart';
+import '../utilities/Menu/side_menu.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});

@@ -22,7 +22,9 @@ class _CurrencySelectorState extends State<CurrencySelector> {
       dropdownColor: Color.fromARGB(255, 27, 28, 34),
       borderRadius: BorderRadius.circular(12),
       icon: Icon(Icons.menu_rounded),
-      style: TextStyle(color: Colors.white),
+      style: TextStyle(
+        color: Colors.white,
+      ),
       items: widget.listOfCurrency
           .map<DropdownMenuItem<String>>((String currency) {
         return DropdownMenuItem<String>(
