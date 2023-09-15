@@ -33,6 +33,13 @@ security = HTTPBasic()
 
 # Define a Jinja2 template directory
 templates = Jinja2Templates(directory="templates")
+# Check if the directory exists
+uploads_path = "static/uploads"
+if not os.path.exists(uploads_path):
+    # If it doesn't exist, create it
+    os.makedirs(uploads_path)
+else:
+    print(f"Directory '{uploads_path}' already exists.")
 
 
 # Define a function to check user credentials
