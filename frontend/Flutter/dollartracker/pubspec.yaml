@@ -40,7 +40,8 @@ dependencies:
   google_fonts: ^5.1.0
   bootstrap_icons: ^1.10.5+2
   fl_chart: ^0.63.0
-  animated_digit: ^3.2.3
+  url_launcher: ^6.1.8
+  animated_number: ^1.0.2
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +74,7 @@ flutter:
 
   assets:
     - .env
+    - "assets/about_background.jpg"
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
