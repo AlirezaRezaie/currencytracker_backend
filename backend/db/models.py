@@ -9,7 +9,7 @@ class News(Base):
     __tablename__ = "news"
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    description = Column(String, index=True)
-    image_link = Column(String, index=True)
+    title = Column(String(255), index=True)
+    description = Column(String(255), index=True)
+    image_link = Column(String(255), index=True)
     created_at = Column(DateTime, default=datetime.datetime.now)
