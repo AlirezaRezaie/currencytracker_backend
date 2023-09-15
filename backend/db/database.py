@@ -5,7 +5,7 @@ from db.models import Base
 
 # from db.test_db import add_news
 # Create the tables in your database
-engine = create_engine("sqlite:///db/your_database.db")
+engine = create_engine("sqlite:///./db/your_database.db")
 Base.metadata.create_all(engine)
 
 # Now that the tables are created, configure your engine and metadata
