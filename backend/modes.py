@@ -2,26 +2,32 @@ from network import fetch_price_data_u_preview_page as fetch_function
 from network import priceInfo
 from price import extract_prices
 from logs import logger
+from locals import local
 
 
 def run_live(emmitter_callback, error_callback, stop_event, args=None):
+    local.args = args
     server_mode = "live"
     prev_fetch = []
     last_price = None
+    patience = 4
     while not stop_event.is_set():
         curr_fetch = None
         priceInfo.channels_last_post_number[args.channel_id] = 0
-        while True:
+
+        # we fetch untill we reach some prices we can change the patience to be more it will search more messages
+        for _ in range(patience):
             curr_fetch_nullable = extract_prices(
-                fetch_function(
-                    server_mode,
-                    args,
-                )
+                fetch_function(server_mode, args), reverse=True
             )
-            curr_fetch_nullable.reverse()
             if curr_fetch_nullable:
                 curr_fetch = curr_fetch_nullable
                 break
+
+        if not type(curr_fetch) == list:
+            stop_event.set()
+            error_callback(args.channel_id)
+            break
 
         if not prev_fetch:
             prev_fetch = curr_fetch
@@ -29,14 +35,6 @@ def run_live(emmitter_callback, error_callback, stop_event, args=None):
         for price in curr_fetch:
             if price == prev_fetch[-1]:
                 last_price_in_curr_fetch = curr_fetch.index(price)
-
-        # last_price_in_curr_fetch = get_index(curr_fetch, prev_fetch[-1])
-
-        if not type(curr_fetch) == list:
-            stop_event.set()
-            print("breaking the live loop")
-            error_callback(args.channel_id)
-            break
 
         if last_price_in_curr_fetch is not None:
             new_prices = curr_fetch[last_price_in_curr_fetch:]
@@ -52,8 +50,6 @@ def run_live(emmitter_callback, error_callback, stop_event, args=None):
             logger.error("something went wrong")
 
         prev_fetch = curr_fetch
-
-    print("loop FINISH")
 
 
 def run_counter(args):
