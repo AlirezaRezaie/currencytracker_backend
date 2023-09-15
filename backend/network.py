@@ -38,6 +38,8 @@ def network_stability_check(proxy=None):
             print(
                 f"Failed connecting 😢 (Picking{' another' if proxy_list.index(proxy) > 0 else ''} proxy...)"
             )
+            if proxy_list.index(proxy) == len(proxy_list) - 1:
+                exit(0)
 
 
 class FetchRate:
@@ -105,13 +107,14 @@ def fetch_price_data_u_preview_page(
         try:
             # TODO: handle network resets and minor error that might cause the whole connection
             # to close
-            logger.info("connecting...")
+            logger.debug("connecting...")
             t1 = int(time())
             response = session.post(
                 f"https://t.me/s/{args.channel_id}?before={str(postnumber)}",
                 headers=headers,
                 timeout=timeout,
             ).text
+
             t2 = int(time())
             if fetchrate:
                 fr.set_rate(t2 - t1)
@@ -132,7 +135,8 @@ def fetch_price_data_u_preview_page(
         evaluated_data = ast.literal_eval(response)
     except Exception as e:
         evaluated_data = response
-        print("parser error critical!!!!!!!!!!!!1")
+        logger.info("parser info: " + str(type(e)))
+        # print("parser error critical!!!!!!!!!!!!1")
     html_data = evaluated_data.replace("\\", "")
     soup = BeautifulSoup(html_data, "html.parser")
 
