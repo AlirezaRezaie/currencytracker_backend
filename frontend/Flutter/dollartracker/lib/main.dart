@@ -15,7 +15,7 @@ void main() async {
       "/home": (context) => Home(),
       '/calculator': (context) => CurrencyCalculator(),
       '/news': (context) => NewsPage(),
-      '/special_currency' :(context) => SpecialCurrency(),
+      '/special_currency': (context) => SpecialCurrency(),
       '/about': (context) => AboutPage(),
     },
   ));

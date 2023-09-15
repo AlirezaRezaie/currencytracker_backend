@@ -1,8 +1,7 @@
-import 'package:animated_digit/animated_digit.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class PriceBox extends StatelessWidget {
+class PriceBox extends StatefulWidget {
   final String title;
   final int price;
   final Color firstColor;
@@ -16,14 +15,18 @@ class PriceBox extends StatelessWidget {
   });
 
   @override
+  State<PriceBox> createState() => _PriceBoxState();
+}
+
+class _PriceBoxState extends State<PriceBox> {
+  @override
   Widget build(BuildContext context) {
-    AnimatedDigitController _controller = AnimatedDigitController(price);
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            firstColor,
-            secondColor,
+            widget.firstColor,
+            widget.secondColor,
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -48,7 +51,7 @@ class PriceBox extends StatelessWidget {
             ),
           ),
           Text(
-            title,
+            widget.title,
             style: TextStyle(
                 color: const Color.fromARGB(255, 255, 255, 255),
                 fontWeight: FontWeight.bold,
@@ -59,10 +62,9 @@ class PriceBox extends StatelessWidget {
             padding: EdgeInsets.only(top: 5),
             child: Row(
               children: [
-                AnimatedDigitWidget(
-                  controller: _controller,
-                  enableSeparator: true,
-                  textStyle: GoogleFonts.aladin(
+                Text(
+                  widget.price.toString(),
+                  style: GoogleFonts.aladin(
                     color: const Color.fromARGB(255, 255, 255, 255),
                     fontWeight: FontWeight.w600,
                     fontSize: 20,

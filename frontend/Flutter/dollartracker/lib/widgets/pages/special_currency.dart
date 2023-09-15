@@ -15,6 +15,46 @@ class SpecialCurrency extends StatefulWidget {
 class _SpecialCurrencyState extends State<SpecialCurrency> {
   @override
   Widget build(BuildContext context) {
+    // set the currency list to map and display to the user
+    List currency_list = [
+      {
+        "title": "title",
+        "subtitle": 'subtitle',
+        "persent": 60.0,
+        "imageLink": "imageLink",
+      },
+      {
+        "title": "title",
+        "subtitle": 'subtitle',
+        "persent": 60.0,
+        "imageLink": "imageLink",
+      },
+      {
+        "title": "title",
+        "subtitle": 'subtitle',
+        "persent": 60.0,
+        "imageLink": "imageLink",
+      },
+      {
+        "title": "title",
+        "subtitle": 'subtitle',
+        "persent": 60.0,
+        "imageLink": "imageLink",
+      },
+      {
+        "title": "title",
+        "subtitle": 'subtitle',
+        "persent": 60.0,
+        "imageLink": "imageLink",
+      },
+      {
+        "title": "title",
+        "subtitle": 'subtitle',
+        "persent": 60.0,
+        "imageLink": "imageLink",
+      },
+    ];
+
     return Scaffold(
       endDrawer: SideMenu(),
       backgroundColor: Color.fromARGB(255, 15, 15, 16),
@@ -46,42 +86,18 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
             height: 20,
           ),
           Expanded(
-            child: ListView(
+            child: ListView.builder(
+              physics: BouncingScrollPhysics(),
+              itemCount: currency_list.length,
               padding: EdgeInsets.symmetric(horizontal: 20),
-              children: [
-                NewUpdatesTable(
-                  title: "title",
-                  subtitle: 'subtitle',
-                  persent: 60,
-                  imageLink: "imageLink",
-                ),
-                NewUpdatesTable(
-                  title: "title",
-                  subtitle: 'subtitle',
-                  persent: 60,
-                  imageLink: "imageLink",
-                ),NewUpdatesTable(
-                  title: "title",
-                  subtitle: 'subtitle',
-                  persent: 60,
-                  imageLink: "imageLink",
-                ),NewUpdatesTable(
-                  title: "title",
-                  subtitle: 'subtitle',
-                  persent: 60,
-                  imageLink: "imageLink",
-                ),NewUpdatesTable(
-                  title: "title",
-                  subtitle: 'subtitle',
-                  persent: 60,
-                  imageLink: "imageLink",
-                ),NewUpdatesTable(
-                  title: "title",
-                  subtitle: 'subtitle',
-                  persent: 60,
-                  imageLink: "imageLink",
-                ),
-              ],
+              itemBuilder: (context, index) {
+                return NewUpdatesTable(
+                  title: currency_list[index]['title'],
+                  imageLink: currency_list[index]['imageLink'],
+                  persent: currency_list[index]['persent'],
+                  subtitle: currency_list[index]['subtitle'],
+                );
+              },
             ),
           ),
         ],

@@ -14,6 +14,7 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
+  // set the list of news to map and display to the user
   List newsList = [
     {
       "thumbnail": "assets/about_background.jpg",
