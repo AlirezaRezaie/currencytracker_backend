@@ -21,7 +21,7 @@ class Header extends StatelessWidget {
         children: [
           // add some padding to make space between the header and the top of the phone
           SizedBox(
-            height: 30,
+            height: 35,
           ),
           Padding(
             padding: EdgeInsets.symmetric(
