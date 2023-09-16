@@ -10,14 +10,19 @@
     <img src="/static/favicon.jpg"></img>
     <h1>Upload Form</h1>
     <form action="/upload/" method="post" enctype="multipart/form-data">
-      <label for="name">Title:</label>
+      <label for="title">Title:</label>
       <input type="text" id="title" name="title" /><br /><br />
 
-      <label for="age">Descreption:</label>
+      <label for="description">Descreption:</label>
       <textarea name="description" id="description" cols="30" rows="10"></textarea><br /><br />
 
       <label for="photo">Photo:</label>
       <input type="file" id="photo" name="photo" /><br /><br />
+
+
+
+      <label for="time_to_read">Time to read:</label>
+      <input type="number" id="time_to_read" name="time_to_read" /><br /><br />
 
       <input type="submit" value="Submit" />
     </form>

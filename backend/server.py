@@ -107,6 +107,7 @@ async def upload_file(
     title: str = Form(...),
     description: str = Form(...),
     photo: UploadFile = Form(...),
+    time_to_read: int = Form(...),
     db: Session = Depends(get_db),
 ):
     if not photo.file.read() or not photo.filename.endswith(".jpg"):
@@ -129,6 +130,7 @@ async def upload_file(
         title=title,
         description=description,
         image_link=f"http://{get_host()}:{get_port()}/{image_path}",
+        time_to_read=time_to_read,
     )
     db.add(new_entry)
     db.commit()
