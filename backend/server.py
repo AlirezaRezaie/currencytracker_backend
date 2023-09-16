@@ -143,7 +143,7 @@ def get_all_people(db: Session = Depends(get_db)):
 
 
 @app.get("/get_hosts")
-def get_hosts() -> str:
+def get_hosts() -> dict:
     url = f"{get_host()}:{get_port()}"
     paths = {
         "http": f"http://{url}",
