@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:dollartracker/widgets/pages/News/news_post.dart';
+import 'package:dollartracker/widgets/utilities/Skeleton/news_card_skeleton.dart';
 import 'package:dollartracker/widgets/utilities/header.dart';
 import 'package:dollartracker/widgets/pages/News/news_card.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class NewsPage extends StatefulWidget {
 class _NewsPageState extends State<NewsPage> {
   // set the list of news to map and display to the user
   List newsList = [];
-
+  bool isLoading = true;
   Future<void> fetchData() async {
     String? host = dotenv.env['SERVER_HOST'];
 
@@ -39,6 +40,7 @@ class _NewsPageState extends State<NewsPage> {
         newsList = data.cast();
         // reverse the list to sort the news currectly
         newsList = newsList.reversed.toList();
+        isLoading = false;
       });
       print(newsList);
     } else {
@@ -113,40 +115,57 @@ class _NewsPageState extends State<NewsPage> {
               ),
             ),
           ),
-          Expanded(
-            child: RefreshIndicator(
-              color: Color.fromARGB(255, 255, 255, 255),
-              backgroundColor: Color.fromARGB(255, 27, 28, 34),
-              onRefresh: () async {
-                await fetchData();
-                setState(() {});
-              },
-              child: ListView.builder(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                physics: AlwaysScrollableScrollPhysics(),
-                itemCount: newsList.length,
-                itemBuilder: (context, index) {
-                  return NewsCard(
-                    thumbnail: newsList[index]['image_link'],
-                    title: newsList[index]['title'],
-                    topic: newsList[index]['topic'],
-                    time: newsList[index]['created_at'],
-                    onPress: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => NewsPostPage(
-                          image: newsList[index]['image_link'],
-                          title: newsList[index]['title'],
-                          content: newsList[index]['description'],
-                          readTime: newsList[index]['time_to_read'],
-                        ),
-                      ),
+          isLoading
+              ? Expanded(
+                  child: RefreshIndicator(
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    backgroundColor: Color.fromARGB(255, 27, 28, 34),
+                    onRefresh: () async {
+                      await fetchData();
+                      setState(() {});
+                    },
+                    child: ListView.separated(
+                      itemBuilder: (context, index) => NewsCardSkeleton(),
+                      separatorBuilder: (context, index) =>
+                          SizedBox(height: 16),
+                      itemCount: 6,
                     ),
-                  );
-                },
-              ),
-            ),
-          )
+                  ),
+                )
+              : Expanded(
+                  child: RefreshIndicator(
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    backgroundColor: Color.fromARGB(255, 27, 28, 34),
+                    onRefresh: () async {
+                      await fetchData();
+                      setState(() {});
+                    },
+                    child: ListView.builder(
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      physics: AlwaysScrollableScrollPhysics(),
+                      itemCount: newsList.length,
+                      itemBuilder: (context, index) {
+                        return NewsCard(
+                          thumbnail: newsList[index]['image_link'],
+                          title: newsList[index]['title'],
+                          topic: newsList[index]['topic'],
+                          time: newsList[index]['created_at'],
+                          onPress: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NewsPostPage(
+                                image: newsList[index]['image_link'],
+                                title: newsList[index]['title'],
+                                content: newsList[index]['description'],
+                                readTime: newsList[index]['time_to_read'],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
         ],
       ),
     );
