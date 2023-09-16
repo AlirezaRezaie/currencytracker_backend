@@ -4,5 +4,11 @@ import socket
 # Define a hardcoded admin username and password (for demonstration purposes)
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "admin_password"
-HOST = socket.gethostname()
-PORT = os.getenv("PORT", default=5000)
+
+
+def get_host():
+    return socket.gethostname()
+
+
+def get_port():
+    return os.getenv("PORT", default=5000)

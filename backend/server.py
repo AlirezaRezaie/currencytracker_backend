@@ -105,8 +105,10 @@ async def serve_form(
 async def upload_file(
     request: Request,
     title: str = Form(...),
+    topic: str = Form(...),
     description: str = Form(...),
     photo: UploadFile = Form(...),
+    time_to_read: int = Form(...),
     db: Session = Depends(get_db),
 ):
     if not photo.file.read() or not photo.filename.endswith(".jpg"):
@@ -127,8 +129,10 @@ async def upload_file(
 
     new_entry = News(
         title=title,
+        topic=topic,
         description=description,
-        image_link=f"http://{HOST}:{PORT}/{image_path}",
+        image_link=f"http://{get_host()}:{get_port()}/{image_path}",
+        time_to_read=time_to_read,
     )
     db.add(new_entry)
     db.commit()
@@ -142,14 +146,24 @@ def get_all_people(db: Session = Depends(get_db)):
     return news
 
 
+@app.get("/get_hosts")
+def get_hosts() -> dict:
+    url = f"{get_host()}:{get_port()}"
+    paths = {
+        "http": f"http://{url}",
+        "ws": f"ws://{url}",
+    }
+    return paths
+
+
 if __name__ == "__main__":
     import uvicorn
 
     # network_stability_check()
 
-    logger.info(f"env port is set to: {PORT}")
+    logger.info(f"env port is set to: {get_port()}")
     uvicorn.run(
         "server:app",
-        host=HOST,
-        port=PORT,
+        host=get_host(),
+        port=get_port(),
     )
