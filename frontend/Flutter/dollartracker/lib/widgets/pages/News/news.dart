@@ -76,12 +76,29 @@ class _NewsPageState extends State<NewsPage> {
               bottom: 20,
             ),
             child: TextField(
+              onChanged: (value) {
+                setState(() {
+                  if (value.isEmpty) {
+                    // If the search text is empty, return the original list
+                    // No need to filter, just reset to the original list
+                    fetchData();
+                  } else {
+                    // Filter the list based on the search text
+                    newsList = newsList.where((news) {
+                      final title = news["title"].toLowerCase();
+                      return title.contains(value.toLowerCase());
+                    }).toList();
+                  }
+                });
+              },
               textAlign: TextAlign.right,
               style: TextStyle(
                 color: Colors.white,
               ),
               decoration: InputDecoration(
-                prefixIcon: Icon(BootstrapIcons.search),
+                prefixIcon: Icon(
+                  BootstrapIcons.search,
+                ),
                 prefixIconColor: const Color.fromARGB(150, 255, 255, 255),
                 filled: true,
                 fillColor: Color.fromARGB(255, 27, 28, 34),
