@@ -128,7 +128,7 @@ async def upload_file(
     new_entry = News(
         title=title,
         description=description,
-        image_link=f"http://{HOST}:{PORT}/{image_path}",
+        image_link=f"http://{get_host()}:{get_port()}/{image_path}",
     )
     db.add(new_entry)
     db.commit()
@@ -142,14 +142,24 @@ def get_all_people(db: Session = Depends(get_db)):
     return news
 
 
+@app.get("/get_hosts")
+def get_hosts() -> str:
+    url = f"{get_host()}:{get_port()}"
+    paths = {
+        "http": f"http://{url}",
+        "ws": f"ws://{url}",
+    }
+    return paths
+
+
 if __name__ == "__main__":
     import uvicorn
 
     # network_stability_check()
 
-    logger.info(f"env port is set to: {PORT}")
+    logger.info(f"env port is set to: {get_port()}")
     uvicorn.run(
         "server:app",
-        host=HOST,
-        port=PORT,
+        host=get_host(),
+        port=get_port(),
     )
