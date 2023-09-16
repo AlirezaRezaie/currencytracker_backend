@@ -1,9 +1,5 @@
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, TypeDecorator
 from sqlalchemy.ext.declarative import declarative_base
-import jdatetime
-import locale
-
-locale.setlocale(locale.LC_ALL, "fa_IR")
 
 Base = declarative_base()
 
@@ -17,7 +13,7 @@ class News(Base):
     description = Column(String(2000, collation="utf8mb4_unicode_ci"), index=True)
     image_link = Column(String(255), index=True)
     time_to_read = Column(Integer, index=True)
+
     created_at = Column(
-        String(30, collation="utf8mb4_unicode_ci"),
-        default=jdatetime.datetime.now().strftime("%a, %d %b %Y %H:%M"),
-    )
+        String(50, collation="utf8mb4_unicode_ci")
+    )  # Use String type to store the formatted time
