@@ -69,17 +69,34 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
           SizedBox(
             height: 30,
           ),
-          Container(
-            child: CurrencySelector(
-              listOfCurrency: [
-                'USD',
-                'EUR',
-                'GBP',
-                'JPY',
-                'AUD',
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  child: CurrencySelector(
+                    listOfCurrency: [
+                      
+                    ],
+                    width: 100,
+                    height: 60,
+                  ),
+                ),
+                Container(
+                  child: CurrencySelector(
+                    listOfCurrency: [
+                      'USD',
+                      'EUR',
+                      'GBP',
+                      'JPY',
+                      'AUD',
+                    ],
+                    width: 230,
+                    height: 60,
+                  ),
+                ),
               ],
-              width: 300,
-              height: 60,
             ),
           ),
           SizedBox(

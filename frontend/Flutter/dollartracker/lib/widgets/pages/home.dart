@@ -18,6 +18,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late WebSocketChannel channel;
+
   int receivedData = 0;
   double changeRate = 0;
   bool isConnecting = false;

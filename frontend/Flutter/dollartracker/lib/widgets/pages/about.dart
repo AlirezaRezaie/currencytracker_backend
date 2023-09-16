@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../utilities/header.dart';
 import '../utilities/Menu/side_menu.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -95,7 +96,7 @@ class AboutPage extends StatelessWidget {
                         width: 180,
                         child: ElevatedButton(
                           onPressed: () {
-                            launch(github_url);
+                            launchUrlString(github_url);
                           },
                           style: ButtonStyle(
                             padding: MaterialStateProperty.all(
@@ -132,7 +133,7 @@ class AboutPage extends StatelessWidget {
                       width: 180,
                       child: ElevatedButton(
                         onPressed: () {
-                          launch(phone_number);
+                          launchUrlString(phone_number);
                         },
                         style: ButtonStyle(
                           padding: MaterialStateProperty.all(
@@ -178,7 +179,7 @@ class AboutPage extends StatelessWidget {
                         width: 180,
                         child: ElevatedButton(
                           onPressed: () {
-                            launch(telegram_address);
+                            launchUrlString(telegram_address);
                           },
                           style: ButtonStyle(
                             padding: MaterialStateProperty.all(
@@ -215,7 +216,7 @@ class AboutPage extends StatelessWidget {
                       width: 180,
                       child: ElevatedButton(
                         onPressed: () {
-                          launch(email_address);
+                          launchUrlString(email_address);
                         },
                         style: ButtonStyle(
                           padding: MaterialStateProperty.all(
