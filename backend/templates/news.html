@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Upload Form</title>
+  </head>
+  <body>
+    {{ token }}
+    <img src="/static/favicon.jpg"></img>
+    <h1>Upload Form</h1>
+    <form action="/upload/" method="post" enctype="multipart/form-data">
+      <label for="name">Title:</label>
+      <input type="text" id="title" name="title" /><br /><br />
+
+      <label for="age">Descreption:</label>
+      <input type="text" id="description" name="description" /><br /><br />
+
+      <label for="photo">Photo:</label>
+      <input type="file" id="photo" name="photo" /><br /><br />
+
+      <input type="submit" value="Submit" />
+    </form>
+  </body>
+</html>

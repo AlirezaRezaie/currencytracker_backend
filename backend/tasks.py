@@ -2,6 +2,7 @@ import threading
 import asyncio
 import json
 from modes import run_live
+from logs import logger
 
 tasks = []
 
@@ -32,7 +33,7 @@ class Task:
         try:
             self.task = self.create_task()
         except:
-            print("error creating thread maybe low memory")
+            logger.critical("error creating thread maybe low memory")
             return None
 
         tasks.append(self)
@@ -54,9 +55,9 @@ class Task:
     def stop(self):
         self.stop_event.set()
         self.task.join()
+        logger.info(f"removing {self.task.name} because no one is using it")
         self.task = None
         tasks.remove(self)
-        print("task removed because lack of users")
 
 
 def get_task(id):
@@ -67,9 +68,15 @@ def get_task(id):
 
 
 def disconnect_websocket(task, websocket):
-    task.users.remove(websocket)
-    if len(task.users) < 1:
-        task.stop()
+    if task in tasks:
+        task.users.remove(websocket)
+        logger.info(
+            f"client {websocket.client.host}:{websocket.client.port} disconnected ❌❌"
+        )
+        if len(task.users) < 1:
+            task.stop()
+    else:
+        logger.info("the task has already been removed")
 
 
 async def send_data_to_clients(new_data, clients):
@@ -92,8 +99,8 @@ def error_callback(id):
 
 
 def price_callback(price, channel):
-    print(price, channel)
     task = get_task(channel)
+    logger.info(f"request:\n{price} from channel {channel}")
     task.lastprice = price
     users = task.users
     asyncio.run(send_data_to_clients(price, users))

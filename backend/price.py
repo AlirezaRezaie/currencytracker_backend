@@ -1,9 +1,6 @@
 import re
-import logging
-
-
-logger = logging.getLogger("dolarlog")
-
+from logs import logger
+from locals import local
 
 known_channels = ["dollar_tehran3bze", "nerkhedollarr"]
 
@@ -21,18 +18,25 @@ known_channels = ["dollar_tehran3bze", "nerkhedollarr"]
 
 # TODO: check if latest message has been edited
 
+
 class priceInfo:
     channels_last_post_number = dict()
 
-    def __init__(self, parsed, fulltext, posttime, postnumber) -> None:
-        action, price, exchtype = parsed
-        self.price = int(price.replace(',','')) 
+    def __init__(self, raw_price_obj) -> None:
+        parsed = self.parse_price_info(raw_price_obj["text"])
+        # if its a valid price text
+        if parsed:
+            action, price, exchtype = parsed
+        else:
+            raise ValueError("Invalid data. Object cannot be created.")
+
+        self.price = int(price.replace(",", ""))
         self.action = action
         self.exchtype = exchtype
         # TODO: it gives UTC turn it into iran local time
-        self.posttime = posttime
-        self.text = fulltext
-        self.postnumber = postnumber
+        self.posttime = raw_price_obj["info"]
+        self.text = raw_price_obj["text"]
+        self.postnumber = raw_price_obj["number"]
         self.rate_of_change = None
 
     def __eq__(self, other):
@@ -49,48 +53,64 @@ class priceInfo:
             "price": self.text if self.action == "پایان معاملات" else self.price,
             "exchtype": self.exchtype,
             "posttime": self.posttime,
-            "rateofchange":self.rate_of_change
+            "rateofchange": self.rate_of_change,
         }
 
-    def calculate_and_set_rate_of_change(self,last_price):
-
+    def calculate_and_set_rate_of_change(self, last_price):
         if last_price:
             prev_prc = last_price.price
             new_prc = self.price
             calculated_rate_of_change = round(
-                            ((new_prc-prev_prc)/prev_prc)*100,3
+                ((new_prc - prev_prc) / prev_prc) * 100, 3
             )
             self.rate_of_change = calculated_rate_of_change
 
-    @staticmethod
-    def parse_price_info(price_text) -> tuple:
-        groups = re.search(
-            r"(فردایی|نقدی|نـــقـدی|نـــقـدۍ|پایان معاملات).*?(\d{1,3}(?:,\d{3})*).(\w*)",
-            price_text,
-        )
-        return groups
+    def parse_price_info(self, price_text) -> tuple:
+        groups = None
+        checked_parsed = None
+
+        match local.args.channel_id:
+            case "nerkhedollarr":
+                groups = re.search(
+                    r"(فردایی|نقدی|نـــقـدی|نـــقـدۍ|پایان معاملات).*?(\d{1,3}(?:,\d{3})*).(\w*)",
+                    price_text,
+                )
+
+            case "dollar_tehran3bze":
+                pass
+            # case "DHS_Dirham":
+            #    pass
+            case _:
+                groups = re.findall(r"(\d{1,3}(?:,\d{3})*)", price_text)
+
+        if groups:
+            try:
+                checked_parsed = groups.groups()
+            except:
+                price = groups[0]
+                checked_parsed = ("none", price, "none")
+
+        return checked_parsed
 
 
 # accepts raw messages and returns price objects
-def extract_prices(messages, count=10):
+def extract_prices(messages, count=10, reverse=False):
     if not messages:
         return "id is not valid"
-    prices = []
+    parsed_prices = []
     latest = len(messages) - 1
 
     for price in reversed(messages[: latest + 1]):
-        parsed = priceInfo.parse_price_info(price["text"])
-
-        if parsed:
-            price_info_obj = priceInfo(
-                parsed.groups(), price["text"], price["info"], price["number"]
-            )
-            prices.append(price_info_obj)
+        try:
+            parsed_price_obj = priceInfo(price)
+            parsed_prices.append(parsed_price_obj)
             count -= 1
-
             if count == 0:
                 break
-        else:
-            logger.debug(f"{price['text']} is not a price message")
-
-    return prices
+        except ValueError as e:
+            # keep in mind that this exception is not an actual error
+            # its my way of handling data text and non-data text
+            logger.debug(e)
+    if reverse:
+        parsed_prices.reverse()
+    return parsed_prices
