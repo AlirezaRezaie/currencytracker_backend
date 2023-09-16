@@ -1,6 +1,4 @@
-import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
-
 import '../../utilities/Menu/side_menu.dart';
 
 class NewsPostPage extends StatelessWidget {

@@ -4,6 +4,7 @@ import 'package:dollartracker/widgets/pages/News/news_post.dart';
 import 'package:dollartracker/widgets/utilities/header.dart';
 import 'package:dollartracker/widgets/pages/News/news_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import '../../utilities/Menu/side_menu.dart';
 
@@ -19,9 +20,11 @@ class _NewsPageState extends State<NewsPage> {
   List newsList = [];
 
   Future<void> fetchData() async {
+    String? host = dotenv.env['SERVER_HOST'];
+
     final response = await http.get(
       Uri.parse(
-        'http://linux23.centraldnserver.com:5000/get_news',
+        'http://$host/get_news',
       ),
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
     );
