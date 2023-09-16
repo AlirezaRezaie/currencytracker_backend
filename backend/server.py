@@ -105,6 +105,7 @@ async def serve_form(
 async def upload_file(
     request: Request,
     title: str = Form(...),
+    topic: str = Form(...),
     description: str = Form(...),
     photo: UploadFile = Form(...),
     time_to_read: int = Form(...),
@@ -128,6 +129,7 @@ async def upload_file(
 
     new_entry = News(
         title=title,
+        topic=topic,
         description=description,
         image_link=f"http://{get_host()}:{get_port()}/{image_path}",
         time_to_read=time_to_read,

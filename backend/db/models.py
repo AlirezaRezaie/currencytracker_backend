@@ -10,6 +10,7 @@ class News(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(255), index=True)
+    topic = Column(String(255), index=True)
     description = Column(String(255), index=True)
     image_link = Column(String(255), index=True)
     time_to_read = Column(Integer, index=True)
