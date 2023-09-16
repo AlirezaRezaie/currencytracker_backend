@@ -26,6 +26,11 @@ from locals import local
 from settings import *
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
+import jdatetime
+import locale
+
+locale.setlocale(locale.LC_ALL, "fa_IR")
+
 app = FastAPI()
 # Mount the "static" directory as a static resources route
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -111,7 +116,9 @@ async def upload_file(
     time_to_read: int = Form(...),
     db: Session = Depends(get_db),
 ):
-    if not photo.file.read() or not photo.filename.endswith(".jpg"):
+    valid_extensions = (".jpg", ".jpeg", ".png")
+
+    if not photo.file.read() or not photo.filename.lower().endswith(valid_extensions):
         raise HTTPException(status_code=400, detail="please provide a photo")
 
     photo.file.seek(0)  # Set the file pointer to the beginning
@@ -132,6 +139,7 @@ async def upload_file(
         topic=topic,
         description=description,
         image_link=f"http://{get_host()}:{get_port()}/{image_path}",
+        created_at=jdatetime.datetime.now().strftime("%a, %d %b %Y %H:%M"),
         time_to_read=time_to_read,
     )
     db.add(new_entry)
