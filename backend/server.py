@@ -136,6 +136,7 @@ async def upload_file(
     )
     db.add(new_entry)
     db.commit()
+    db.close()
     # Here, I'm just returning a message with the received data
     return {"status": "ok"}
 
@@ -143,6 +144,7 @@ async def upload_file(
 @app.get("/get_news")
 def get_all_people(db: Session = Depends(get_db)):
     news = db.query(News).all()
+    db.close()
     return news
 
 
