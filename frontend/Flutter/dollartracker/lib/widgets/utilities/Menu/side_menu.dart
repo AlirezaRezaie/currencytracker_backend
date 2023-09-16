@@ -82,7 +82,7 @@ class SideMenu extends StatelessWidget {
             ),
             MenuItem(
               title: "ارز اختصاصی",
-              icon: BootstrapIcons.house_fill,
+              icon: BootstrapIcons.currency_dollar,
               color: currentRoute == "/special_currency"
                   ? Color.fromARGB(255, 60, 80, 250)
                   : Color.fromARGB(255, 27, 28, 34),

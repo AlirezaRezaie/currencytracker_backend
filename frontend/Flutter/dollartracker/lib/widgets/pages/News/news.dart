@@ -109,7 +109,7 @@ class _NewsPageState extends State<NewsPage> {
                   return NewsCard(
                     thumbnail: newsList[index]['image_link'],
                     title: newsList[index]['title'],
-                    topic: newsList[index]['title'],
+                    topic: newsList[index]['topic'],
                     time: newsList[index]['created_at'],
                     onPress: () => Navigator.push(
                       context,
@@ -118,7 +118,7 @@ class _NewsPageState extends State<NewsPage> {
                           image: newsList[index]['image_link'],
                           title: newsList[index]['title'],
                           content: newsList[index]['description'],
-                          readTime: newsList[index]['created_at'],
+                          readTime: newsList[index]['time_to_read'],
                         ),
                       ),
                     ),

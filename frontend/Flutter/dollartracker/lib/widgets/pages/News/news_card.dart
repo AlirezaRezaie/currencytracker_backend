@@ -31,13 +31,16 @@ class NewsCard extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(
-                        topic,
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 60, 80, 250),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 9,
-                          fontFamily: 'IransansBlack',
+                      Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: Text(
+                          topic,
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 60, 80, 250),
+                            fontWeight: FontWeight.w400,
+                            fontSize: 9,
+                            fontFamily: 'IransansBlack',
+                          ),
                         ),
                       ),
                       Directionality(
