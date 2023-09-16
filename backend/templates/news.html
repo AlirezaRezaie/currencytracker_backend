@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Upload Form</title>
-  </head>
-  <body>
-    {{ token }}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Form</title>
+</head>
+<body>
+  {{ token }}
     <img src="/static/favicon.jpg"></img>
     <h1>Upload Form</h1>
     <form action="/upload/" method="post" enctype="multipart/form-data">
@@ -12,12 +14,12 @@
       <input type="text" id="title" name="title" /><br /><br />
 
       <label for="age">Descreption:</label>
-      <input type="text" id="description" name="description" /><br /><br />
+      <textarea name="description" id="description" cols="30" rows="10"></textarea><br /><br />
 
       <label for="photo">Photo:</label>
       <input type="file" id="photo" name="photo" /><br /><br />
 
       <input type="submit" value="Submit" />
     </form>
-  </body>
+</body>
 </html>
