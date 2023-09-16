@@ -1,9 +1,10 @@
+import 'dart:convert';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:dollartracker/widgets/pages/News/news_post.dart';
 import 'package:dollartracker/widgets/utilities/header.dart';
-import 'package:dollartracker/widgets/utilities/news_card.dart';
+import 'package:dollartracker/widgets/pages/News/news_card.dart';
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
 import '../../utilities/Menu/side_menu.dart';
 
 class NewsPage extends StatefulWidget {
@@ -15,40 +16,39 @@ class NewsPage extends StatefulWidget {
 
 class _NewsPageState extends State<NewsPage> {
   // set the list of news to map and display to the user
-  List newsList = [
-    {
-      "thumbnail": "assets/about_background.jpg",
-      "title": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ ",
-      "content":
-          "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد کتابهای زیادی در شصت و سه درصد گذشته حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد. و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد. و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد. و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد. ",
-      "topic": "اقتصاد",
-      "time": "23 شهریور 1403 ساعت 9:23",
-    },
-    {
-      "thumbnail": "assets/about_background.jpg",
-      "title": "لورم ایپسو نامفهوم از صنعت چاپ ",
-      "content":
-          "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد کتابهای زیادی در شصت و سه درصد گذشته حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد. و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد. و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد. و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد. ",
-      "topic": "اقتصاد",
-      "time": "23 شهریور 1403 ساعت 9:23",
-    },
-    {
-      "thumbnail": "assets/about_background.jpg",
-      "title": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ ",
-      "content":
-          "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد کتابهای زیادی در شصت و سه درصد گذشته حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد. و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد. و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد. و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد. ",
-      "topic": "اقتصاد",
-      "time": "23 شهریور 1403 ساعت 9:23",
-    },
-    {
-      "thumbnail": "assets/about_background.jpg",
-      "title": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ ",
-      "content":
-          "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد کتابهای زیادی در شصت و سه درصد گذشته حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد. و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد. و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد. و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد. ",
-      "topic": "اقتصاد",
-      "time": "23 شهریور 1403 ساعت 9:23",
-    },
-  ];
+  List newsList = [];
+
+  Future<void> fetchData() async {
+    final response = await http.get(
+      Uri.parse(
+        'http://linux23.centraldnserver.com:5000/get_news',
+      ),
+      headers: {'Content-Type': 'application/json; charset=UTF-8'},
+    );
+
+    if (response.statusCode == 200) {
+      // If the server returns a 200 OK response, parse the JSON data
+      String responseBody = utf8.decode(response.bodyBytes);
+      final data = json.decode(responseBody);
+      // You can now work with the data
+      setState(() {
+        // set the list of news
+        newsList = data.cast();
+        // reverse the list to sort the news currectly
+        newsList = newsList.reversed.toList();
+      });
+      print(newsList);
+    } else {
+      // If the server did not return a 200 OK response, throw an exception
+      throw Exception('faild to fetch data');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,29 +94,37 @@ class _NewsPageState extends State<NewsPage> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              physics: BouncingScrollPhysics(),
-              itemCount: newsList.length,
-              itemBuilder: (context, index) {
-                return NewsCard(
-                  thumbnail: newsList[index]['thumbnail'],
-                  title: newsList[index]['title'],
-                  topic: newsList[index]['topic'],
-                  time: newsList[index]['time'],
-                  onPress: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => NewsPostPage(
-                        image: newsList[index]['thumbnail'],
-                        title: newsList[index]['title'],
-                        content: newsList[index]['content'],
-                        readTime: newsList[index]['time'],
+            child: RefreshIndicator(
+              color: Color.fromARGB(255, 255, 255, 255),
+              backgroundColor: Color.fromARGB(255, 27, 28, 34),
+              onRefresh: () async {
+                await fetchData();
+                setState(() {});
+              },
+              child: ListView.builder(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                physics: AlwaysScrollableScrollPhysics(),
+                itemCount: newsList.length,
+                itemBuilder: (context, index) {
+                  return NewsCard(
+                    thumbnail: newsList[index]['image_link'],
+                    title: newsList[index]['title'],
+                    topic: newsList[index]['title'],
+                    time: newsList[index]['created_at'],
+                    onPress: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NewsPostPage(
+                          image: newsList[index]['image_link'],
+                          title: newsList[index]['title'],
+                          content: newsList[index]['description'],
+                          readTime: newsList[index]['created_at'],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           )
         ],

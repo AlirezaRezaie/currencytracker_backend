@@ -31,7 +31,7 @@ class NewsPostPage extends StatelessWidget {
                   height: 300,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage(image),
+                      image: NetworkImage(image),
                       fit: BoxFit
                           .cover, // You can adjust the image fit as needed
                     ),
@@ -42,6 +42,9 @@ class NewsPostPage extends StatelessWidget {
                 height: 20,
               ),
             ],
+          ),
+          Row(
+            children: [],
           ),
           Expanded(
             child: ListView(
