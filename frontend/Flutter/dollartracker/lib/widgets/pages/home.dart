@@ -78,7 +78,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           });
           print("flash ended");
           Future.delayed(Duration(seconds: 5), () {
-            _reconnectToWebSocket(host);
+            _connectToWebSocket(host);
           });
         }
         //_reconnectToWebSocket(serverHost);
@@ -150,13 +150,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         ),
       ),
     );
+
+    controller.whenComplete(() {
+      print("flash ended");
+    });
   }
 
   @override
   void dispose() {
     channel.sink.close();
     super.dispose();
-    print("close home page :)");
   }
 
   @override
