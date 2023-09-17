@@ -20,7 +20,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late WebSocketChannel channel;
-
+  late BuildContext buildContext;
   int receivedData = 0;
   double changeRate = 0;
   String serverHost = "";
@@ -48,6 +48,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     });
 
     channel = IOWebSocketChannel.connect(host);
+
     channel.stream.listen(
       (data) {
         setState(() {
@@ -67,12 +68,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       },
       onDone: () {
         print("Server closed the connection");
+        _reconnectToWebSocket(serverHost);
       },
       onError: (error) {
         print("WebSocket error: $error");
         setState(() {
           isConnecting = false;
         });
+        showFlash();
+
         _reconnectToWebSocket(serverHost);
       },
     );
@@ -86,6 +90,38 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     }
   }
 
+  void showFlash() {
+    print("show flash");
+    buildContext.showFlash<bool>(
+      duration: const Duration(seconds: 3),
+      builder: (context, controller) => FlashBar(
+        controller: controller,
+        behavior: FlashBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+          side: BorderSide(
+            color: Color.fromARGB(255, 15, 15, 16),
+            strokeAlign: BorderSide.strokeAlignInside,
+          ),
+        ),
+        margin: const EdgeInsets.all(32.0),
+        clipBehavior: Clip.antiAlias,
+        iconColor: Colors.white,
+        backgroundColor: Color.fromARGB(255, 15, 15, 16),
+        indicatorColor: Color.fromARGB(255, 60, 80, 250),
+        icon: Icon(Icons.tips_and_updates_outlined),
+        title: Text(
+          'Flash Title',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: Text(
+          'This is basic flash.',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    );
+  }
+
   @override
   void dispose() {
     channel.sink.close();
@@ -94,38 +130,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    Function showFlash = () {
-      context.showFlash<bool>(
-        duration: const Duration(seconds: 3),
-        builder: (context, controller) => FlashBar(
-          controller: controller,
-          behavior: FlashBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(16)),
-            side: BorderSide(
-              color: Color.fromARGB(255, 15, 15, 16),
-              strokeAlign: BorderSide.strokeAlignInside,
-            ),
-          ),
-          margin: const EdgeInsets.all(32.0),
-          clipBehavior: Clip.antiAlias,
-          iconColor: Colors.white,
-          backgroundColor: Color.fromARGB(255, 15, 15, 16),
-          indicatorColor: Color.fromARGB(255, 60, 80, 250),
-          icon: Icon(Icons.tips_and_updates_outlined),
-          title: Text(
-            'Flash Title',
-            style: TextStyle(color: Colors.white),
-          ),
-          content: Text(
-            'This is basic flash.',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-      );
-    };
-
     // add some padding to make space
+    buildContext = context;
     return Scaffold(
       endDrawer: SideMenu(),
       backgroundColor: Color.fromARGB(255, 15, 15, 16),
