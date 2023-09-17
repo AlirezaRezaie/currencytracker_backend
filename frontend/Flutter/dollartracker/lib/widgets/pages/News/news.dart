@@ -7,6 +7,7 @@ import 'package:dollartracker/widgets/pages/News/news_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:lottie/lottie.dart';
 import '../../utilities/Menu/side_menu.dart';
 
 class NewsPage extends StatefulWidget {
@@ -21,6 +22,7 @@ class _NewsPageState extends State<NewsPage> {
   List newsList = [];
   // set the is loading for show the skeleton to the user
   bool isLoading = true;
+  bool isFetchCurrect = false;
   Future<void> fetchData() async {
     String? host = dotenv.env['SERVER_HOST'];
 
@@ -42,11 +44,13 @@ class _NewsPageState extends State<NewsPage> {
         // reverse the list to sort the news currectly
         newsList = newsList.reversed.toList();
         isLoading = false;
+        isFetchCurrect = true;
       });
       print(newsList);
     } else {
       // If the server did not return a 200 OK response, throw an exception
-      throw Exception('faild to fetch data');
+      // set the isFetchCurrect to make the connection error on ui
+      isFetchCurrect = false;
     }
   }
 
@@ -125,12 +129,74 @@ class _NewsPageState extends State<NewsPage> {
                       await fetchData();
                       setState(() {});
                     },
-                    child: ListView.separated(
-                      itemBuilder: (context, index) => NewsCardSkeleton(),
-                      separatorBuilder: (context, index) =>
-                          SizedBox(height: 16),
-                      itemCount: 6,
-                    ),
+                    child: isFetchCurrect
+                        ? ListView.separated(
+                            itemBuilder: (context, index) => NewsCardSkeleton(),
+                            separatorBuilder: (context, index) =>
+                                SizedBox(height: 16),
+                            itemCount: 6,
+                          )
+                        : Padding(
+                            padding: EdgeInsets.only(top: 90),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 250,
+                                  height: 200,
+                                  child:
+                                      Lottie.asset("assets/NetworkError.json"),
+                                ),
+                                Text(
+                                  "مشکل در اتصال به سرور",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                    fontFamily: 'IransansBlack',
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 10),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      fetchData();
+                                    },
+                                    style: ButtonStyle(
+                                      padding: MaterialStateProperty.all(
+                                        EdgeInsets.only(
+                                          right: 20,
+                                          left: 20,
+                                          top: 10,
+                                          bottom: 10,
+                                        ),
+                                      ),
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                        Color.fromARGB(255, 60, 80, 250),
+                                      ),
+                                      shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              8), // Border radius
+                                        ),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      "تلاش مجدد",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 13,
+                                        fontFamily: 'IransansBlack',
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                   ),
                 )
               : Expanded(
