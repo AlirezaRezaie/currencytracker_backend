@@ -154,6 +154,7 @@ class _NewsPageState extends State<NewsPage> {
                         color: Color.fromARGB(255, 255, 255, 255),
                         backgroundColor: Color.fromARGB(255, 27, 28, 34),
                         onRefresh: () async {
+                          await checkNetworkStatus();
                           await fetchData();
                           setState(() {});
                         },
