@@ -45,6 +45,7 @@ dependencies:
   flutter_cache_manager: ^3.3.1
   http: ^1.1.0
   flash: ^3.0.5+1
+  lottie: ^1.4.2
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +79,7 @@ flutter:
   assets:
     - .env
     - "assets/about_background.jpg"
+    - "assets/NetworkError.json"
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
