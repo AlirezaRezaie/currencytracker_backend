@@ -132,117 +132,133 @@ class _NewsPageState extends State<NewsPage> {
               ),
             ),
           ),
-          isLoading
-              ? Expanded(
-                  child: RefreshIndicator(
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      backgroundColor: Color.fromARGB(255, 27, 28, 34),
-                      onRefresh: () async {
-                        await fetchData();
-                        setState(() {});
-                      },
-                      child: ListView.separated(
-                        itemBuilder: (context, index) => NewsCardSkeleton(),
-                        separatorBuilder: (context, index) =>
-                            SizedBox(height: 16),
-                        itemCount: 6,
-                      )),
-                )
-              : Expanded(
-                  child: RefreshIndicator(
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    backgroundColor: Color.fromARGB(255, 27, 28, 34),
-                    onRefresh: () async {
-                      await fetchData();
-                      setState(() {});
-                    },
-                    child: ListView.builder(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      physics: AlwaysScrollableScrollPhysics(),
-                      itemCount: newsList.length,
-                      itemBuilder: (context, index) {
-                        return NewsCard(
-                          thumbnail: newsList[index]['image_link'],
-                          title: newsList[index]['title'],
-                          topic: newsList[index]['topic'],
-                          time: newsList[index]['created_at'],
-                          onPress: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => NewsPostPage(
-                                image: newsList[index]['image_link'],
-                                title: newsList[index]['title'],
-                                content: newsList[index]['description'],
-                                readTime: newsList[index]['time_to_read'],
+          isConnected
+              ? isLoading
+                  ? Expanded(
+                      child: RefreshIndicator(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          backgroundColor: Color.fromARGB(255, 27, 28, 34),
+                          onRefresh: () async {
+                            await fetchData();
+                            setState(() {});
+                          },
+                          child: ListView.separated(
+                            itemBuilder: (context, index) => NewsCardSkeleton(),
+                            separatorBuilder: (context, index) =>
+                                SizedBox(height: 16),
+                            itemCount: 6,
+                          )),
+                    )
+                  : Expanded(
+                      child: RefreshIndicator(
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        backgroundColor: Color.fromARGB(255, 27, 28, 34),
+                        onRefresh: () async {
+                          await fetchData();
+                          setState(() {});
+                        },
+                        child: ListView.builder(
+                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          physics: AlwaysScrollableScrollPhysics(),
+                          itemCount: newsList.length,
+                          itemBuilder: (context, index) {
+                            return NewsCard(
+                              thumbnail: newsList[index]['image_link'],
+                              title: newsList[index]['title'],
+                              topic: newsList[index]['topic'],
+                              time: newsList[index]['created_at'],
+                              onPress: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => NewsPostPage(
+                                    image: newsList[index]['image_link'],
+                                    title: newsList[index]['title'],
+                                    content: newsList[index]['description'],
+                                    readTime: newsList[index]['time_to_read'],
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-          !isConnected
-              ? Padding(
-                  padding: EdgeInsets.only(top: 90),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: 250,
-                        height: 200,
-                        child: Lottie.asset("assets/NetworkError.json"),
-                      ),
-                      Text(
-                        "مشکل در اتصال به سرور",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          fontFamily: 'IransansBlack',
+                            );
+                          },
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 10),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            fetchData();
-                          },
-                          style: ButtonStyle(
-                            padding: MaterialStateProperty.all(
-                              EdgeInsets.only(
-                                right: 20,
-                                left: 20,
-                                top: 10,
-                                bottom: 10,
-                              ),
-                            ),
-                            backgroundColor: MaterialStateProperty.all(
-                              Color.fromARGB(255, 60, 80, 250),
-                            ),
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(8), // Border radius
-                              ),
-                            ),
+                    )
+              : !isConnected
+                  ? Padding(
+                      padding: EdgeInsets.only(top: 90),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 250,
+                            height: 200,
+                            child: Lottie.asset("assets/NetworkError.json"),
                           ),
-                          child: Text(
-                            "تلاش مجدد",
+                          Text(
+                            "مشکل در اتصال به سرور",
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
-                              fontSize: 13,
+                              fontSize: 16,
                               fontFamily: 'IransansBlack',
                             ),
                           ),
-                        ),
+                          SizedBox(
+                            height: 4,
+                          ),
+                          Text(
+                            "از اتصال اینترنت خود اطمینان حاصل کنید و دوباره امتحان کنید",
+                            style: TextStyle(
+                              color: const Color.fromARGB(200, 255, 255, 255),
+                              fontWeight: FontWeight.w400,
+                              fontSize: 11,
+                              fontFamily: 'IransansBlack',
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                // recheck the internet connection
+                                checkNetworkStatus();
+                                // refetch the data
+                                fetchData();
+                              },
+                              style: ButtonStyle(
+                                padding: MaterialStateProperty.all(
+                                  EdgeInsets.only(
+                                    right: 20,
+                                    left: 20,
+                                    top: 10,
+                                    bottom: 10,
+                                  ),
+                                ),
+                                backgroundColor: MaterialStateProperty.all(
+                                  Color.fromARGB(255, 60, 80, 250),
+                                ),
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        8), // Border radius
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                "تلاش مجدد",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 13,
+                                  fontFamily: 'IransansBlack',
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                )
-              : Text("data")
+                    )
+                  : Text("data")
         ],
       ),
     );
