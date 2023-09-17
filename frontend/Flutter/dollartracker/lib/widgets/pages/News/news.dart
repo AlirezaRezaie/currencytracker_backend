@@ -19,6 +19,7 @@ class NewsPage extends StatefulWidget {
 class _NewsPageState extends State<NewsPage> {
   // set the list of news to map and display to the user
   List newsList = [];
+  // set the is loading for show the skeleton to the user
   bool isLoading = true;
   Future<void> fetchData() async {
     String? host = dotenv.env['SERVER_HOST'];
