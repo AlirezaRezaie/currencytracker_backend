@@ -18,7 +18,7 @@ class MenuItem extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(bottom: 20),
       child: GestureDetector(
-        onTap: () => Navigator.pushNamed(context, "/$routName"),
+        onTap: () => Navigator.pushReplacementNamed(context, "/$routName"),
         child: Container(
           width: 250,
           padding: EdgeInsets.all(5),
