@@ -21,8 +21,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   int receivedData = 0;
   double changeRate = 0;
+  String serverHost = "";
+  bool isConnected = false;
   bool isConnecting = false;
-  String errorMessage = '';
   List chartData = [
     30500.0,
     40500.0,
@@ -35,18 +36,21 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     String? host = dotenv.env['SERVER_HOST'];
     super.initState();
     // Replace 'ws://your_websocket_url' with your actual WebSocket server URL.
-    _connectToWebSocket("ws://$host/live/nerkhedollarr");
+    serverHost = "ws://$host/live/nerkhedollarr";
+    _connectToWebSocket(serverHost);
   }
 
   void _connectToWebSocket(String host) async {
     setState(() {
       isConnecting = true;
-      errorMessage = '';
     });
 
     channel = IOWebSocketChannel.connect(host);
     channel.stream.listen(
       (data) {
+        setState(() {
+          isConnecting = false;
+        });
         print(data);
         // Parse the received data as JSON
         Map<String, dynamic> jsonData = jsonDecode(data);
@@ -60,21 +64,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         }
       },
       onDone: () {
-        print("WebSocket disconnected");
-        _reconnectToWebSocket(host);
+        print("Server closed the connection");
       },
       onError: (error) {
         print("WebSocket error: $error");
         setState(() {
-          errorMessage = "WebSocket error: $error";
+          isConnecting = false;
         });
-        _reconnectToWebSocket(host);
+        _reconnectToWebSocket(serverHost);
       },
     );
-
-    setState(() {
-      isConnecting = false;
-    });
   }
 
   void _reconnectToWebSocket(String host) {
