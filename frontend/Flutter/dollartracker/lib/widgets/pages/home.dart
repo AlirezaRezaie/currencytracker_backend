@@ -22,6 +22,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late WebSocketChannel channel;
   late BuildContext buildContext;
+  late Future controller;
+
   int receivedData = 0;
   double changeRate = 0;
   String serverHost = "";
@@ -71,7 +73,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         isConnecting = false;
         if (!isError) {
           print("reconnecting ?.....?????@#");
-          showFlash();
+          controller.whenComplete(() {
+            showFlash();
+          });
+          print("flash ended");
           Future.delayed(Duration(seconds: 5), () {
             _connectToWebSocket(host);
           });
@@ -90,6 +95,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void _reconnectToWebSocket(String host) {
     if (!isConnecting) {
       print("reconnecting ?.....?????@#");
+
       showFlash();
       Future.delayed(Duration(seconds: 5), () {
         _connectToWebSocket(host);
@@ -99,7 +105,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   void showFlash() {
     print("show flash");
-    buildContext.showFlash<bool>(
+
+    controller = buildContext.showFlash<bool>(
       duration: const Duration(seconds: 5),
       builder: (context, controller) => FlashBar(
         controller: controller,
