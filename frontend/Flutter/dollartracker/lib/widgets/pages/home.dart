@@ -1,6 +1,8 @@
 import 'package:dollartracker/widgets/utilities/Chart/chart.dart';
 import 'package:dollartracker/widgets/utilities/header.dart';
 import 'package:dollartracker/widgets/utilities/new_updates_table.dart';
+import 'package:flash/flash.dart';
+import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -109,22 +111,54 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               SizedBox(
                 height: 20,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  PriceBox(
-                    title: "🇪🇺 یورو",
-                    price: receivedData,
-                    firstColor: Color.fromARGB(255, 60, 80, 250),
-                    secondColor: Color.fromARGB(255, 60, 78, 246),
-                  ),
-                  PriceBox(
-                    title: "🇺🇸 دلار",
-                    price: receivedData,
-                    firstColor: Color.fromARGB(255, 60, 80, 250),
-                    secondColor: Color.fromARGB(255, 60, 78, 246),
-                  ),
-                ],
+              GestureDetector(
+                onTap: () {
+                  context.showFlash<bool>(
+                    duration: const Duration(seconds: 3),
+                    builder: (context, controller) => FlashBar(
+                      controller: controller,
+                      behavior: FlashBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(16)),
+                        side: BorderSide(
+                          color: Color.fromARGB(255, 15, 15, 16),
+                          strokeAlign: BorderSide.strokeAlignInside,
+                        ),
+                      ),
+                      margin: const EdgeInsets.all(32.0),
+                      clipBehavior: Clip.antiAlias,
+                      iconColor: Colors.white,
+                      backgroundColor: Color.fromARGB(255, 15, 15, 16),
+                      indicatorColor: Color.fromARGB(255, 60, 80, 250),
+                      icon: Icon(Icons.tips_and_updates_outlined),
+                      title: Text(
+                        'Flash Title',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      content: Text(
+                        'This is basic flash.',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  );
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    PriceBox(
+                      title: "🇪🇺 یورو",
+                      price: receivedData,
+                      firstColor: Color.fromARGB(255, 60, 80, 250),
+                      secondColor: Color.fromARGB(255, 60, 78, 246),
+                    ),
+                    PriceBox(
+                      title: "🇺🇸 دلار",
+                      price: receivedData,
+                      firstColor: Color.fromARGB(255, 60, 80, 250),
+                      secondColor: Color.fromARGB(255, 60, 78, 246),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: 20),
               Padding(

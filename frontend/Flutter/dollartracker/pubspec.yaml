@@ -44,6 +44,7 @@ dependencies:
   animated_number: ^1.0.2
   flutter_cache_manager: ^3.3.1
   http: ^1.1.0
+  flash: ^3.0.5+1
 
 dev_dependencies:
   flutter_test:

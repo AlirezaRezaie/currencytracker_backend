@@ -51,7 +51,7 @@ class NewsPostPage extends StatelessWidget {
                     child: Align(
                         alignment: Alignment.topRight,
                         child: Padding(
-                          padding: EdgeInsets.only(right: 15, top: 35),
+                          padding: EdgeInsets.only(right: 17, top: 35),
                           child: GestureDetector(
                             onTap: () => Navigator.pop(context),
                             child: Container(
