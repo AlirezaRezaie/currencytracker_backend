@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dollartracker/widgets/pages/News/news_post.dart';
 import 'package:dollartracker/widgets/utilities/Skeleton/news_card_skeleton.dart';
 import 'package:dollartracker/widgets/utilities/header.dart';
@@ -21,9 +22,19 @@ class _NewsPageState extends State<NewsPage> {
   // set the list of news to map and display to the user
   List newsList = [];
   // set the is loading for show the skeleton to the user
-  bool isLoading = true;
-  bool isFetchCurrect = false;
+  bool isLoading = false;
+  bool isConnected = false;
+
+  Future<void> checkNetworkStatus() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    setState(() {
+      isConnected = connectivityResult != ConnectivityResult.none;
+    });
+    print("funccccccccccccccccc $isConnected");
+  }
+
   Future<void> fetchData() async {
+    isLoading = true;
     String? host = dotenv.env['SERVER_HOST'];
 
     final response = await http.get(
@@ -44,19 +55,20 @@ class _NewsPageState extends State<NewsPage> {
         // reverse the list to sort the news currectly
         newsList = newsList.reversed.toList();
         isLoading = false;
-        isFetchCurrect = true;
       });
       print(newsList);
     } else {
-      // If the server did not return a 200 OK response, throw an exception
+      // If the server did not return a 200 OK response
       // set the isFetchCurrect to make the connection error on ui
-      isFetchCurrect = false;
+      print("errrrrrrrrrrrrrrrrrrrrrrrrrrrror");
+      isLoading = false;
     }
   }
 
   @override
   void initState() {
     super.initState();
+    checkNetworkStatus();
     fetchData();
   }
 
@@ -123,81 +135,18 @@ class _NewsPageState extends State<NewsPage> {
           isLoading
               ? Expanded(
                   child: RefreshIndicator(
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    backgroundColor: Color.fromARGB(255, 27, 28, 34),
-                    onRefresh: () async {
-                      await fetchData();
-                      setState(() {});
-                    },
-                    child: isFetchCurrect
-                        ? ListView.separated(
-                            itemBuilder: (context, index) => NewsCardSkeleton(),
-                            separatorBuilder: (context, index) =>
-                                SizedBox(height: 16),
-                            itemCount: 6,
-                          )
-                        : Padding(
-                            padding: EdgeInsets.only(top: 90),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 250,
-                                  height: 200,
-                                  child:
-                                      Lottie.asset("assets/NetworkError.json"),
-                                ),
-                                Text(
-                                  "مشکل در اتصال به سرور",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16,
-                                    fontFamily: 'IransansBlack',
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 10),
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      fetchData();
-                                    },
-                                    style: ButtonStyle(
-                                      padding: MaterialStateProperty.all(
-                                        EdgeInsets.only(
-                                          right: 20,
-                                          left: 20,
-                                          top: 10,
-                                          bottom: 10,
-                                        ),
-                                      ),
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                        Color.fromARGB(255, 60, 80, 250),
-                                      ),
-                                      shape: MaterialStateProperty.all(
-                                        RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              8), // Border radius
-                                        ),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      "تلاش مجدد",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 13,
-                                        fontFamily: 'IransansBlack',
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                  ),
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      backgroundColor: Color.fromARGB(255, 27, 28, 34),
+                      onRefresh: () async {
+                        await fetchData();
+                        setState(() {});
+                      },
+                      child: ListView.separated(
+                        itemBuilder: (context, index) => NewsCardSkeleton(),
+                        separatorBuilder: (context, index) =>
+                            SizedBox(height: 16),
+                        itemCount: 6,
+                      )),
                 )
               : Expanded(
                   child: RefreshIndicator(
@@ -233,6 +182,67 @@ class _NewsPageState extends State<NewsPage> {
                     ),
                   ),
                 ),
+          !isConnected
+              ? Padding(
+                  padding: EdgeInsets.only(top: 90),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 250,
+                        height: 200,
+                        child: Lottie.asset("assets/NetworkError.json"),
+                      ),
+                      Text(
+                        "مشکل در اتصال به سرور",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          fontFamily: 'IransansBlack',
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            fetchData();
+                          },
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.all(
+                              EdgeInsets.only(
+                                right: 20,
+                                left: 20,
+                                top: 10,
+                                bottom: 10,
+                              ),
+                            ),
+                            backgroundColor: MaterialStateProperty.all(
+                              Color.fromARGB(255, 60, 80, 250),
+                            ),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(8), // Border radius
+                              ),
+                            ),
+                          ),
+                          child: Text(
+                            "تلاش مجدد",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                              fontFamily: 'IransansBlack',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : Text("data")
         ],
       ),
     );
