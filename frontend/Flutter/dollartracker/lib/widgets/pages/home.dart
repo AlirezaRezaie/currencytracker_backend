@@ -94,6 +94,37 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    Function showFlash = () {
+      context.showFlash<bool>(
+        duration: const Duration(seconds: 3),
+        builder: (context, controller) => FlashBar(
+          controller: controller,
+          behavior: FlashBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16)),
+            side: BorderSide(
+              color: Color.fromARGB(255, 15, 15, 16),
+              strokeAlign: BorderSide.strokeAlignInside,
+            ),
+          ),
+          margin: const EdgeInsets.all(32.0),
+          clipBehavior: Clip.antiAlias,
+          iconColor: Colors.white,
+          backgroundColor: Color.fromARGB(255, 15, 15, 16),
+          indicatorColor: Color.fromARGB(255, 60, 80, 250),
+          icon: Icon(Icons.tips_and_updates_outlined),
+          title: Text(
+            'Flash Title',
+            style: TextStyle(color: Colors.white),
+          ),
+          content: Text(
+            'This is basic flash.',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      );
+    };
+
     // add some padding to make space
     return Scaffold(
       endDrawer: SideMenu(),
@@ -112,36 +143,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 height: 20,
               ),
               GestureDetector(
-                onTap: () {
-                  context.showFlash<bool>(
-                    duration: const Duration(seconds: 3),
-                    builder: (context, controller) => FlashBar(
-                      controller: controller,
-                      behavior: FlashBehavior.floating,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(16)),
-                        side: BorderSide(
-                          color: Color.fromARGB(255, 15, 15, 16),
-                          strokeAlign: BorderSide.strokeAlignInside,
-                        ),
-                      ),
-                      margin: const EdgeInsets.all(32.0),
-                      clipBehavior: Clip.antiAlias,
-                      iconColor: Colors.white,
-                      backgroundColor: Color.fromARGB(255, 15, 15, 16),
-                      indicatorColor: Color.fromARGB(255, 60, 80, 250),
-                      icon: Icon(Icons.tips_and_updates_outlined),
-                      title: Text(
-                        'Flash Title',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      content: Text(
-                        'This is basic flash.',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  );
-                },
+                onTap: () => showFlash(),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
