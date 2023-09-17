@@ -27,6 +27,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   String serverHost = "";
   bool isConnected = false;
   bool isConnecting = false;
+  bool noNetwork = false;
+  bool isError = false;
   List chartData = [
     30500.0,
     40500.0,
@@ -44,17 +46,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   void _connectToWebSocket(String host) async {
-    setState(() {
-      isConnecting = true;
-    });
+    isConnecting = true;
 
     channel = IOWebSocketChannel.connect(host);
 
     channel.stream.listen(
       (data) {
-        setState(() {
-          isConnecting = false;
-        });
+        isConnecting = false;
+        isError = false;
         print(data);
         // Parse the received data as JSON
         Map<String, dynamic> jsonData = jsonDecode(data);
@@ -69,15 +68,20 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       },
       onDone: () {
         print("Server closed the connection");
-        _reconnectToWebSocket(serverHost);
+        isConnecting = false;
+        if (!isError) {
+          print("reconnecting ?.....?????@#");
+          showFlash();
+          Future.delayed(Duration(seconds: 5), () {
+            _connectToWebSocket(host);
+          });
+        }
+        //_reconnectToWebSocket(serverHost);
       },
       onError: (error) {
-        print("WebSocket error: $error");
-        setState(() {
-          isConnecting = false;
-        });
-        showFlash();
-
+        print("WebSocket error");
+        isConnecting = false;
+        isError = true;
         _reconnectToWebSocket(serverHost);
       },
     );
@@ -85,12 +89,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   void _reconnectToWebSocket(String host) {
     if (!isConnecting) {
+      print("reconnecting ?.....?????@#");
+      showFlash();
       Future.delayed(Duration(seconds: 5), () {
         _connectToWebSocket(host);
       });
     }
   }
-  
 
   void showFlash() {
     print("show flash");
