@@ -46,7 +46,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     String? host = dotenv.env['SERVER_HOST'];
     super.initState();
     // Replace 'ws://your_websocket_url' with your actual WebSocket server URL.
-    serverHost = "ws://$host/live/nerkhedollarr";
+    serverHost = "ws://$host/api/";
     _connectToWebSocket(serverHost);
   }
 
@@ -54,6 +54,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     isConnecting = true;
 
     channel = IOWebSocketChannel.connect(host);
+    channel.sink.add('SUBSCRIBE nerkhedollarr');
 
     channel.stream.listen(
       (data) {

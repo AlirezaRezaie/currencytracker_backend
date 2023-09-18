@@ -38,7 +38,7 @@ class _NewsPageState extends State<NewsPage> {
 
     final response = await http.get(
       Uri.parse(
-        'http://$host/get_news',
+        'http://$host/news/get_news',
       ),
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
     );

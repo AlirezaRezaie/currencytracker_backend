@@ -16,8 +16,18 @@ class CurrencyCalculator extends StatefulWidget {
 }
 
 class _CurrencyCalculatorState extends State<CurrencyCalculator> {
+  // i want to save the status of the internet connection
   bool isConnected = false;
+  // set the value for the answer section container i save them here
+  // because i want to change it when user click on the submit button
+  // and i want the container to be animation
+  double _answerOpacity = 0;
+  Color answerShadowColor = Color.fromARGB(0, 0, 0, 0);
+  BorderRadius answerBorderRadius = BorderRadius.circular(0);
+  EdgeInsets answerPadding = EdgeInsets.only(top: 80);
+  Duration answerDuration = Duration(milliseconds: 300);
 
+  // check the internet connection
   Future<void> checkNetworkStatus() async {
     var connectivityResult = await Connectivity().checkConnectivity();
     setState(() {
@@ -25,6 +35,17 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
     });
   }
 
+  // change the container values
+  showAnswer() {
+    setState(() {
+      _answerOpacity = 1;
+      answerShadowColor = Color.fromARGB(255, 27, 28, 34);
+      answerBorderRadius = BorderRadius.circular(25);
+      answerPadding = EdgeInsets.only(top: 60);
+    });
+  }
+
+  // a flash message to show user the internet is not connected
   showFlash() {
     context.showFlash<bool>(
       duration: const Duration(seconds: 8),
@@ -74,13 +95,14 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    // check the internet connection
     checkNetworkStatus();
   }
 
   @override
   Widget build(BuildContext context) {
+    // check the internet connection every 1 second
     Future.delayed(Duration(seconds: 1), () {
       checkNetworkStatus();
     });
@@ -239,6 +261,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                       onPressed: () {
                         if (isConnected) {
                           // get the coverted currency and show to the user
+                          showAnswer();
                         } else {
                           // show a network connection error to the user
                           showFlash();
@@ -275,6 +298,80 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                       ),
                     ),
                   ],
+                ),
+                AnimatedPadding(
+                  duration: answerDuration,
+                  padding: answerPadding,
+                  child: AnimatedOpacity(
+                    opacity: _answerOpacity,
+                    duration: answerDuration,
+                    child: AnimatedContainer(
+                        padding: EdgeInsets.all(25),
+                        duration: answerDuration,
+                        width: 330,
+                        height: 170,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 27, 28, 34),
+                          borderRadius: answerBorderRadius,
+                          boxShadow: [
+                            BoxShadow(
+                              color: answerShadowColor,
+                              spreadRadius: 2,
+                              blurRadius: 15,
+                              offset: Offset(0, 6),
+                            )
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Transform.rotate(
+                                  angle: -30 * 3.14159265359 / 180,
+                                  child: Icon(
+                                    BootstrapIcons.currency_dollar,
+                                    color: Colors.white,
+                                    size: 45,
+                                  ),
+                                ),
+                                Text(
+                                  " : مقدار ارز تبدیل شده",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    fontFamily: 'IransansBlack',
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Text(
+                              "3.2512",
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 60, 80, 250),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 25,
+                                fontFamily: 'IransansBlack',
+                              ),
+                            ),
+                            Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: Text(
+                                "تبدیل ارز شما بر اساس جدید ترین قیمت ارز ها بوده، همچنین میتوانید این ارز ها رو درون اپلیکیشن بصورت جداگانه مشاهده کنید",
+                                style: TextStyle(
+                                  color:
+                                      const Color.fromARGB(200, 255, 255, 255),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 10,
+                                  fontFamily: 'IransansBlack',
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
+                  ),
                 )
               ],
             ),
