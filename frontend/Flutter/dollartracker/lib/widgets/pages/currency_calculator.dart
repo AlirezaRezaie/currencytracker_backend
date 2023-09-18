@@ -278,7 +278,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                           ),
                         ),
                         backgroundColor: MaterialStateProperty.all(
-                          Color.fromARGB(255, 27, 28, 34),
+                          Color.fromARGB(255, 60, 80, 250),
                         ),
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
@@ -306,12 +306,12 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                     opacity: _answerOpacity,
                     duration: answerDuration,
                     child: AnimatedContainer(
-                        padding: EdgeInsets.only(top: 20, right: 20, left: 20,),
+                        padding: EdgeInsets.only(top: 35, right: 20, left: 20),
                         duration: answerDuration,
-                        width: 370,
+                        width: 350,
                         height: 190,
                         decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 60, 80, 250),
+                          color: Color.fromARGB(255, 27, 28, 34),
                           borderRadius: answerBorderRadius,
                           boxShadow: [
                             BoxShadow(
@@ -361,14 +361,11 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                             Text(
                               "3.2512",
                               style: TextStyle(
-                                color: Color.fromARGB(255, 27, 28, 34),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 30,
+                                color: Color.fromARGB(255, 60, 80, 250),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 25,
                                 fontFamily: 'IransansBlack',
                               ),
-                            ),
-                            SizedBox(
-                              height: 10,
                             ),
                             Directionality(
                               textDirection: TextDirection.rtl,
