@@ -1,6 +1,10 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dollartracker/widgets/utilities/currency_selector.dart';
 import 'package:dollartracker/widgets/utilities/header.dart';
 import 'package:dollartracker/widgets/utilities/Menu/side_menu.dart';
+import 'package:flash/flash.dart';
+import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,6 +16,69 @@ class CurrencyCalculator extends StatefulWidget {
 }
 
 class _CurrencyCalculatorState extends State<CurrencyCalculator> {
+  bool isConnected = false;
+
+  Future<void> checkNetworkStatus() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    setState(() {
+      isConnected = connectivityResult != ConnectivityResult.none;
+    });
+  }
+
+  showFlash() {
+    context.showFlash<bool>(
+      duration: const Duration(seconds: 8),
+      builder: (context, controller) => FlashBar(
+        controller: controller,
+        behavior: FlashBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+          side: BorderSide(
+            color: Color.fromARGB(255, 15, 15, 16),
+            strokeAlign: BorderSide.strokeAlignInside,
+          ),
+        ),
+        margin: const EdgeInsets.all(32.0),
+        clipBehavior: Clip.antiAlias,
+        iconColor: Colors.white,
+        backgroundColor: Color.fromARGB(255, 15, 15, 16),
+        indicatorColor: Color.fromARGB(255, 255, 204, 0),
+        icon: Icon(BootstrapIcons.exclamation_circle),
+        title: Directionality(
+          textDirection: TextDirection.rtl,
+          child: Text(
+            'مشکل در اتصال به اینترنت',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+              fontFamily: 'IransansBlack',
+            ),
+          ),
+        ),
+        content: Directionality(
+          textDirection: TextDirection.rtl,
+          child: Text(
+            'بنظر میرسد اتصال اینترنت شما دچار مشکل شده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و سپس دوباره تلاش کنید',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w400,
+              fontSize: 10,
+              fontFamily: 'IransansBlack',
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkNetworkStatus();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -163,7 +230,16 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (isConnected) {
+                          // get the coverted currency and show to the user
+                          checkNetworkStatus();
+                        } else {
+                          // show a network connection error to the user
+                          showFlash();
+                          checkNetworkStatus();
+                        }
+                      },
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all(
                           EdgeInsets.only(
