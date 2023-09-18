@@ -1,7 +1,6 @@
 import 'package:dollartracker/widgets/utilities/currency_selector.dart';
-import 'package:dollartracker/widgets/utilities/new_updates_table.dart';
+import 'package:dollartracker/widgets/utilities/special_currency_table.dart';
 import 'package:flutter/material.dart';
-
 import '../utilities/Menu/side_menu.dart';
 import '../utilities/header.dart';
 
@@ -19,39 +18,51 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
     List currency_list = [
       {
         "title": "title",
+        "price": 57000,
         "subtitle": 'subtitle',
-        "persent": 60.0,
-        "imageLink": "imageLink",
+        "persent": 25.0,
+        "imageLink":
+            "https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vector-up-arrow-icon-png-image_956434.jpg",
       },
       {
         "title": "title",
+        "price": 58000,
         "subtitle": 'subtitle',
-        "persent": 60.0,
-        "imageLink": "imageLink",
+        "persent": -12.0,
+        "imageLink":
+            "https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vector-up-arrow-icon-png-image_956434.jpg",
       },
       {
         "title": "title",
+        "price": 60000,
         "subtitle": 'subtitle',
         "persent": 60.0,
-        "imageLink": "imageLink",
+        "imageLink":
+            "https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vector-up-arrow-icon-png-image_956434.jpg",
       },
       {
         "title": "title",
+        "price": 58000,
         "subtitle": 'subtitle',
         "persent": 60.0,
-        "imageLink": "imageLink",
+        "imageLink":
+            "https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vector-up-arrow-icon-png-image_956434.jpg",
       },
       {
         "title": "title",
+        "price": 58000,
         "subtitle": 'subtitle',
         "persent": 60.0,
-        "imageLink": "imageLink",
+        "imageLink":
+            "https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vector-up-arrow-icon-png-image_956434.jpg",
       },
       {
         "title": "title",
+        "price": 58000,
         "subtitle": 'subtitle',
         "persent": 60.0,
-        "imageLink": "imageLink",
+        "imageLink":
+            "https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vector-up-arrow-icon-png-image_956434.jpg",
       },
     ];
 
@@ -76,9 +87,7 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
               children: [
                 Container(
                   child: CurrencySelector(
-                    listOfCurrency: [
-                      
-                    ],
+                    listOfCurrency: [],
                     width: 100,
                     height: 60,
                   ),
@@ -108,11 +117,15 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
               itemCount: currency_list.length,
               padding: EdgeInsets.symmetric(horizontal: 20),
               itemBuilder: (context, index) {
-                return NewUpdatesTable(
-                  title: currency_list[index]['title'],
+                return SpecialCurrencyTable(
+                  price: currency_list[index]['price'],
+                  persentColor: currency_list[index]['persent'] > 0
+                      ? Colors.greenAccent
+                      : Colors.redAccent,
+                  currencyName: currency_list[index]['title'],
                   imageLink: currency_list[index]['imageLink'],
                   persent: currency_list[index]['persent'],
-                  subtitle: currency_list[index]['subtitle'],
+                  volatility: currency_list[index]['subtitle'],
                 );
               },
             ),

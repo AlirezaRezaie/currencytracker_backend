@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:animated_digit/animated_digit.dart';
 
 class PriceBox extends StatefulWidget {

@@ -1,32 +1,37 @@
 import 'package:flutter/material.dart';
 
-class NewUpdatesTable extends StatelessWidget {
-  final String title;
-  final String subtitle;
+class SpecialCurrencyTable extends StatelessWidget {
+  final String currencyName;
+  final int price;
+  final String volatility;
   final double persent;
+  final Color persentColor;
   final String imageLink;
 
-  const NewUpdatesTable({
+  const SpecialCurrencyTable({
     super.key,
-    required this.title,
-    required this.subtitle,
+    required this.currencyName,
+    required this.price,
+    required this.volatility,
     required this.persent,
+    required this.persentColor,
     required this.imageLink,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 15),
+      padding: const EdgeInsets.only(top: 18),
       child: Container(
+        padding: EdgeInsets.only(left: 10, top: 4, bottom: 4),
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 35, 36, 42),
+          color: const Color.fromARGB(255, 27, 28, 34),
           borderRadius: BorderRadius.circular(12),
           boxShadow: const [
             BoxShadow(
-              color: Color.fromARGB(127, 0, 0, 0),
-              spreadRadius: 1,
-              blurRadius: 10,
+              color: Color.fromARGB(126, 0, 0, 0),
+              spreadRadius: 3,
+              blurRadius: 20,
               offset: Offset(0, 7),
             )
           ],
@@ -37,9 +42,31 @@ class NewUpdatesTable extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                "$persent %",
-                style: TextStyle(color: Colors.greenAccent),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    price.toString(),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'IransansBlack',
+                    ),
+                  ),
+                  SizedBox(
+                    height: 2,
+                  ),
+                  Text(
+                    "$persent %",
+                    style: TextStyle(
+                      color: persentColor,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'IransansBlack',
+                    ),
+                  ),
+                ],
               ),
               Row(
                 children: [
@@ -50,7 +77,7 @@ class NewUpdatesTable extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          title,
+                          currencyName,
                           style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
@@ -60,7 +87,7 @@ class NewUpdatesTable extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(top: 2),
                           child: Text(
-                            subtitle,
+                            volatility,
                             style: const TextStyle(
                               fontSize: 10,
                               color: Color.fromARGB(97, 255, 255, 255),
@@ -72,9 +99,14 @@ class NewUpdatesTable extends StatelessWidget {
                       ],
                     ),
                   ),
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(imageLink),
-                  ),
+                  Container(
+                    width: 50,
+                    height: 50,
+                    
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: NetworkImage(imageLink), fit: BoxFit.cover)),
+                  )
                 ],
               ),
             ],
