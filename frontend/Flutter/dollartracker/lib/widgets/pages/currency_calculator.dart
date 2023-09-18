@@ -94,6 +94,8 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
           Header(
             backgroundColor: Color.fromARGB(0, 255, 255, 255),
             color: Colors.white,
+            profileImage:
+                'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
           ),
           SizedBox(
             height: 25,

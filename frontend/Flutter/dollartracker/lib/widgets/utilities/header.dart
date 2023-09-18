@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Header extends StatelessWidget {
+  final String profileImage;
   final Color color;
   final Color backgroundColor;
   const Header({
     super.key,
+    required this.profileImage,
     required this.color,
     required this.backgroundColor,
   });
@@ -32,7 +34,9 @@ class Header extends StatelessWidget {
                 CircleAvatar(
                   radius: 25,
                   // user profile
-                  backgroundImage: AssetImage("assets/Logo.jpg")
+                  backgroundImage: NetworkImage(
+                    profileImage,
+                  ),
                 ),
                 Text(
                   "Currency Tracker",

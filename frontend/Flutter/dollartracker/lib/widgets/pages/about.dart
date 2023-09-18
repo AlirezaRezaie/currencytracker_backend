@@ -34,6 +34,8 @@ class AboutPage extends StatelessWidget {
               child: Header(
                 backgroundColor: Color.fromARGB(106, 0, 0, 0),
                 color: Color.fromARGB(255, 255, 255, 255),
+                profileImage:
+                    'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
               ),
             ),
           ),

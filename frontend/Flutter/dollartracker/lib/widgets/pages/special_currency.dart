@@ -93,6 +93,8 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
           Header(
             backgroundColor: const Color.fromARGB(0, 0, 0, 0),
             color: Colors.white,
+            profileImage:
+                'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
           ),
           SizedBox(
             height: 30,
@@ -169,7 +171,7 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
                         },
                       ),
                     )
-                  : SizedBox()
+                  : SizedBox.shrink()
         ],
       ),
     );
