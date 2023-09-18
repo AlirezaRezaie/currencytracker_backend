@@ -77,7 +77,10 @@ class priceInfo:
                 )
 
             case "dollar_tehran3bze":
-                pass
+                groups = re.search(
+                    r"(فردایی|نقدی|نـــقـدی|نـــقـدۍ|پایان معاملات).*?(\d{1,3}(?:,\d{3})*).(\w*)",
+                    price_text,
+                )
             # case "DHS_Dirham":
             #    pass
             case _:

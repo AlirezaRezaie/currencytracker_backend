@@ -20,12 +20,14 @@ def run_live(emmitter_callback, error_callback, stop_event, args=None):
             curr_fetch_nullable = extract_prices(
                 fetch_function(server_mode, args), reverse=True
             )
+
             if curr_fetch_nullable:
+                # print(curr_fetch_nullable)
                 curr_fetch = curr_fetch_nullable
                 break
 
         if not type(curr_fetch) == list:
-            stop_event.set()
+            # stop_event.set()
             error_callback(args.channel_id)
             break
 
@@ -50,6 +52,7 @@ def run_live(emmitter_callback, error_callback, stop_event, args=None):
             logger.error("something went wrong")
 
         prev_fetch = curr_fetch
+    print("FINISH LOOP")
 
 
 def run_counter(args):
