@@ -35,7 +35,7 @@ class AboutPage extends StatelessWidget {
                 backgroundColor: Color.fromARGB(106, 0, 0, 0),
                 color: Color.fromARGB(255, 255, 255, 255),
                 profileImage:
-                    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Dwayne_Johnson_2014_%28cropped%29.jpg/640px-Dwayne_Johnson_2014_%28cropped%29.jpg",
+                    'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
               ),
             ),
           ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:animated_digit/animated_digit.dart';
 
 class PriceBox extends StatefulWidget {
@@ -61,11 +60,7 @@ class _PriceBoxState extends State<PriceBox> {
           ),
           Padding(
             padding: EdgeInsets.only(top: 5),
-            child: Row(
-              children: [
-                widget.price,
-              ],
-            ),
+            child: widget.price,
           ),
         ],
       ),

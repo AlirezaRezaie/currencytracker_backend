@@ -180,7 +180,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 backgroundColor: const Color.fromARGB(0, 0, 0, 0),
                 color: Colors.white,
                 profileImage:
-                    'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg/220px-Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
+                    'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
               ),
               SizedBox(
                 height: 20,
@@ -192,14 +192,27 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     title: "🇪🇺 یورو",
                     price: AnimatedDigitWidget(
                       value: receivedData,
-                      textStyle: const TextStyle(),
+                      enableSeparator: true,
+                      textStyle: GoogleFonts.aladin(
+                        color: const Color.fromARGB(255, 255, 255, 255),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                      ),
                     ),
                     firstColor: Color.fromARGB(255, 60, 80, 250),
                     secondColor: Color.fromARGB(255, 60, 78, 246),
                   ),
                   PriceBox(
                     title: "🇺🇸 دلار",
-                    price: AnimatedDigitWidget(value: receivedData),
+                    price: AnimatedDigitWidget(
+                      value: receivedData,
+                      enableSeparator: true,
+                      textStyle: GoogleFonts.aladin(
+                        color: const Color.fromARGB(255, 255, 255, 255),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                      ),
+                    ),
                     firstColor: Color.fromARGB(255, 60, 80, 250),
                     secondColor: Color.fromARGB(255, 60, 78, 246),
                   ),
