@@ -61,11 +61,7 @@ class _PriceBoxState extends State<PriceBox> {
           ),
           Padding(
             padding: EdgeInsets.only(top: 5),
-            child: Row(
-              children: [
-                widget.price,
-              ],
-            ),
+            child: widget.price,
           ),
         ],
       ),

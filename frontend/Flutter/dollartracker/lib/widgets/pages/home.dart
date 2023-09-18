@@ -192,14 +192,27 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     title: "🇪🇺 یورو",
                     price: AnimatedDigitWidget(
                       value: receivedData,
-                      textStyle: const TextStyle(),
+                      enableSeparator: true,
+                      textStyle: GoogleFonts.aladin(
+                        color: const Color.fromARGB(255, 255, 255, 255),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                      ),
                     ),
                     firstColor: Color.fromARGB(255, 60, 80, 250),
                     secondColor: Color.fromARGB(255, 60, 78, 246),
                   ),
                   PriceBox(
                     title: "🇺🇸 دلار",
-                    price: AnimatedDigitWidget(value: receivedData),
+                    price: AnimatedDigitWidget(
+                      value: receivedData,
+                      enableSeparator: true,
+                      textStyle: GoogleFonts.aladin(
+                        color: const Color.fromARGB(255, 255, 255, 255),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                      ),
+                    ),
                     firstColor: Color.fromARGB(255, 60, 80, 250),
                     secondColor: Color.fromARGB(255, 60, 78, 246),
                   ),
