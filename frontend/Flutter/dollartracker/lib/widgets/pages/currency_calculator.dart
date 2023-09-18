@@ -278,7 +278,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                           ),
                         ),
                         backgroundColor: MaterialStateProperty.all(
-                          Color.fromARGB(255, 60, 80, 250),
+                          Color.fromARGB(255, 27, 28, 34),
                         ),
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
@@ -306,19 +306,19 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                     opacity: _answerOpacity,
                     duration: answerDuration,
                     child: AnimatedContainer(
-                        padding: EdgeInsets.all(25),
+                        padding: EdgeInsets.only(top: 20, right: 20, left: 20,),
                         duration: answerDuration,
-                        width: 330,
-                        height: 170,
+                        width: 370,
+                        height: 190,
                         decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 27, 28, 34),
+                          color: Color.fromARGB(255, 60, 80, 250),
                           borderRadius: answerBorderRadius,
                           boxShadow: [
                             BoxShadow(
                               color: answerShadowColor,
-                              spreadRadius: 2,
-                              blurRadius: 15,
-                              offset: Offset(0, 6),
+                              spreadRadius: 1,
+                              blurRadius: 35,
+                              offset: Offset(0, 30),
                             )
                           ],
                         ),
@@ -329,13 +329,24 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Transform.rotate(
-                                  angle: -30 * 3.14159265359 / 180,
-                                  child: Icon(
-                                    BootstrapIcons.currency_dollar,
-                                    color: Colors.white,
-                                    size: 45,
-                                  ),
-                                ),
+                                    angle: -30 * 3.14159265359 / 180,
+                                    child: Container(
+                                      padding: EdgeInsets.only(
+                                        top: 3,
+                                        right: 3,
+                                        left: 3,
+                                        bottom: 6,
+                                      ),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                              color: Colors.white, width: 3)),
+                                      child: Icon(
+                                        BootstrapIcons.currency_dollar,
+                                        color: Colors.white,
+                                        size: 40,
+                                      ),
+                                    )),
                                 Text(
                                   " : مقدار ارز تبدیل شده",
                                   style: TextStyle(
@@ -350,11 +361,14 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                             Text(
                               "3.2512",
                               style: TextStyle(
-                                color: Color.fromARGB(255, 60, 80, 250),
-                                fontWeight: FontWeight.w600,
-                                fontSize: 25,
+                                color: Color.fromARGB(255, 27, 28, 34),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 30,
                                 fontFamily: 'IransansBlack',
                               ),
+                            ),
+                            SizedBox(
+                              height: 10,
                             ),
                             Directionality(
                               textDirection: TextDirection.rtl,
