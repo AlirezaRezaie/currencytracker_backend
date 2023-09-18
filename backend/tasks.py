@@ -54,7 +54,10 @@ class Task:
 
     def stop(self):
         self.stop_event.set()
-        self.task.join()
+        try:
+            self.task.join()
+        except:
+            print("cant stop current thread")
         logger.info(f"removing {self.task.name} because no one is using it")
         self.task = None
         tasks.remove(self)
@@ -70,9 +73,7 @@ def get_task(id):
 def disconnect_websocket(task, websocket):
     if task in tasks:
         task.users.remove(websocket)
-        logger.info(
-            f"client {websocket.client.host}:{websocket.client.port} disconnected ❌❌"
-        )
+
         if len(task.users) < 1:
             task.stop()
     else:
@@ -84,18 +85,15 @@ async def send_data_to_clients(new_data, clients):
         await client.send_text(json.dumps(new_data))
 
 
-async def disconnect_clients(task, clients):
-    for client in clients:
-        await client.send_text("wrong id")
-        await client.close()
-        disconnect_websocket(task, client)
+async def notify_error_to_all(error_msg, all_clients):
+    for client in all_clients:
+        await client.send_text(error_msg)
 
 
 def error_callback(id):
     task = get_task(id)
-    users = task.users
-    loop = task.main_loop
-    loop.create_task(disconnect_clients(task, users))
+    task.stop()
+    task.main_loop.create_task(notify_error_to_all("wrong id bruh", task.users))
 
 
 def price_callback(price, channel):
