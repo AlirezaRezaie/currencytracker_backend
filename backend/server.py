@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 from fastapi.staticfiles import StaticFiles
 
-from network import network_stability_check
+# from network import network_stability_check
 from logs import logger
 from routes import counter, live, news
 from tasks import get_task
@@ -35,7 +35,7 @@ def get_hosts() -> dict:
 if __name__ == "__main__":
     import uvicorn
 
-    network_stability_check()
+    # network_stability_check()
 
     logger.info(f"env port is set to: {get_port()}")
     uvicorn.run(
