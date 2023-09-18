@@ -11,6 +11,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
 import '../utilities/price_box.dart';
 import '../utilities/Menu/side_menu.dart';
+import 'package:animated_digit/animated_digit.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -26,6 +28,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   int receivedData = 0;
   double changeRate = 0;
+  int value = 9999;
   String serverHost = "";
   bool isConnected = false;
   bool isConnecting = false;
@@ -187,13 +190,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 children: [
                   PriceBox(
                     title: "🇪🇺 یورو",
-                    price: receivedData,
+                    price: AnimatedDigitWidget(
+                      value: receivedData,
+                      textStyle: const TextStyle(),
+                    ),
                     firstColor: Color.fromARGB(255, 60, 80, 250),
                     secondColor: Color.fromARGB(255, 60, 78, 246),
                   ),
                   PriceBox(
                     title: "🇺🇸 دلار",
-                    price: receivedData,
+                    price: AnimatedDigitWidget(value: receivedData),
                     firstColor: Color.fromARGB(255, 60, 80, 250),
                     secondColor: Color.fromARGB(255, 60, 78, 246),
                   ),

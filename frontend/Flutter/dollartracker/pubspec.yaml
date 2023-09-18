@@ -46,7 +46,8 @@ dependencies:
   http: ^1.1.0
   flash: ^3.0.5+1
   lottie: ^1.4.2
-  connectivity_plus: ^3.0.0
+  connectivity_plus: ^4.0.2
+  animated_digit: ^3.2.3
 
 dev_dependencies:
   flutter_test:

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:animated_digit/animated_digit.dart';
 
 class PriceBox extends StatefulWidget {
   final String title;
-  final int price;
+  final AnimatedDigitWidget price;
   final Color firstColor;
   final Color secondColor;
 
@@ -62,14 +63,7 @@ class _PriceBoxState extends State<PriceBox> {
             padding: EdgeInsets.only(top: 5),
             child: Row(
               children: [
-                Text(
-                  widget.price.toString(),
-                  style: GoogleFonts.aladin(
-                    color: const Color.fromARGB(255, 255, 255, 255),
-                    fontWeight: FontWeight.w600,
-                    fontSize: 20,
-                  ),
-                ),
+                widget.price,
               ],
             ),
           ),
