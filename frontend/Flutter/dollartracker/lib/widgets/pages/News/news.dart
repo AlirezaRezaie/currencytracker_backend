@@ -5,10 +5,10 @@ import 'package:dollartracker/widgets/pages/News/news_post.dart';
 import 'package:dollartracker/widgets/utilities/Skeleton/news_card_skeleton.dart';
 import 'package:dollartracker/widgets/utilities/header.dart';
 import 'package:dollartracker/widgets/pages/News/news_card.dart';
+import 'package:dollartracker/widgets/utilities/network_error.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:lottie/lottie.dart';
 import '../../utilities/Menu/side_menu.dart';
 
 class NewsPage extends StatefulWidget {
@@ -30,7 +30,6 @@ class _NewsPageState extends State<NewsPage> {
     setState(() {
       isConnected = connectivityResult != ConnectivityResult.none;
     });
-    print("funccccccccccccccccc $isConnected");
   }
 
   Future<void> fetchData() async {
@@ -187,79 +186,16 @@ class _NewsPageState extends State<NewsPage> {
               : !isConnected
                   ? Padding(
                       padding: EdgeInsets.only(top: 90),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 250,
-                            height: 200,
-                            child: Lottie.asset("assets/NetworkError.json"),
-                          ),
-                          Text(
-                            "مشکل در اتصال به سرور",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              fontFamily: 'IransansBlack',
-                            ),
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            "از اتصال اینترنت خود اطمینان حاصل کنید و دوباره امتحان کنید",
-                            style: TextStyle(
-                              color: const Color.fromARGB(200, 255, 255, 255),
-                              fontWeight: FontWeight.w400,
-                              fontSize: 11,
-                              fontFamily: 'IransansBlack',
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 10),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                // recheck the internet connection
-                                checkNetworkStatus();
-                                // refetch the data
-                                fetchData();
-                              },
-                              style: ButtonStyle(
-                                padding: MaterialStateProperty.all(
-                                  EdgeInsets.only(
-                                    right: 20,
-                                    left: 20,
-                                    top: 10,
-                                    bottom: 10,
-                                  ),
-                                ),
-                                backgroundColor: MaterialStateProperty.all(
-                                  Color.fromARGB(255, 60, 80, 250),
-                                ),
-                                shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        8), // Border radius
-                                  ),
-                                ),
-                              ),
-                              child: Text(
-                                "تلاش مجدد",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 13,
-                                  fontFamily: 'IransansBlack',
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                      child: NetworkError(
+                        onPress: () {
+                          // recheck the internet connection
+                          checkNetworkStatus();
+                          // refetch the data
+                          fetchData();
+                        },
                       ),
                     )
-                  : Text("data")
+                  : SizedBox()
         ],
       ),
     );
