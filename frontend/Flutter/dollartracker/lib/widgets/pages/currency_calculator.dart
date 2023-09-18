@@ -81,6 +81,10 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
 
   @override
   Widget build(BuildContext context) {
+    Future.delayed(Duration(seconds: 1), () {
+      checkNetworkStatus();
+    });
+
     return Scaffold(
       endDrawer: SideMenu(),
       backgroundColor: Color.fromARGB(255, 15, 15, 16),
@@ -233,7 +237,6 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                       onPressed: () {
                         if (isConnected) {
                           // get the coverted currency and show to the user
-                          checkNetworkStatus();
                         } else {
                           // show a network connection error to the user
                           showFlash();
