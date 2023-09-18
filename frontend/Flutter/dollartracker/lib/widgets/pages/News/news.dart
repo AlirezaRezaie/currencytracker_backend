@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:dollartracker/widgets/pages/News/news_post.dart';
+import 'package:dollartracker/widgets/pages/News/widgets/news_post.dart';
 import 'package:dollartracker/widgets/utilities/Skeleton/news_card_skeleton.dart';
 import 'package:dollartracker/widgets/utilities/header.dart';
-import 'package:dollartracker/widgets/pages/News/news_card.dart';
+import 'package:dollartracker/widgets/pages/News/widgets/news_card.dart';
 import 'package:dollartracker/widgets/utilities/network_error.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -79,8 +79,6 @@ class _NewsPageState extends State<NewsPage> {
       body: Column(
         children: [
           Header(
-            profileImage:
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg/220px-Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg",
             color: Colors.white,
             backgroundColor: const Color.fromARGB(0, 255, 255, 255),
           ),

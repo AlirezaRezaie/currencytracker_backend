@@ -81,6 +81,7 @@ flutter:
 
   assets:
     - .env
+    - "assets/Logo.jpg"
     - "assets/about_background.jpg"
     - "assets/NetworkError.json"
   # An image asset can refer to one or more resolution-specific "variants", see

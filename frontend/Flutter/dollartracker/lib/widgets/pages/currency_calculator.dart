@@ -23,8 +23,6 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
           Header(
             backgroundColor: Color.fromARGB(0, 255, 255, 255),
             color: Colors.white,
-            profileImage:
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg/220px-Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg",
           ),
           SizedBox(
             height: 25,
