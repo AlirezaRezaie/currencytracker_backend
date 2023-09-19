@@ -186,6 +186,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+// check the internet connection every 1 second
+    Future.delayed(Duration(seconds: 1), () {
+      checkNetworkStatus();
+    });
+
     // add some padding to make space
     buildContext = context;
     return Scaffold(
