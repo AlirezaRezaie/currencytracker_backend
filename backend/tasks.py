@@ -74,24 +74,25 @@ def get_task(code):
 def get_all_tasks_subbed_in(user):
     all_tasks = []
     for task in tasks:
-        if user in task:
+        if user in task.users:
             all_tasks.append(task)
     return all_tasks
 
 
 def disconnect_websocket(websocket, task=None):
+    user_tasks = []
     if not task:
         # if not specified which task to unsubscribe from unsub it from every task
-        task = get_all_tasks_subbed_in(websocket)
+        user_tasks = get_all_tasks_subbed_in(websocket)
+    else:
+        user_tasks.append(task)
 
-    if task in tasks and websocket in task.users:
+    for task in user_tasks:
         logger.info(f"removing the user from {task.args.code}")
         task.users.remove(websocket)
 
         if len(task.users) < 1 and not task.args.channel_info["nonstop"]:
             task.stop()
-    else:
-        logger.info("the user has already been removed")
 
 
 async def send_data_to_clients(new_data, clients):
