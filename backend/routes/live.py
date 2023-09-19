@@ -37,6 +37,7 @@ def command_parser(msg):
 @router.websocket("/")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
+    await websocket.send_text("CONNECTED")
     logger.info(f"client {websocket.client.host}:{websocket.client.port} connected 🔌🔌")
     loop = asyncio.get_event_loop()
     task = None
@@ -50,27 +51,27 @@ async def websocket_endpoint(websocket: WebSocket):
                 continue
 
             if parse_command["status"] == "ok":
-                channel_id = parse_command["channel_name"]
-                if channel_id:
-                    task = get_task(channel_id)
+                channel_code = parse_command["channel_name"]
+                if channel_code:
+                    task = get_task(channel_code)
                     if not task:
-                        task = Task(channel_id, loop)
+                        task = Task(channel_code, loop)
                     else:
-                        logger.info(f"task {channel_id} exists")
+                        logger.info(f"task {channel_code} exists")
                 match parse_command["command"]:
                     case "SUBSCRIBE":
                         if not websocket in task.users:
                             task.users.append(websocket)
                         else:
                             await websocket.send_text(
-                                f"you have already subscribed to {channel_id}"
+                                f"you have already subscribed to {channel_code}"
                             )
                         if task.lastprice:
                             await websocket.send_text(json.dumps(task.lastprice))
 
                     case "UNSUBSCRIBE":
                         if websocket in task.users:
-                            disconnect_websocket(task, websocket)
+                            disconnect_websocket(websocket, task)
                         else:
                             await websocket.send_text(
                                 "your are not subscribed to any channel silly"
@@ -79,7 +80,7 @@ async def websocket_endpoint(websocket: WebSocket):
                         channels_subbed_in = []
                         for task in tasks:
                             if websocket in task.users:
-                                channels_subbed_in.append(task.channel_id)
+                                channels_subbed_in.append(task.args.code)
                         await websocket.send_text(str(channels_subbed_in))
 
                     case "TASKS":
@@ -93,7 +94,7 @@ async def websocket_endpoint(websocket: WebSocket):
         logger.info(
             f"client {websocket.client.host}:{websocket.client.port} disconnected ❌❌"
         )
-        disconnect_websocket(task, websocket)
+        disconnect_websocket(websocket)
     except Exception as e:
         logger.error(
             f"Custome Exception Occurred: {e}\nException from client {websocket.client.host}:{websocket.client.port}\ncheck the logs to see who that was"
