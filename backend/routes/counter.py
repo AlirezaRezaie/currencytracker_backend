@@ -1,6 +1,4 @@
 from modes import run_counter
-from tasks import Arg
-from settings import get_defaults
 from locals import local
 from fastapi import APIRouter
 
@@ -8,15 +6,16 @@ from fastapi import APIRouter
 router = APIRouter()
 
 
-@router.get("/get_last/{code}/{count}")
-async def get_live_counter(code: str, count: int) -> str:
-    default_id = get_defaults(code)
-    args = Arg(default_id, count=count)
-    local.args = args
-    return str(run_counter(args))
+@router.get("/get_last/{code}/{channel}/{count}")
+def get_live_counter(code: str, channel: str, count: int) -> str:
+    get_channel = local.default_channels[code][channel]
+    local.channel_info = get_channel
+    local.channel_id = get_channel["channel_name"]
+    local.count = count
+    local.code = code
+    return str(run_counter())
 
 
 @router.get("/get_supported")
-async def get_live_counter(code: str, count: int) -> list:
-    defaults = get_defaults()
-    return list(defaults.values())
+def get_live_counter() -> list:
+    return list(local.default_channels.values())
