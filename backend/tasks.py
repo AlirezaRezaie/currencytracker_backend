@@ -3,33 +3,34 @@ import asyncio
 import json
 from modes import run_live
 from logs import logger
+from locals import local
 
 tasks = []
 
 
 # args object for task configs
 class Arg:
-    def __init__(
-        self, channel_id, count=None, timeout=None, retry=None, fetchrate=None
-    ):
-        self.channel_id = channel_id
+    def __init__(self, code, count=None, timeout=None, retry=None, fetchrate=None):
+        self.code = code
         self.timeout = timeout
         self.retry = retry
         self.fetchrate = fetchrate
         self.count = count
+        self.channel_info = local.default_channels[code][0]
+        self.channel_id = self.channel_info["channel_name"]
 
 
 class Task:
-    def __init__(self, channel_id, loop=None):
+    def __init__(self, code, loop=None):
         """
         TODO : this might return error or None as memory limit reaches
         """
         self.main_loop = loop
-        self.channel_id = channel_id
-        self.args = Arg(channel_id)
+        self.args = Arg(code)
         self.users = []
         self.stop_event = threading.Event()
         self.lastprice = None
+
         try:
             self.task = self.create_task()
         except:
@@ -63,21 +64,34 @@ class Task:
         tasks.remove(self)
 
 
-def get_task(id):
+def get_task(code):
     for task in tasks:
-        if task.channel_id == id:
+        if task.args.code == code:
             return task
     return None
 
 
-def disconnect_websocket(task, websocket):
-    if task in tasks:
+def get_all_tasks_subbed_in(user):
+    all_tasks = []
+    for task in tasks:
+        if user in task:
+            all_tasks.append(task)
+    return all_tasks
+
+
+def disconnect_websocket(websocket, task=None):
+    if not task:
+        # if not specified which task to unsubscribe from unsub it from every task
+        task = get_all_tasks_subbed_in(websocket)
+
+    if task in tasks and websocket in task.users:
+        logger.info(f"removing the user from {task.args.code}")
         task.users.remove(websocket)
 
-        if len(task.users) < 1:
+        if len(task.users) < 1 and not task.args.channel_info["nonstop"]:
             task.stop()
     else:
-        logger.info("the task has already been removed")
+        logger.info("the user has already been removed")
 
 
 async def send_data_to_clients(new_data, clients):
@@ -90,8 +104,8 @@ async def notify_error_to_all(error_msg, all_clients):
         await client.send_text(error_msg)
 
 
-def error_callback(id):
-    task = get_task(id)
+def error_callback(code):
+    task = get_task(code)
     task.stop()
     task.main_loop.create_task(notify_error_to_all("wrong id bruh", task.users))
 
