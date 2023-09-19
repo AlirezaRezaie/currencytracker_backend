@@ -1,6 +1,8 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dollartracker/widgets/utilities/Chart/chart.dart';
 import 'package:dollartracker/widgets/utilities/header.dart';
+import 'package:dollartracker/widgets/utilities/network_error.dart';
 import 'package:dollartracker/widgets/utilities/new_updates_table.dart';
 import 'package:flash/flash.dart';
 import 'package:flash/flash_helper.dart';
@@ -32,7 +34,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   int value = 9999;
   String serverHost = "";
   bool isConnected = false;
-  bool isHomeConnected = true;
+  // set a bool to check is the page loaded or not
+  bool isHomeConnected = false;
+  // a bool to check is the network connect or not
+  bool isNetworkConnected = false;
   bool isConnecting = false;
   bool noNetwork = false;
   bool isError = false;
@@ -43,8 +48,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     55500.0,
   ];
 
+  Future<void> checkNetworkStatus() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    setState(() {
+      isNetworkConnected = connectivityResult != ConnectivityResult.none;
+    });
+  }
+
   @override
   void initState() {
+    checkNetworkStatus();
     String? host = dotenv.env['SERVER_HOST'];
     super.initState();
     // Replace 'ws://your_websocket_url' with your actual WebSocket server URL.
@@ -56,12 +69,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     isConnecting = true;
 
     channel = IOWebSocketChannel.connect(host);
-    channel.sink.add('SUBSCRIBE nerkhedollarr');
+    channel.sink.add('SUBSCRIBE USD');
 
     channel.stream.listen(
       (data) {
         isConnecting = false;
         isError = false;
+        setState(() {
+          isHomeConnected = data != "CONNECTED";
+        });
         print(data);
         // Parse the received data as JSON
         Map<String, dynamic> jsonData = jsonDecode(data);
@@ -370,13 +386,27 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               ],
             )
           // a loading screen whene the main data is on loading
-          : Center(
-              child: Container(
-                width: 400,
-                height: 300,
-                child: Lottie.asset("assets/Loading.json"),
-              ),
-            ),
+          : isNetworkConnected
+              ? Center(
+                  child: Container(
+                    width: 400,
+                    height: 300,
+                    child: Lottie.asset("assets/Loading.json"),
+                  ),
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: NetworkError(
+                        onPress: () {
+                          // recheck the network status
+                          checkNetworkStatus();
+                        },
+                      ),
+                    )
+                  ],
+                ),
     );
   }
 }
