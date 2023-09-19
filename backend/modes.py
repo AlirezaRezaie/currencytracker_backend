@@ -59,17 +59,19 @@ def run_counter(args):
     priceInfo.channels_last_post_number[args.channel_id] = 0
     server_mode = "count"
     full_prices = []
+    previous_price = None
     while True:
         msgs = extract_prices(fetch_function(server_mode, args))
         for msg in msgs:
+            msg.calculate_and_set_rate_of_change(previous_price)
             full_prices.insert(0, msg)
             logger.info(f"accumulated {len(full_prices)} prices")
-
+            previous_price = msg
             if args.count == len(full_prices):
                 break
 
         if args.count == len(full_prices):
             break
 
-    server_ret = list(map(lambda price: price.get_data(), full_prices))
+    server_ret = list(map(lambda price: price.get_json_data(), full_prices))
     return server_ret

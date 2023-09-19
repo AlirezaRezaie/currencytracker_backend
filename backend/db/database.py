@@ -7,7 +7,7 @@ from db.models import Base
 # Create the tables in your database
 engine = create_engine(
     "mysql+mysqlconnector://ariascod_curr:k,O#kB{KD!Ew@5.144.130.7:3306/ariascod_curtra",
-    pool_recycle=3600,
+    pool_recycle=100,
 )
 Base.metadata.create_all(engine)
 
