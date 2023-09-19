@@ -20,8 +20,6 @@ known_channels = ["dollar_tehran3bze", "nerkhedollarr"]
 
 
 class priceInfo:
-    channels_last_post_number = dict()
-
     def __init__(self, raw_price_obj) -> None:
         parsed = self.parse_price_info(raw_price_obj["text"])
         # if its a valid price text
@@ -68,23 +66,13 @@ class priceInfo:
     def parse_price_info(self, price_text) -> tuple:
         groups = None
         checked_parsed = None
-
-        match local.args.channel_id:
-            case "nerkhedollarr":
-                groups = re.search(
-                    r"(فردایی|نقدی|نـــقـدی|نـــقـدۍ|پایان معاملات).*?(\d{1,3}(?:,\d{3})*).(\w*)",
-                    price_text,
-                )
-
-            case "dollar_tehran3bze":
-                groups = re.search(
-                    r"(فردایی|نقدی|نـــقـدی|نـــقـدۍ|پایان معاملات).*?(\d{1,3}(?:,\d{3})*).(\w*)",
-                    price_text,
-                )
-            # case "DHS_Dirham":
-            #    pass
-            case _:
-                groups = re.findall(r"(\d{1,3}(?:,\d{3})*)", price_text)
+        # code = local.code
+        regex = local.channel_info["regex"]
+        if regex:
+            groups = re.search(regex, price_text)
+        else:
+            # use the default regex
+            groups = re.findall(r"(\d{1,3}(?:,\d{3})*)", price_text)
 
         if groups:
             try:

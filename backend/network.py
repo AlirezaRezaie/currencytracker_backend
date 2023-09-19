@@ -4,8 +4,7 @@ from bs4 import BeautifulSoup
 import os
 from time import time
 from logs import logger
-from price import priceInfo
-
+from locals import local
 from requests import Session
 
 session = Session()
@@ -81,13 +80,12 @@ def fetch_price_data_u_tg_api(apikey=""):
 
 def fetch_price_data_u_preview_page(
     server_mode,
-    args,
 ):
     global session
 
-    timeout = args.timeout if args.timeout else 10
-    retry_limit = args.retry if args.retry else 10
-    fetchrate = args.fetchrate if args.fetchrate else False
+    timeout = local.args.timeout if local.args.timeout else 10
+    retry_limit = local.args.retry if local.args.retry else 10
+    fetchrate = local.args.fetchrate if local.args.fetchrate else False
 
     headers = {
         "Accept": "text/javascript",
@@ -98,7 +96,7 @@ def fetch_price_data_u_preview_page(
         "Content-Length": "0",
     }
 
-    postnumber = priceInfo.channels_last_post_number[args.channel_id]
+    postnumber = local.last_post_number
 
     if server_mode == "count":
         session = requests
@@ -110,7 +108,7 @@ def fetch_price_data_u_preview_page(
             logger.debug("connecting...")
             t1 = int(time())
             response = session.post(
-                f"https://t.me/s/{args.channel_id}?before={str(postnumber)}",
+                f"https://t.me/s/{local.channel_id}?before={str(postnumber)}",
                 headers=headers,
                 timeout=timeout,
             ).text
@@ -167,6 +165,6 @@ def fetch_price_data_u_preview_page(
             logger.debug("is not desired format")
 
     if len(messages) > 0:
-        priceInfo.channels_last_post_number[args.channel_id] = messages[0]["number"]
+        local.last_post_number = messages[0]["number"]
 
     return messages
