@@ -145,7 +145,7 @@ class _NewsPageState extends State<NewsPage> {
                             itemBuilder: (context, index) => NewsCardSkeleton(),
                             separatorBuilder: (context, index) =>
                                 SizedBox(height: 16),
-                            itemCount: 6,
+                            itemCount: 8,
                           )),
                     )
                   : Expanded(

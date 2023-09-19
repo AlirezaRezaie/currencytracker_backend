@@ -22,7 +22,6 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
   // because i want to change it when user click on the submit button
   // and i want the container to be animation
   double _answerOpacity = 0;
-  Color answerShadowColor = Color.fromARGB(0, 0, 0, 0);
   BorderRadius answerBorderRadius = BorderRadius.circular(0);
   EdgeInsets answerPadding = EdgeInsets.only(top: 80);
   Duration answerDuration = Duration(milliseconds: 300);
@@ -39,7 +38,6 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
   showAnswer() {
     setState(() {
       _answerOpacity = 1;
-      answerShadowColor = Color.fromARGB(255, 27, 28, 34);
       answerBorderRadius = BorderRadius.circular(25);
       answerPadding = EdgeInsets.only(top: 60);
     });
@@ -306,16 +304,16 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                     opacity: _answerOpacity,
                     duration: answerDuration,
                     child: AnimatedContainer(
-                        padding: EdgeInsets.only(top: 35, right: 20, left: 20),
+                        padding: EdgeInsets.only(top: 25, right: 20, left: 20),
                         duration: answerDuration,
                         width: 350,
-                        height: 190,
+                        height: 180,
                         decoration: BoxDecoration(
                           color: Color.fromARGB(255, 27, 28, 34),
                           borderRadius: answerBorderRadius,
                           boxShadow: [
                             BoxShadow(
-                              color: answerShadowColor,
+                              color: Color.fromARGB(255, 27, 28, 34),
                               spreadRadius: 1,
                               blurRadius: 35,
                               offset: Offset(0, 30),
@@ -338,13 +336,16 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                                         bottom: 6,
                                       ),
                                       decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                              color: Colors.white, width: 3)),
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: Colors.white,
+                                          width: 3,
+                                        ),
+                                      ),
                                       child: Icon(
                                         BootstrapIcons.currency_dollar,
                                         color: Colors.white,
-                                        size: 40,
+                                        size: 35,
                                       ),
                                     )),
                                 Text(
