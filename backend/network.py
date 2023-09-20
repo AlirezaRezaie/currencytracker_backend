@@ -105,14 +105,14 @@ def fetch_price_data_u_preview_page(
         try:
             # TODO: handle network resets and minor error that might cause the whole connection
             # to close
-            logger.debug("connecting...")
+            logger.info("connecting...")
             t1 = int(time())
             response = session.post(
                 f"https://t.me/s/{local.channel_id}?before={str(postnumber)}",
                 headers=headers,
                 timeout=timeout,
             ).text
-
+            logger.info("connected successfully +++")
             t2 = int(time())
             if fetchrate:
                 fr.set_rate(t2 - t1)
@@ -120,7 +120,7 @@ def fetch_price_data_u_preview_page(
         except requests.exceptions.RequestException as e:
             # TODO : change this retry method to also fit the server
             logger.error(e)
-            logger.info("failed to connect")
+            logger.info("failed to connect ---")
             # Continuously check the connection stability
             if not is_connection_stable("t.me", timeout=timeout):
                 logger.critical("Connection is not stable. Retrying in 5 seconds...")
