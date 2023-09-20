@@ -27,20 +27,14 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late WebSocketChannel channel;
   late BuildContext buildContext;
-  late Future controller;
 
   int receivedData = 0;
   double changeRate = 0;
   int value = 9999;
   String serverHost = "";
-  bool isConnected = false;
-  // set a bool to check is the page loaded or not
-  bool isHomeConnected = false;
-  // a bool to check is the network connect or not
-  bool isNetworkConnected = false;
   bool isConnecting = false;
-  bool noNetwork = false;
-  bool isError = false;
+  bool isNetworkConnected = false;
+  bool isHomeConnected = false;
   List chartData = [
     30500.0,
     40500.0,
@@ -57,7 +51,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    checkNetworkStatus();
     String? host = dotenv.env['SERVER_HOST'];
     super.initState();
     // Replace 'ws://your_websocket_url' with your actual WebSocket server URL.
@@ -66,69 +59,68 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   void _connectToWebSocket(String host) async {
-    isConnecting = true;
+    bool called = false;
+    if (!isConnecting) {
+      isConnecting = true;
 
-    channel = IOWebSocketChannel.connect(host);
-    channel.sink.add('SUBSCRIBE USD');
+      channel = IOWebSocketChannel.connect(host);
+      channel.sink.add('SUBSCRIBE USD');
 
-    channel.stream.listen(
-      (data) {
-        isConnecting = false;
-        isError = false;
-        setState(() {
-          isHomeConnected = data != "CONNECTED";
-        });
-        print(data);
-        // Parse the received data as JSON
-        Map<String, dynamic> jsonData = jsonDecode(data);
-        // Check if the 'price' field exists and is a numeric value
-        if (jsonData.containsKey('price')) {
-          // Update the animation when the price changes
-          setState(() {
-            receivedData =
-                jsonData['price']; // Format the price to two decimal places
-          });
-        }
-      },
-      onDone: () {
-        print("Server closed the connection");
-        isConnecting = false;
-        if (!isError) {
-          print("reconnecting ?.....?????@#");
-          controller.whenComplete(() {
-            showFlash();
-          });
-          print("flash ended");
-          Future.delayed(Duration(seconds: 5), () {
-            _connectToWebSocket(host);
-          });
-        }
-        //_reconnectToWebSocket(serverHost);
-      },
-      onError: (error) {
-        print("WebSocket error");
-        isConnecting = false;
-        isError = true;
-        _reconnectToWebSocket(serverHost);
-      },
-    );
+      channel.stream.listen(
+        (data) {
+          isConnecting = false;
+
+          if (data == "CONNECTED") {
+            setState(() {
+              isHomeConnected = true;
+            });
+          }
+          print(data);
+          // Parse the received data as JSON
+          Map<String, dynamic> jsonData = jsonDecode(data);
+          // Check if the 'price' field exists and is a numeric value
+          if (jsonData.containsKey('price')) {
+            // Update the animation when the price changes
+            setState(() {
+              receivedData =
+                  jsonData['price']; // Format the price to two decimal places
+            });
+          }
+        },
+        onDone: () {
+          print("Server closed the connection");
+          isConnecting = false;
+          if (!called) {
+            _reconnectToWebSocket(serverHost);
+            called = true;
+          }
+        },
+        onError: (error) {
+          print("WebSocket error");
+          isConnecting = false;
+          if (!called) {
+            _reconnectToWebSocket(serverHost);
+            called = true;
+          }
+        },
+      );
+    } else {
+      print("already calling the connection function bro");
+    }
   }
 
   void _reconnectToWebSocket(String host) {
-    if (!isConnecting) {
-      print("reconnecting ?.....?????@#");
-
-      showFlash();
-      Future.delayed(Duration(seconds: 5), () {
-        _connectToWebSocket(host);
-      });
-    }
+    print("reconnecting ?.....?????@#");
+    showFlash();
+    Future.delayed(Duration(seconds: 5), () {
+      _connectToWebSocket(host);
+    });
   }
 
   void showFlash() {
     print("show flash");
 
-    controller = buildContext.showFlash<bool>(
+    buildContext.showFlash<bool>(
       duration: const Duration(seconds: 5),
       builder: (context, controller) => FlashBar(
         controller: controller,
@@ -172,10 +164,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         ),
       ),
     );
-
-    controller.whenComplete(() {
-      print("flash ended");
-    });
   }
 
   @override
@@ -187,11 +175,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
 // check the internet connection every 1 second
-    Future.delayed(Duration(seconds: 1), () {
-      checkNetworkStatus();
-    });
-
-    // add some padding to make space
     buildContext = context;
     return Scaffold(
       endDrawer: SideMenu(),
