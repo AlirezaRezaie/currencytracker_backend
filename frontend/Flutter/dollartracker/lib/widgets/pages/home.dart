@@ -53,6 +53,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     String? host = dotenv.env['SERVER_HOST'];
     super.initState();
+    checkNetworkStatus();
     // Replace 'ws://your_websocket_url' with your actual WebSocket server URL.
     serverHost = "ws://$host/api/";
     _connectToWebSocket(serverHost);
