@@ -53,7 +53,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     String? host = dotenv.env['SERVER_HOST'];
     super.initState();
-    checkNetworkStatus();
+
+    buildContext = this.context;
+
     // Replace 'ws://your_websocket_url' with your actual WebSocket server URL.
     serverHost = "ws://$host/api/";
     _connectToWebSocket(serverHost);
@@ -111,7 +113,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   void _reconnectToWebSocket(String host) {
-    print("reconnecting ?.....?????@#");
+    print("reconnecting.....");
     showFlash();
     Future.delayed(Duration(seconds: 5), () {
       _connectToWebSocket(host);
@@ -176,7 +178,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
 // check the internet connection every 1 second
-    buildContext = context;
+    //buildContext = context;
     return Scaffold(
       endDrawer: SideMenu(),
       backgroundColor: Color.fromARGB(255, 15, 15, 16),
