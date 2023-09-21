@@ -55,6 +55,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     super.initState();
 
     buildContext = this.context;
+
     // Replace 'ws://your_websocket_url' with your actual WebSocket server URL.
     serverHost = "ws://$host/api/";
     _connectToWebSocket(serverHost);
