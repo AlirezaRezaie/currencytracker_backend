@@ -15,6 +15,7 @@ class Chart extends StatelessWidget {
 
     return LineChart(
       LineChartData(
+        
         gridData: FlGridData(
           show: true,
           getDrawingHorizontalLine: (value) {
@@ -35,36 +36,36 @@ class Chart extends StatelessWidget {
         lineTouchData: LineTouchData(
             touchTooltipData: LineTouchTooltipData(
           tooltipBgColor: Color.fromARGB(255, 35, 36, 42),
-          
         )),
         lineBarsData: [
           LineChartBarData(
-              spots: [
-                FlSpot(22, 50000),
-                FlSpot(22, 50000),
-                FlSpot(21, 60000),
-                FlSpot(20, 70000),
-                FlSpot(19, 55000),
-                FlSpot(18, 70000),
-                FlSpot(17, 80000),
-                FlSpot(16, 55000),
-                FlSpot(12, 60000),
-                FlSpot(8, 75000),
-                FlSpot(6, 45000),
-                FlSpot(2, 55000),
-                FlSpot(1, 55000),
-              ],
-              isCurved: true,
-              color: const Color.fromARGB(255, 60, 80, 250),
-              barWidth: 3,
-              belowBarData: BarAreaData(
-                  show: true, color: Color.fromARGB(90, 60, 79, 250)))
+            spots: [
+              FlSpot(22, 50000),
+              FlSpot(22, 50000),
+              FlSpot(21, 60000),
+              FlSpot(20, 70000),
+              FlSpot(19, 55000),
+              FlSpot(18, 70000),
+              FlSpot(17, 80000),
+              FlSpot(16, 55000),
+              FlSpot(12, 60000),
+              FlSpot(8, 75000),
+              FlSpot(6, 45000),
+              FlSpot(2, 55000),
+              FlSpot(1, 55000),
+            ],
+            isCurved: true,
+            color : const Color.fromARGB(255, 60, 80, 250),
+            barWidth: 3,
+            belowBarData: BarAreaData(
+              show: true,
+              color: Color.fromARGB(35, 60, 79, 250),
+            ),
+          )
         ],
         maxX: 24,
         minX: 0,
-        titlesData: FlTitlesData(
-          show: false
-        )
+        titlesData: FlTitlesData(show: false),
       ),
       duration: Duration(milliseconds: 500),
       curve: Curves.linear,
