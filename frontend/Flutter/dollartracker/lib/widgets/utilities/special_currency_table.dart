@@ -102,10 +102,11 @@ class SpecialCurrencyTable extends StatelessWidget {
                   Container(
                     width: 50,
                     height: 50,
-                    
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: NetworkImage(imageLink), fit: BoxFit.cover)),
+                      image: NetworkImage(imageLink),
+                      fit: BoxFit.cover,
+                    )),
                   )
                 ],
               ),

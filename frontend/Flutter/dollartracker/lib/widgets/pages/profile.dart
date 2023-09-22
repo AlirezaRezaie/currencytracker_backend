@@ -13,6 +13,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
+    BorderRadius imageBoxBorderRadius = BorderRadius.circular(15);
     return Scaffold(
       endDrawer: SideMenu(),
       backgroundColor: Color.fromARGB(255, 15, 15, 16),
@@ -23,6 +24,76 @@ class _ProfilePageState extends State<ProfilePage> {
             color: Colors.white,
             profileImage:
                 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 80),
+            child: Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.center,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(50),
+                    topLeft: Radius.circular(50),
+                  ),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height - 165,
+                    color: Color.fromARGB(255, 27, 28, 34),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 70,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 20,
+                          ),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "علیرضا رضایی",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                      fontFamily: "IransansBlack",
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                    top: -60,
+                    child: Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 60, 80, 250),
+                        borderRadius: imageBoxBorderRadius,
+                      ),
+                      padding: EdgeInsets.all(2),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: imageBoxBorderRadius,
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                'https://assets.entrepreneur.com/content/3x2/2000/1694109712-ent23-septoct-cover-ChrisHemsworth-hero.jpg?format=pjeg&auto=webp',
+                              ),
+                              fit: BoxFit.cover),
+                        ),
+                      ),
+                    )),
+              ],
+            ),
           ),
         ],
       ),

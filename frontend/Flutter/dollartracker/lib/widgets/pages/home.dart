@@ -33,7 +33,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   int value = 9999;
   String serverHost = "";
   bool isConnecting = false;
-  bool isNetworkConnected = false;
+  bool isNetworkConnected = true;
   bool isHomeConnected = false;
   List chartData = [
     30500.0,
@@ -244,8 +244,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               child: Text(
                                 "قیمت دلار امروز",
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: "IransansBlack"),
+                                  color: Colors.white,
+                                  fontFamily: "IransansBlack",
+                                ),
                               ),
                             ),
                             Padding(

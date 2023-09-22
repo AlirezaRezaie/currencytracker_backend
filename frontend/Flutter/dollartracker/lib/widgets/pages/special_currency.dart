@@ -41,7 +41,7 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
         "subtitle": 'subtitle',
         "persent": 25.0,
         "imageLink":
-            "https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vector-up-arrow-icon-png-image_956434.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg",
       },
       {
         "title": "title",
@@ -49,7 +49,7 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
         "subtitle": 'subtitle',
         "persent": -12.0,
         "imageLink":
-            "https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vector-up-arrow-icon-png-image_956434.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg",
       },
       {
         "title": "title",
@@ -57,7 +57,7 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
         "subtitle": 'subtitle',
         "persent": 60.0,
         "imageLink":
-            "https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vector-up-arrow-icon-png-image_956434.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg",
       },
       {
         "title": "title",
@@ -65,7 +65,7 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
         "subtitle": 'subtitle',
         "persent": 60.0,
         "imageLink":
-            "https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vector-up-arrow-icon-png-image_956434.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg",
       },
       {
         "title": "title",
@@ -73,7 +73,7 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
         "subtitle": 'subtitle',
         "persent": 60.0,
         "imageLink":
-            "https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vector-up-arrow-icon-png-image_956434.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg",
       },
       {
         "title": "title",
@@ -81,7 +81,7 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
         "subtitle": 'subtitle',
         "persent": 60.0,
         "imageLink":
-            "https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vector-up-arrow-icon-png-image_956434.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg",
       },
     ];
 
