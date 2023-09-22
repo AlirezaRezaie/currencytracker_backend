@@ -104,13 +104,7 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  child: CurrencySelector(
-                    listOfCurrency: [],
-                    width: 100,
-                    height: 60,
-                  ),
-                ),
+                
                 Container(
                   child: CurrencySelector(
                     listOfCurrency: [
@@ -120,7 +114,7 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
                       'JPY',
                       'AUD',
                     ],
-                    width: 230,
+                    width: 350,
                     height: 60,
                   ),
                 ),

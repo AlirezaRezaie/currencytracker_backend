@@ -85,10 +85,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         decoration: BoxDecoration(
                           borderRadius: imageBoxBorderRadius,
                           image: DecorationImage(
-                              image: NetworkImage(
-                                'https://assets.entrepreneur.com/content/3x2/2000/1694109712-ent23-septoct-cover-ChrisHemsworth-hero.jpg?format=pjeg&auto=webp',
-                              ),
-                              fit: BoxFit.cover),
+                            image: NetworkImage(
+                              'https://assets.entrepreneur.com/content/3x2/2000/1694109712-ent23-septoct-cover-ChrisHemsworth-hero.jpg?format=pjeg&auto=webp',
+                            ),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     )),
