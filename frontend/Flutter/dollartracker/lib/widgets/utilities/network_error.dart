@@ -23,7 +23,7 @@ class NetworkError extends StatelessWidget {
         Text(
           "مشکل در اتصال به سرور",
           style: TextStyle(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.onPrimary,
             fontWeight: FontWeight.w600,
             fontSize: 16,
             fontFamily: 'IransansBlack',
@@ -35,7 +35,7 @@ class NetworkError extends StatelessWidget {
         Text(
           "از اتصال اینترنت خود اطمینان حاصل کنید و دوباره امتحان کنید",
           style: TextStyle(
-            color: const Color.fromARGB(200, 255, 255, 255),
+            color: Theme.of(context).colorScheme.primaryContainer,
             fontWeight: FontWeight.w400,
             fontSize: 11,
             fontFamily: 'IransansBlack',
@@ -55,7 +55,7 @@ class NetworkError extends StatelessWidget {
                 ),
               ),
               backgroundColor: MaterialStateProperty.all(
-                Color.fromARGB(255, 60, 80, 250),
+                Theme.of(context).colorScheme.primary,
               ),
               shape: MaterialStateProperty.all(
                 RoundedRectangleBorder(
@@ -66,7 +66,7 @@ class NetworkError extends StatelessWidget {
             child: Text(
               "تلاش مجدد",
               style: TextStyle(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.onPrimary,
                 fontWeight: FontWeight.w600,
                 fontSize: 13,
                 fontFamily: 'IransansBlack',

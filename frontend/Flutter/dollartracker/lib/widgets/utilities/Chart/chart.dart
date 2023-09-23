@@ -55,11 +55,11 @@ class Chart extends StatelessWidget {
               FlSpot(1, 55000),
             ],
             isCurved: true,
-            color : const Color.fromARGB(255, 60, 80, 250),
+            color : Theme.of(context).colorScheme.primary,
             barWidth: 3,
             belowBarData: BarAreaData(
               show: true,
-              color: Color.fromARGB(35, 60, 79, 250),
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
             ),
           )
         ],

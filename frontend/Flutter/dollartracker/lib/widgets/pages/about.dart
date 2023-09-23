@@ -15,7 +15,7 @@ class AboutPage extends StatelessWidget {
 
     return Scaffold(
       endDrawer: SideMenu(),
-      backgroundColor: Color.fromARGB(255, 15, 15, 16),
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Column(
         children: [
           ClipRRect(
@@ -32,8 +32,8 @@ class AboutPage extends StatelessWidget {
                 ),
               ),
               child: Header(
-                backgroundColor: Color.fromARGB(106, 0, 0, 0),
-                color: Color.fromARGB(255, 255, 255, 255),
+                backgroundColor: Color.fromARGB(100, 0, 0, 0),
+                color: Theme.of(context).colorScheme.onPrimary,
                 profileImage:
                     'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
               ),
@@ -50,7 +50,7 @@ class AboutPage extends StatelessWidget {
                 Text(
                   "درباره کارنسی ترکر ",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.onPrimary,
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                     fontFamily: 'IransansBlack',
@@ -64,7 +64,7 @@ class AboutPage extends StatelessWidget {
                   child: Text(
                     "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد کتابهای زیادی در شصت و سه درصد گذشته حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد ",
                     style: TextStyle(
-                      color: const Color.fromARGB(200, 255, 255, 255),
+                      color: Theme.of(context).colorScheme.primaryContainer,
                       fontWeight: FontWeight.w400,
                       fontSize: 12,
                       fontFamily: 'IransansBlack',
@@ -77,7 +77,7 @@ class AboutPage extends StatelessWidget {
                 Text(
                   "راه های ارتباطی با ما ",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.onPrimary,
                     fontWeight: FontWeight.w600,
                     fontSize: 18,
                     fontFamily: 'IransansBlack',
@@ -107,7 +107,7 @@ class AboutPage extends StatelessWidget {
                               ),
                             ),
                             backgroundColor: MaterialStateProperty.all(
-                              Color.fromARGB(255, 60, 80, 250),
+                              Theme.of(context).colorScheme.primary,
                             ),
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
@@ -119,7 +119,7 @@ class AboutPage extends StatelessWidget {
                           child: Text(
                             "آدرس گیت هاب",
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.w600,
                               fontSize: 15,
                               fontFamily: 'IransansBlack',
@@ -144,7 +144,7 @@ class AboutPage extends StatelessWidget {
                             ),
                           ),
                           backgroundColor: MaterialStateProperty.all(
-                            Color.fromARGB(255, 60, 80, 250),
+                            Theme.of(context).colorScheme.primary,
                           ),
                           shape: MaterialStateProperty.all(
                             RoundedRectangleBorder(
@@ -156,7 +156,7 @@ class AboutPage extends StatelessWidget {
                         child: Text(
                           "تماس با توسعه دهنده",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.onPrimary,
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
                             fontFamily: 'IransansBlack',
@@ -190,7 +190,7 @@ class AboutPage extends StatelessWidget {
                               ),
                             ),
                             backgroundColor: MaterialStateProperty.all(
-                              Color.fromARGB(255, 60, 80, 250),
+                              Theme.of(context).colorScheme.primary,
                             ),
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
@@ -202,7 +202,7 @@ class AboutPage extends StatelessWidget {
                           child: Text(
                             "آیدی تلگرام",
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.w600,
                               fontSize: 15,
                               fontFamily: 'IransansBlack',
@@ -227,7 +227,7 @@ class AboutPage extends StatelessWidget {
                             ),
                           ),
                           backgroundColor: MaterialStateProperty.all(
-                            Color.fromARGB(255, 60, 80, 250),
+                            Theme.of(context).colorScheme.primary,
                           ),
                           shape: MaterialStateProperty.all(
                             RoundedRectangleBorder(
@@ -239,7 +239,7 @@ class AboutPage extends StatelessWidget {
                         child: Text(
                           "ایمیل توسعه دهنده",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.onPrimary,
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
                             fontFamily: 'IransansBlack',

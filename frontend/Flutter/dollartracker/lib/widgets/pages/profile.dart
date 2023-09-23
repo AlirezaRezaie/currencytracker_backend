@@ -16,12 +16,12 @@ class _ProfilePageState extends State<ProfilePage> {
     BorderRadius imageBoxBorderRadius = BorderRadius.circular(15);
     return Scaffold(
       endDrawer: SideMenu(),
-      backgroundColor: Color.fromARGB(255, 15, 15, 16),
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Column(
         children: [
           Header(
             backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.onPrimary,
             profileImage:
                 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
           ),
@@ -38,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   child: Container(
                     height: MediaQuery.of(context).size.height - 165,
-                    color: Color.fromARGB(255, 27, 28, 34),
+                    color: Theme.of(context).colorScheme.secondary,
                     child: Column(
                       children: [
                         SizedBox(
@@ -56,7 +56,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   Text(
                                     "علیرضا رضایی",
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: Theme.of(context).colorScheme.onPrimary,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15,
                                       fontFamily: "IransansBlack",
@@ -77,7 +77,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       width: 120,
                       height: 120,
                       decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 60, 80, 250),
+                        color: Theme.of(context).colorScheme.primary,
                         borderRadius: imageBoxBorderRadius,
                       ),
                       padding: EdgeInsets.all(2),

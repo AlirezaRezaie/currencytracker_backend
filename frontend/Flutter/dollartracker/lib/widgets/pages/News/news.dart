@@ -75,11 +75,11 @@ class _NewsPageState extends State<NewsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       endDrawer: SideMenu(),
-      backgroundColor: Color.fromARGB(255, 15, 15, 16),
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Column(
         children: [
           Header(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.onPrimary,
             backgroundColor: const Color.fromARGB(0, 255, 255, 255),
             profileImage:
                 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
@@ -111,19 +111,19 @@ class _NewsPageState extends State<NewsPage> {
               },
               textAlign: TextAlign.right,
               style: TextStyle(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
               decoration: InputDecoration(
                 prefixIcon: Icon(
                   BootstrapIcons.search,
                 ),
-                prefixIconColor: const Color.fromARGB(150, 255, 255, 255),
+                prefixIconColor: Theme.of(context).colorScheme.primaryContainer,
                 filled: true,
-                fillColor: Color.fromARGB(255, 27, 28, 34),
+                fillColor: Theme.of(context).colorScheme.secondary,
                 hintTextDirection: TextDirection.rtl,
                 hintText: "جستجوری خبر ...",
                 hintStyle: TextStyle(
-                  color: Color.fromARGB(150, 255, 255, 255),
+                  color: Theme.of(context).colorScheme.primaryContainer,
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -135,23 +135,26 @@ class _NewsPageState extends State<NewsPage> {
               ? isLoading
                   ? Expanded(
                       child: RefreshIndicator(
-                          color: Color.fromARGB(255, 255, 255, 255),
-                          backgroundColor: Color.fromARGB(255, 27, 28, 34),
-                          onRefresh: () async {
-                            await fetchData();
-                            setState(() {});
-                          },
-                          child: ListView.separated(
-                            itemBuilder: (context, index) => NewsCardSkeleton(),
-                            separatorBuilder: (context, index) =>
-                                SizedBox(height: 16),
-                            itemCount: 8,
-                          )),
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.background,
+                        onRefresh: () async {
+                          await fetchData();
+                          setState(() {});
+                        },
+                        child: ListView.separated(
+                          itemBuilder: (context, index) => NewsCardSkeleton(),
+                          separatorBuilder: (context, index) =>
+                              SizedBox(height: 16),
+                          itemCount: 8,
+                        ),
+                      ),
                     )
                   : Expanded(
                       child: RefreshIndicator(
-                        color: Color.fromARGB(255, 255, 255, 255),
-                        backgroundColor: Color.fromARGB(255, 27, 28, 34),
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.background,
                         onRefresh: () async {
                           await checkNetworkStatus();
                           await fetchData();

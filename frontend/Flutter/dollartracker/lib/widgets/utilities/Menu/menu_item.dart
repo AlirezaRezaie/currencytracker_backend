@@ -33,7 +33,7 @@ class MenuItem extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.onPrimary,
                   fontFamily: 'IransansBlack',
                   fontSize: 15,
                 ),
@@ -43,7 +43,7 @@ class MenuItem extends StatelessWidget {
               ),
               Icon(
                 icon,
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
             ],
           ),

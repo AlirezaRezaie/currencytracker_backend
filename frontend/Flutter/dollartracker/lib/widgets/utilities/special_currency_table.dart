@@ -25,13 +25,13 @@ class SpecialCurrencyTable extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.only(left: 10, top: 4, bottom: 4),
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 27, 28, 34),
+          color: Theme.of(context).colorScheme.secondary,
           borderRadius: BorderRadius.circular(12),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
-              color: Color.fromARGB(126, 0, 0, 0),
-              spreadRadius: 3,
-              blurRadius: 20,
+              color: Theme.of(context).colorScheme.shadow,
+              spreadRadius: 2,
+              blurRadius: 12,
               offset: Offset(0, 7),
             )
           ],
@@ -48,7 +48,7 @@ class SpecialCurrencyTable extends StatelessWidget {
                   Text(
                     price.toString(),
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.onPrimary,
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'IransansBlack',
@@ -78,8 +78,8 @@ class SpecialCurrencyTable extends StatelessWidget {
                       children: [
                         Text(
                           currencyName,
-                          style: const TextStyle(
-                              color: Colors.white,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.w600,
                               fontSize: 15,
                               fontFamily: 'IransansBlack'),
@@ -88,9 +88,11 @@ class SpecialCurrencyTable extends StatelessWidget {
                           padding: const EdgeInsets.only(top: 2),
                           child: Text(
                             volatility,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 10,
-                              color: Color.fromARGB(97, 255, 255, 255),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer,
                               fontWeight: FontWeight.w600,
                               fontFamily: 'IransansBlack',
                             ),
@@ -103,11 +105,11 @@ class SpecialCurrencyTable extends StatelessWidget {
                     width: 50,
                     height: 50,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
+                        borderRadius: BorderRadius.circular(30),
                         image: DecorationImage(
-                      image: NetworkImage(imageLink),
-                      fit: BoxFit.cover,
-                    )),
+                          image: NetworkImage(imageLink),
+                          fit: BoxFit.cover,
+                        )),
                   )
                 ],
               ),
