@@ -57,8 +57,12 @@ def run_live(emmitter_callback, error_callback, stop_event, args=None):
     print("FINISH LOOP")
 
 
-def run_counter():
+def run_counter(args):
+    local.channel_id = args.channel_info["channel_name"]
+    local.channel_info = args.channel_info
     local.last_post_number = 0
+    local.args = args
+
     server_mode = "count"
     full_prices = []
     previous_price = None
