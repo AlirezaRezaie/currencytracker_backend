@@ -4,19 +4,25 @@ import json
 from modes import run_live
 from logs import logger
 from locals import local
-
+from settings import get_defaults
 tasks = []
 
 
 # args object for task configs
 class Arg:
-    def __init__(self, code, count=None, timeout=None, retry=None, fetchrate=None):
+    def __init__(self, code,count=None, timeout=None, retry=None, fetchrate=None):
         self.code = code
         self.timeout = timeout
         self.retry = retry
         self.fetchrate = fetchrate
         self.count = count
-        self.channel_info = local.default_channels[code][0]
+
+        try:
+            default_channels = local.default_channels
+        except:
+            default_channels = get_defaults()
+
+        self.channel_info = default_channels[code][0]
         self.channel_id = self.channel_info["channel_name"]
 
 
