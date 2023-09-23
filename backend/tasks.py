@@ -126,7 +126,7 @@ def error_callback(code):
 def price_callback(local_board, channel):
     task = get_task(channel)
     logger.info(f"request:\n{local_board} from channel {channel}")
-    new_price = local_board[-1]
+    new_price = local_board['latests'][-1]
     task.lastprice = new_price
     with lock:
         push_in_board(new_price,global_board)
