@@ -1,57 +1,92 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
+import 'package:dollartracker/theme/theme.dart';
+import 'package:dollartracker/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'menu_item.dart';
 
-class SideMenu extends StatelessWidget {
+class SideMenu extends StatefulWidget {
   const SideMenu({super.key});
 
+  @override
+  State<SideMenu> createState() => _SideMenuState();
+}
+
+class _SideMenuState extends State<SideMenu> {
   @override
   Widget build(BuildContext context) {
     String? currentRoute = ModalRoute.of(context)?.settings.name;
 
     return Drawer(
-      backgroundColor: Color.fromARGB(255, 27, 28, 34),
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       child: Padding(
         padding: EdgeInsets.only(top: 35, right: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(right: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+            Padding(
+              padding: EdgeInsets.only(left: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () =>
+                        Provider.of<ThemeProvider>(context, listen: false)
+                            .toggleTheme(),
+                    child: Icon(
+                      Provider.of<ThemeProvider>(
+                                context,
+                              ).themeData ==
+                              lightMode
+                          ? BootstrapIcons.moon_fill
+                          : BootstrapIcons.sun_fill,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        "سلام، علیرضا",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'IransansBlack',
-                            fontSize: 17),
+                      Padding(
+                        padding: EdgeInsets.only(right: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              "سلام، علیرضا",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                fontFamily: 'IransansBlack',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17,
+                              ),
+                            ),
+                            Text(
+                              "خوش آمدی",
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primaryContainer,
+                                fontFamily: 'IransansBlack',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 10,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      Text(
-                        "خوش آمدی",
-                        style: TextStyle(
-                          color: const Color.fromARGB(200, 255, 255, 255),
-                          fontFamily: 'IransansBlack',
-                          fontSize: 10,
+                      CircleAvatar(
+                        radius: 30,
+                        // user profile
+                        backgroundImage: NetworkImage(
+                          'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg/220px-Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
                         ),
                       ),
                     ],
                   ),
-                ),
-                CircleAvatar(
-                  radius: 30,
-                  // user profile
-                  backgroundImage: NetworkImage(
-                    'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg/220px-Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
             SizedBox(
               height: 30,
@@ -60,48 +95,48 @@ class SideMenu extends StatelessWidget {
               title: "صفحه اصلی",
               icon: BootstrapIcons.house_fill,
               color: currentRoute == "/home"
-                  ? Color.fromARGB(255, 60, 80, 250)
-                  : Color.fromARGB(255, 27, 28, 34),
+                  ? Theme.of(context).colorScheme.primary
+                  : Color.fromARGB(0, 27, 28, 34),
               routName: "home",
             ),
             MenuItem(
               title: "تبدیل ارز",
               icon: BootstrapIcons.clipboard2_data_fill,
               color: currentRoute == "/calculator"
-                  ? Color.fromARGB(255, 60, 80, 250)
-                  : Color.fromARGB(255, 27, 28, 34),
+                  ? Theme.of(context).colorScheme.primary
+                  : Color.fromARGB(0, 27, 28, 34),
               routName: "calculator",
             ),
             MenuItem(
               title: "اخبار",
               icon: BootstrapIcons.newspaper,
               color: currentRoute == "/news"
-                  ? Color.fromARGB(255, 60, 80, 250)
-                  : Color.fromARGB(255, 27, 28, 34),
+                  ? Theme.of(context).colorScheme.primary
+                  : Color.fromARGB(0, 27, 28, 34),
               routName: "news",
             ),
             MenuItem(
               title: "ارز اختصاصی",
               icon: BootstrapIcons.currency_dollar,
               color: currentRoute == "/special_currency"
-                  ? Color.fromARGB(255, 60, 80, 250)
-                  : Color.fromARGB(255, 27, 28, 34),
+                  ? Theme.of(context).colorScheme.primary
+                  : Color.fromARGB(0, 27, 28, 34),
               routName: "special_currency",
             ),
             MenuItem(
               title: "پروفایل",
               icon: BootstrapIcons.person_fill,
               color: currentRoute == "/profile"
-                  ? Color.fromARGB(255, 60, 80, 250)
-                  : Color.fromARGB(255, 27, 28, 34),
+                  ? Theme.of(context).colorScheme.primary
+                  : Color.fromARGB(0, 27, 28, 34),
               routName: "profile",
             ),
             MenuItem(
               title: "درباره ما",
               icon: BootstrapIcons.info_circle_fill,
               color: currentRoute == "/about"
-                  ? Color.fromARGB(255, 60, 80, 250)
-                  : Color.fromARGB(255, 27, 28, 34),
+                  ? Theme.of(context).colorScheme.primary
+                  : Color.fromARGB(0, 27, 28, 34),
               routName: "about",
             ),
           ],

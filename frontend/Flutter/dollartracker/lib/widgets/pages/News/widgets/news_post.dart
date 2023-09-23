@@ -17,16 +17,16 @@ class NewsPostPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       endDrawer: SideMenu(),
-      backgroundColor: Color.fromARGB(255, 15, 15, 16),
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Column(
         children: [
           Column(
             children: [
               Container(
                 decoration: BoxDecoration(
-                  boxShadow: const [
+                  boxShadow: [
                     BoxShadow(
-                      color: Color.fromARGB(67, 255, 255, 255),
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
                       spreadRadius: 1,
                       blurRadius: 50,
                       offset: Offset(0, -10),
@@ -56,7 +56,7 @@ class NewsPostPage extends StatelessWidget {
                             onTap: () => Navigator.pop(context),
                             child: Container(
                               decoration: BoxDecoration(
-                                  color: Color.fromARGB(76, 255, 255, 255),
+                                  color: Theme.of(context).colorScheme.background,
                                   borderRadius: BorderRadius.circular(12)),
                               child: Padding(
                                 padding: EdgeInsets.all(10),
@@ -85,7 +85,7 @@ class NewsPostPage extends StatelessWidget {
                   child: Text(
                     "$readTime دقیقه برای خواندن",
                     style: TextStyle(
-                      color: Color.fromARGB(255, 223, 230, 233),
+                      color: Theme.of(context).colorScheme.primaryContainer,
                       fontWeight: FontWeight.w400,
                       fontSize: 11,
                       fontFamily: 'IransansBlack',
@@ -105,7 +105,7 @@ class NewsPostPage extends StatelessWidget {
                   child: Text(
                     title,
                     style: TextStyle(
-                      color: const Color.fromARGB(255, 236, 240, 241),
+                      color: Theme.of(context).colorScheme.onPrimary,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                       fontFamily: 'IransansBlack',
@@ -120,7 +120,7 @@ class NewsPostPage extends StatelessWidget {
                   child: Text(
                     content,
                     style: TextStyle(
-                      color: Color.fromARGB(200, 236, 240, 241),
+                      color: Theme.of(context).colorScheme.primaryContainer,
                       fontWeight: FontWeight.w400,
                       fontSize: 11,
                       fontFamily: 'IransansBlack',

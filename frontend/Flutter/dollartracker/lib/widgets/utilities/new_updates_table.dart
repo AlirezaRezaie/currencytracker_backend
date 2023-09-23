@@ -20,11 +20,11 @@ class NewUpdatesTable extends StatelessWidget {
       padding: const EdgeInsets.only(top: 15),
       child: Container(
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 35, 36, 42),
+          color: Theme.of(context).colorScheme.tertiary,
           borderRadius: BorderRadius.circular(12),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
-              color: Color.fromARGB(127, 0, 0, 0),
+              color: Theme.of(context).colorScheme.shadow,
               spreadRadius: 1,
               blurRadius: 10,
               offset: Offset(0, 7),

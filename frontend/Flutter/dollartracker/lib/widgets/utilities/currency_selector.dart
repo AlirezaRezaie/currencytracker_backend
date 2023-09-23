@@ -26,30 +26,31 @@ class _CurrencySelectorState extends State<CurrencySelector> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color:
-                Color.fromARGB(255, 27, 28, 34), // Customize the border color
+            color: Theme.of(context)
+                .colorScheme
+                .secondary, // Customize the border color
             width: 2.0, // Customize the border width
           ),
-          color: Color.fromARGB(255, 27, 28, 34)),
+          color: Theme.of(context).colorScheme.secondary),
       child: DropdownButtonHideUnderline(
         child: DropdownButton(
           value: current_currency,
           padding: EdgeInsets.symmetric(horizontal: 10),
-          dropdownColor: Color.fromARGB(255, 27, 28, 34),
+          dropdownColor: Theme.of(context).colorScheme.secondary,
           borderRadius: BorderRadius.circular(12),
           icon: Icon(Icons.menu_rounded),
           style: TextStyle(
-            color: Colors.white,
-          ),
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontFamily: "IransansBlack",
+              fontWeight: FontWeight.bold),
           items: widget.listOfCurrency
               .map<DropdownMenuItem<String>>((String currency) {
             return DropdownMenuItem<String>(
                 value: currency,
                 child: Row(
                   children: [
-                    Text("🇺🇸"),
                     Text(
-                      currency,
+                      "🇺🇸 $currency",
                     ),
                   ],
                 ) // Display the currency name as the item

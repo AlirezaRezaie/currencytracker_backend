@@ -36,7 +36,7 @@ class NewsCard extends StatelessWidget {
                         child: Text(
                           topic,
                           style: TextStyle(
-                            color: Color.fromARGB(255, 60, 80, 250),
+                            color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.w400,
                             fontSize: 9,
                             fontFamily: 'IransansBlack',
@@ -48,7 +48,7 @@ class NewsCard extends StatelessWidget {
                         child: Text(
                           title,
                           style: TextStyle(
-                            color: const Color.fromARGB(255, 255, 255, 255),
+                            color: Theme.of(context).colorScheme.onPrimary,
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
                             fontFamily: 'IransansBlack',
@@ -62,7 +62,7 @@ class NewsCard extends StatelessWidget {
                     child: Text(
                       time,
                       style: TextStyle(
-                        color: const Color.fromARGB(200, 255, 255, 255),
+                        color: Theme.of(context).colorScheme.primaryContainer,
                         fontWeight: FontWeight.w400,
                         fontSize: 10,
                         fontFamily: 'IransansBlack',

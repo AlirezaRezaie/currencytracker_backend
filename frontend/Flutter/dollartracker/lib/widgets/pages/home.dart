@@ -159,14 +159,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16)),
           side: BorderSide(
-            color: Color.fromARGB(255, 15, 15, 16),
+            color: Theme.of(context).colorScheme.background,
             strokeAlign: BorderSide.strokeAlignInside,
           ),
         ),
         margin: const EdgeInsets.all(32.0),
         clipBehavior: Clip.antiAlias,
-        iconColor: Colors.white,
-        backgroundColor: Color.fromARGB(255, 15, 15, 16),
+        iconColor: Theme.of(context).colorScheme.onPrimary,
+        backgroundColor: Theme.of(context).colorScheme.background,
         indicatorColor: Color.fromARGB(255, 255, 204, 0),
         icon: Icon(BootstrapIcons.exclamation_circle),
         title: Directionality(
@@ -174,7 +174,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           child: Text(
             'هشدار',
             style: TextStyle(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.onPrimary,
               fontWeight: FontWeight.bold,
               fontSize: 16,
               fontFamily: 'IransansBlack',
@@ -186,7 +186,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           child: Text(
             'بنظر میرسد اتصال شما دچار مشکل شده است، در حال اتصال مجدد...',
             style: TextStyle(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.onPrimary,
               fontWeight: FontWeight.w400,
               fontSize: 11,
               fontFamily: 'IransansBlack',
@@ -209,7 +209,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     //buildContext = context;
     return Scaffold(
       endDrawer: SideMenu(),
-      backgroundColor: Color.fromARGB(255, 15, 15, 16),
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: isHomeConnected
           ? Column(
               children: [
@@ -217,7 +217,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   children: [
                     Header(
                       backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.onPrimary,
                       profileImage:
                           'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
                     ),
@@ -238,8 +238,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               fontSize: 20,
                             ),
                           ),
-                          firstColor: Color.fromARGB(255, 60, 80, 250),
-                          secondColor: Color.fromARGB(255, 60, 78, 246),
+                          firstColor: Theme.of(context).colorScheme.primary,
+                          secondColor: Theme.of(context).colorScheme.primary,
                         ),
                         PriceBox(
                           title: "🇺🇸 دلار",
@@ -252,8 +252,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               fontSize: 20,
                             ),
                           ),
-                          firstColor: Color.fromARGB(255, 60, 80, 250),
-                          secondColor: Color.fromARGB(255, 60, 78, 246),
+                          firstColor: Theme.of(context).colorScheme.primary,
+                          secondColor: Theme.of(context).colorScheme.primary,
                         ),
                       ],
                     ),
@@ -263,7 +263,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: const Color.fromARGB(255, 27, 28, 34),
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                         child: Column(
                           children: [
@@ -272,7 +272,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               child: Text(
                                 "قیمت دلار امروز",
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
                                   fontFamily: "IransansBlack",
                                 ),
                               ),
@@ -308,7 +309,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     height: 50,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
-                      color: Color.fromARGB(255, 60, 80, 250),
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 15),
@@ -321,7 +322,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               child: Text(
                                 newsList[0]["title"],
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
                                   fontFamily: "IransansBlack",
                                 ),
                                 maxLines: 1,
@@ -344,10 +346,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 Expanded(
                   child: ClipRRect(
                     borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(40),
-                        topRight: Radius.circular(40)),
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40),
+                    ),
                     child: Container(
-                      color: Color.fromARGB(255, 27, 28, 34),
+                      color: Theme.of(context).colorScheme.secondary,
                       child: Column(
                         children: [
                           Padding(
@@ -371,7 +374,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                 Text(
                                   "جدید ترین آپدیت های قیمت",
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
                                     fontWeight: FontWeight.w600,
                                     fontSize: 15,
                                     fontFamily: 'IransansBlack',
