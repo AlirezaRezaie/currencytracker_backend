@@ -6,6 +6,7 @@ import 'package:dollartracker/widgets/utilities/network_error.dart';
 import 'package:dollartracker/widgets/utilities/new_updates_table.dart';
 import 'package:flash/flash.dart';
 import 'package:flash/flash_helper.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:web_socket_channel/io.dart';
@@ -28,6 +29,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late WebSocketChannel channel;
   late BuildContext buildContext;
 
+  List newsList = [];
   int receivedData = 0;
   double changeRate = 0;
   int value = 9999;
@@ -55,7 +57,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     super.initState();
 
     buildContext = this.context;
-
+    getNews(host);
     // Replace 'ws://your_websocket_url' with your actual WebSocket server URL.
     serverHost = "ws://$host/api/";
     _connectToWebSocket(serverHost);
@@ -109,6 +111,32 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       );
     } else {
       print("already calling the connection function bro");
+    }
+  }
+
+  Future<void> getNews(host) async {
+    final response = await http.get(
+      Uri.parse(
+        'http://$host/news/get_news',
+      ),
+      headers: {'Content-Type': 'application/json; charset=UTF-8'},
+    );
+
+    if (response.statusCode == 200) {
+      // If the server returns a 200 OK response, parse the JSON data
+      String responseBody = utf8.decode(response.bodyBytes);
+      final data = json.decode(responseBody);
+      // You can now work with the data
+      setState(() {
+        // set the list of news
+        newsList = data.cast();
+        // reverse the list to sort the news currectly
+        newsList = newsList.reversed.toList();
+      });
+      print(newsList);
+    } else {
+      // If the server did not return a 200 OK response
+      print("Error");
     }
   }
 
@@ -282,17 +310,31 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       borderRadius: BorderRadius.circular(15),
                       color: Color.fromARGB(255, 60, 80, 250),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "قیمت دلار امروز",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: "IransansBlack",
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: Text(
+                                newsList[0]["title"],
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: "IransansBlack",
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
+                          Text(
+                            '📰',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
