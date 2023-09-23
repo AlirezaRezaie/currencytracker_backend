@@ -1,7 +1,7 @@
 from modes import run_counter
 from locals import local
 from fastapi import APIRouter
-from settings import get_defaults
+from utils import get_defaults
 from tasks import Arg
 
 default_currencies = get_defaults()
@@ -15,7 +15,7 @@ def get_live_counter(code: str, channel: int, count: int) -> str:
 
 
 @router.get("/get_supported")
-def get_live_counter() -> dict:
+def get_supported() -> dict:
     formatted = {}
     for currency,channel_list in default_currencies.items():
         if len(channel_list) >= 1:

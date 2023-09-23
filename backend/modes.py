@@ -2,6 +2,7 @@ from network import fetch_price_data_u_preview_page as fetch_function
 from price import extract_prices
 from logs import logger
 from locals import local
+from utils import push_in_board
 
 
 def run_live(emmitter_callback, error_callback, stop_event, args=None):
@@ -9,6 +10,7 @@ def run_live(emmitter_callback, error_callback, stop_event, args=None):
     local.channel_info = args.channel_info
     local.args = args
 
+    local_board = {"latests":[],"limit":20}
     server_mode = "live"
     prev_fetch = []
     last_price = None
@@ -47,7 +49,8 @@ def run_live(emmitter_callback, error_callback, stop_event, args=None):
                 if not price == last_price:
                     price.calculate_and_set_rate_of_change(last_price)
                     to_user = price.get_json_data()
-                    emmitter_callback(to_user, args.code)
+                    push_in_board(to_user,local_board)
+                    emmitter_callback(local_board, args.code)
                     last_price = price
 
         else:

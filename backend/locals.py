@@ -1,5 +1,5 @@
 import threading
-from settings import get_defaults
+from utils import get_defaults
 
 local = threading.local()
 
