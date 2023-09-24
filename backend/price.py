@@ -28,7 +28,7 @@ class priceInfo:
         else:
             raise ValueError("Invalid data. Object cannot be created.")
 
-        if local.channel_info.get("price"):
+        if local.args.currency_info:
             self.price = int(price.replace(",", ""))
         else:
             #might not be a price
@@ -62,7 +62,7 @@ class priceInfo:
         }
 
     def calculate_and_set_rate_of_change(self, last_price):
-        if last_price and local.args.currency_info.get("currency_info"):
+        if last_price and local.args.currency_info:
                 prev_prc = last_price.price
                 new_prc = self.price
                 calculated_rate_of_change = round(
