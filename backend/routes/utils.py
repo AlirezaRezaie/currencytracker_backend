@@ -1,5 +1,5 @@
 from tasks import get_task
-from settings import get_host, get_port
+from utils import get_host, get_port
 from fastapi import APIRouter
 
 router = APIRouter()

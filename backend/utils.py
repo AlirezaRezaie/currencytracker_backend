@@ -19,3 +19,12 @@ def get_defaults():
     # read the json file
     with open("default-channels.json", "r") as f:
         return json.load(f)
+
+def push_in_board(item,board):
+    latests = board["latests"]
+    limit = board["limit"]
+    if len(latests) > limit:
+        latests.pop(0)
+        latests.append(item)
+    else:
+        latests.append(item)

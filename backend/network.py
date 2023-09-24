@@ -105,14 +105,14 @@ def fetch_price_data_u_preview_page(
         try:
             # TODO: handle network resets and minor error that might cause the whole connection
             # to close
-            logger.info("connecting...")
+            #logger.info("connecting...")
             t1 = int(time())
             response = session.post(
                 f"https://t.me/s/{local.channel_id}?before={str(postnumber)}",
                 headers=headers,
                 timeout=timeout,
             ).text
-            logger.info("connected successfully +++")
+            #logger.info("connected successfully +++")
             t2 = int(time())
             if fetchrate:
                 fr.set_rate(t2 - t1)

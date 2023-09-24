@@ -4,29 +4,39 @@ import json
 from modes import run_live
 from logs import logger
 from locals import local
+from utils import get_defaults,push_in_board
+
+# Create a shared dict
+global_board = {"latests":[],"limit":20}
+lock = threading.Lock()
 
 tasks = []
 
-
 # args object for task configs
 class Arg:
-    def __init__(self, code, count=None, timeout=None, retry=None, fetchrate=None):
+    def __init__(self, code,channel_index,count=None, timeout=None, retry=None, fetchrate=None):
         self.code = code
         self.timeout = timeout
         self.retry = retry
         self.fetchrate = fetchrate
         self.count = count
-        self.channel_info = local.default_channels[code][0]
+
+        try:
+            default_channels = local.default_channels
+        except:
+            default_channels = get_defaults()
+
+        self.channel_info = default_channels[code][channel_index]
         self.channel_id = self.channel_info["channel_name"]
 
 
 class Task:
-    def __init__(self, code, loop=None):
+    def __init__(self, code, channel_index=0,loop=None):
         """
         TODO : this might return error or None as memory limit reaches
         """
         self.main_loop = loop
-        self.args = Arg(code)
+        self.args = Arg(code,channel_index)
         self.users = []
         self.stop_event = threading.Event()
         self.lastprice = None
@@ -64,7 +74,7 @@ class Task:
         tasks.remove(self)
 
 
-def get_task(code):
+def get_task(code) -> Task:
     for task in tasks:
         if task.args.code == code:
             return task
@@ -94,10 +104,12 @@ def disconnect_websocket(websocket, task=None):
         if len(task.users) < 1 and not task.args.channel_info["nonstop"]:
             task.stop()
 
+def baked_data(local_board,):
+    return json.dumps({"global":global_board,"local":local_board})
 
-async def send_data_to_clients(new_data, clients):
+async def send_data_to_clients(local_board,clients):
     for client in clients:
-        await client.send_text(json.dumps(new_data))
+        await client.send_text(baked_data(local_board))
 
 
 async def notify_error_to_all(error_msg, all_clients):
@@ -111,9 +123,12 @@ def error_callback(code):
     task.main_loop.create_task(notify_error_to_all("wrong id bruh", task.users))
 
 
-def price_callback(price, channel):
+def price_callback(local_board, channel):
     task = get_task(channel)
-    logger.info(f"request:\n{price} from channel {channel}")
-    task.lastprice = price
+    logger.info(f"request:\n{local_board} from channel {channel}")
+    new_price = local_board['latests'][-1]
+    task.lastprice = new_price
+    with lock:
+        push_in_board(new_price,global_board)
     users = task.users
-    asyncio.run(send_data_to_clients(price, users))
+    asyncio.run(send_data_to_clients(local_board, users))

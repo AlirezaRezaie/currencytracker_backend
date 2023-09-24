@@ -13,12 +13,13 @@ from db.models import News
 
 from tasks import *
 
-from settings import *
+from utils import *
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
 import jdatetime
 from fastapi.templating import Jinja2Templates
 from fastapi import APIRouter
+import os
 
 router = APIRouter()
 

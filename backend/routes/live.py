@@ -67,7 +67,7 @@ async def websocket_endpoint(websocket: WebSocket):
                                 f"you have already subscribed to {channel_code}"
                             )
                         if task.lastprice:
-                            await websocket.send_text(json.dumps(task.lastprice))
+                            await websocket.send_text(baked_data(task.lastprice))
 
                     case "UNSUBSCRIBE":
                         if websocket in task.users:
