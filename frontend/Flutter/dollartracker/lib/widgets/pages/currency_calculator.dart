@@ -71,20 +71,16 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
     isFetchingData = true;
     final response = await http.get(
       Uri.parse(
-        'http://$host/calculator/$firstCurrency:$secondCurrency',
+        'http://$host/calculator/USD:DHS',
       ),
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
     );
-    // if the fetch is successful
-    print('http://$host/calculator/$firstCurrency:$secondCurrency');
-    String responseBody = utf8.decode(response.bodyBytes);
-    final data = json.decode(responseBody);
-    print(data);
+
     if (response.statusCode == 200) {
       // If the server returns a 200 OK response, parse the JSON data
       String responseBody = utf8.decode(response.bodyBytes);
       final data = json.decode(responseBody);
-      // calculate the price
+      // You can now work with the data
       setState(() {
         calculatedData = (data['from'] * number_of_currency) / data['to'];
       });
@@ -93,14 +89,13 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
     } else {
       // If the server did not return a 200 OK response
       print("Error");
-      showFlash();
+      
     }
   }
 
   // fetch the list of currencies
   Future<void> getCurrencyList() async {
     while (currencyList.isEmpty) {
-      print("getting currency list");
       final response;
       try {
         response = await http.get(
@@ -182,7 +177,6 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
     super.initState();
     // fetch the list of currencies
     getCurrencyList();
-    print("ENNNNNND OF GET LISIIIASfASIFKAOSFNNSFOINF");
     // check the internet connection
     checkNetworkStatus();
   }

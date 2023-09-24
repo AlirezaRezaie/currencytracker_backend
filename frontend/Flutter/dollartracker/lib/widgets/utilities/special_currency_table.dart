@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 
 class SpecialCurrencyTable extends StatelessWidget {
-  final String currencyName;
+  final String time, volatility, imageLink;
   final int price;
-  final String volatility;
   final double persent;
   final Color persentColor;
-  final String imageLink;
 
   const SpecialCurrencyTable({
     super.key,
-    required this.currencyName,
-    required this.price,
     required this.volatility,
+    required this.price,
+    required this.time,
     required this.persent,
     required this.persentColor,
     required this.imageLink,
@@ -77,7 +75,7 @@ class SpecialCurrencyTable extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          currencyName,
+                          volatility,
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.w600,
@@ -87,7 +85,7 @@ class SpecialCurrencyTable extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(top: 2),
                           child: Text(
-                            volatility,
+                            time,
                             style: TextStyle(
                               fontSize: 10,
                               color: Theme.of(context)
@@ -102,12 +100,12 @@ class SpecialCurrencyTable extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    width: 50,
-                    height: 50,
+                    width: 45,
+                    height: 45,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
                         image: DecorationImage(
-                          image: NetworkImage(imageLink),
+                          image: AssetImage(imageLink),
                           fit: BoxFit.cover,
                         )),
                   )

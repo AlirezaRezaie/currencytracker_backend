@@ -1,14 +1,13 @@
 import 'dart:convert';
-
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:dollartracker/widgets/utilities/Skeleton/currency_table_skeleton.dart';
 import 'package:dollartracker/widgets/utilities/currency_selector.dart';
 import 'package:dollartracker/widgets/utilities/special_currency_table.dart';
 import 'package:flash/flash.dart';
 import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:lottie/lottie.dart';
 import '../utilities/Menu/side_menu.dart';
 import '../utilities/header.dart';
 import '../utilities/network_error.dart';
@@ -23,22 +22,30 @@ class SpecialCurrency extends StatefulWidget {
 
 class _SpecialCurrencyState extends State<SpecialCurrency> {
   bool isLoading = false;
-  bool isConnected = false;
+  bool isNetworkConnected = false;
 
+  bool isLoadingCurrencyList = false;
   // get the host name
   String? host = dotenv.env['SERVER_HOST'];
 
   // list of currencies to show user
   List<String> currencyList = [];
 
+  // the currency that we want to show the list of them to the user
+  String selectedCurrency = 'USD';
+
+  // set the currency list to map and display to the user
+  List data_list = [];
+
   Future<void> checkNetworkStatus() async {
     var connectivityResult = await Connectivity().checkConnectivity();
     setState(() {
-      isConnected = connectivityResult != ConnectivityResult.none;
+      isNetworkConnected = connectivityResult != ConnectivityResult.none;
     });
   }
 
   Future<void> getCurrencyList() async {
+    isLoadingCurrencyList = true;
     final response = await http.get(
       Uri.parse(
         'http://$host/counter/get_supported',
@@ -51,7 +58,37 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
       String responseBody = utf8.decode(response.bodyBytes);
       final data = json.decode(responseBody);
       // You can now work with the data
-      currencyList = data.keys.toList();
+      setState(() {
+        currencyList = data.keys.toList();
+        isLoadingCurrencyList = false;
+      });
+      getCurrencyData();
+    } else {
+      // If the server did not return a 200 OK response
+      print("Error");
+      showFlash();
+      getCurrencyList();
+    }
+  }
+
+  Future<void> getCurrencyData() async {
+    isLoading = true;
+    final response = await http.get(
+      Uri.parse(
+        'http://$host/counter/get_last/$selectedCurrency/0/60',
+      ),
+      headers: {'Content-Type': 'application/json; charset=UTF-8'},
+    );
+    // if the fetch is successful
+    if (response.statusCode == 200) {
+      // If the server returns a 200 OK response, parse the JSON data
+      String responseBody = utf8.decode(response.bodyBytes);
+      final data = json.decode(responseBody);
+      // You can now work with the data
+      setState(() {
+        data_list = data.toList().reversed.toList(); // Reverse the list here
+        isLoading = false;
+      });
     } else {
       // If the server did not return a 200 OK response
       print("Error");
@@ -59,7 +96,43 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
     }
   }
 
-// a flash message to show user the internet is not connected
+  String getTimeForIran(time) {
+    // Time strings in "HH:mm" format
+    String time1String = time;
+    String time2String = "03:30";
+    // Parse the time strings into Duration objects
+    List<String> time1Parts = time1String.split(':');
+    List<String> time2Parts = time2String.split(':');
+
+    int hours1 = int.parse(time1Parts[0]);
+    int minutes1 = int.parse(time1Parts[1]);
+
+    int hours2 = int.parse(time2Parts[0]);
+    int minutes2 = int.parse(time2Parts[1]);
+
+    Duration time1 = Duration(hours: hours1, minutes: minutes1);
+    Duration time2 = Duration(hours: hours2, minutes: minutes2);
+
+    // Add the two Duration objects together
+    Duration totalTime = time1 + time2;
+
+    // Ensure the total time does not exceed 24 hours (1 day)
+    if (totalTime.inHours >= 24) {
+      totalTime = Duration(hours: 23, minutes: 59); // Set it to 23:59
+    }
+
+    // Extract hours and minutes from the totalTime
+    int totalHours = totalTime.inHours;
+    int totalMinutes = totalTime.inMinutes.remainder(60);
+
+    // Format the result as "HH:mm"
+    String result =
+        '${totalHours.toString().padLeft(2, '0')}:${totalMinutes.toString().padLeft(2, '0')}';
+
+    return result;
+  }
+
+  // a flash message to show user the internet is not connected
   showFlash() {
     context.showFlash<bool>(
       duration: const Duration(seconds: 8),
@@ -118,9 +191,6 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
 
   @override
   Widget build(BuildContext context) {
-    // set the currency list to map and display to the user
-    List data_list = [];
-
     return Scaffold(
       endDrawer: SideMenu(),
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -135,57 +205,109 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
           SizedBox(
             height: 30,
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 45),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  child: CurrencySelector(
-                    listOfCurrency: currencyList,
-                    width: 300,
-                    height: 60,
-                    getCurrency: (currency) {},
-                  ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                child: CurrencySelector(
+                  listOfCurrency: currencyList,
+                  width: 320,
+                  height: 60,
+                  getCurrency: (currency) {
+                    setState(() {
+                      selectedCurrency = currency;
+                      getCurrencyData();
+                    });
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           SizedBox(
             height: 20,
           ),
-          isConnected
-              ? isLoading
-                  ? Expanded(
-                      child: ListView.separated(
-                        physics: BouncingScrollPhysics(),
-                        itemBuilder: (context, index) =>
-                            CurrencyTableSkeleton(),
-                        separatorBuilder: (context, index) =>
-                            SizedBox(height: 16),
-                        itemCount: 8,
-                      ),
+          isNetworkConnected
+              ? isLoadingCurrencyList
+                  ? Column(
+                      children: [
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Container(
+                          width: 400,
+                          height: 400,
+                          child: Lottie.asset("assets/Loading3.json"),
+                        ),
+                        Text(
+                          "... در حال بارگیری لیست ارز ها",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            fontFamily: 'IransansBlack',
+                          ),
+                        ),
+                      ],
                     )
-                  : Expanded(
-                      child: ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        itemCount: data_list.length,
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        itemBuilder: (context, index) {
-                          return SpecialCurrencyTable(
-                            price: data_list[index]['price'],
-                            persentColor: data_list[index]['persent'] > 0
-                                ? Colors.greenAccent
-                                : Colors.redAccent,
-                            currencyName: data_list[index]['title'],
-                            imageLink: data_list[index]['imageLink'],
-                            persent: data_list[index]['persent'],
-                            volatility: data_list[index]['subtitle'],
-                          );
-                        },
-                      ),
-                    )
-              : !isConnected
+                  : isLoading
+                      ? Column(
+                          children: [
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Container(
+                              width: 400,
+                              height: 400,
+                              child: Lottie.asset("assets/Searching.json"),
+                            ),
+                            Text(
+                              "... در حال بارگیری اطلاعات",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                                fontFamily: 'IransansBlack',
+                              ),
+                            ),
+                          ],
+                        )
+                      : Expanded(
+                          child: ListView.builder(
+                            physics: BouncingScrollPhysics(),
+                            itemCount: data_list.length,
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            itemBuilder: (context, index) {
+                              return SpecialCurrencyTable(
+                                price: data_list[index]['price'],
+                                persentColor:
+                                    data_list[index]['rateofchange'] != null
+                                        ? data_list[index]['rateofchange'] > 0
+                                            ? Colors.greenAccent
+                                            : Colors.redAccent
+                                        : Colors.white,
+                                time: getTimeForIran(
+                                    data_list[index]['posttime']),
+                                imageLink:
+                                    data_list[index]['rateofchange'] != null
+                                        ? data_list[index]['rateofchange'] > 0
+                                            ? 'assets/upArrow.png'
+                                            : 'assets/downArrrow.png'
+                                        : 'assets/line.png',
+                                persent:
+                                    data_list[index]['rateofchange'] == null
+                                        ? 0
+                                        : data_list[index]['rateofchange'],
+                                volatility:
+                                    data_list[index]['rateofchange'] != null
+                                        ? data_list[index]['rateofchange'] > 0
+                                            ? 'صعودی'
+                                            : 'نزولی'
+                                        : 'نامشخص',
+                              );
+                            },
+                          ),
+                        )
+              : !isNetworkConnected
                   ? Padding(
                       padding: EdgeInsets.only(top: 90),
                       child: NetworkError(
