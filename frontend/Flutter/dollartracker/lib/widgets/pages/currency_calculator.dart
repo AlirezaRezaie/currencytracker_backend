@@ -76,6 +76,10 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
     );
     // if the fetch is successful
+    print('http://$host/calculator/$firstCurrency:$secondCurrency');
+    String responseBody = utf8.decode(response.bodyBytes);
+    final data = json.decode(responseBody);
+    print(data);
     if (response.statusCode == 200) {
       // If the server returns a 200 OK response, parse the JSON data
       String responseBody = utf8.decode(response.bodyBytes);
@@ -95,23 +99,33 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
 
   // fetch the list of currencies
   Future<void> getCurrencyList() async {
-    final response = await http.get(
-      Uri.parse(
-        'http://$host/counter/get_supported',
-      ),
-      headers: {'Content-Type': 'application/json; charset=UTF-8'},
-    );
-    // if the fetch is successful
-    if (response.statusCode == 200) {
-      // If the server returns a 200 OK response, parse the JSON data
-      String responseBody = utf8.decode(response.bodyBytes);
-      final data = json.decode(responseBody);
-      // You can now work with the data
-      currencyList = data.keys.toList();
-    } else {
-      // If the server did not return a 200 OK response
-      print("Error");
-      showFlash();
+    while (currencyList.isEmpty) {
+      print("getting currency list");
+      final response;
+      try {
+        response = await http.get(
+          Uri.parse(
+            'http://$host/counter/get_supported',
+          ),
+          headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        );
+      } catch (error) {
+        await Future.delayed(
+            Duration(seconds: 3)); // Wait with increasing delay
+        continue;
+      }
+      // if the fetch is successful
+      if (response.statusCode == 200) {
+        // If the server returns a 200 OK response, parse the JSON data
+        String responseBody = utf8.decode(response.bodyBytes);
+        final data = json.decode(responseBody);
+        // You can now work with the data
+        currencyList = data.keys.toList();
+      } else {
+        // If the server did not return a 200 OK response
+        print("failed to get currency list");
+        showFlash();
+      }
     }
   }
 
@@ -168,6 +182,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
     super.initState();
     // fetch the list of currencies
     getCurrencyList();
+    print("ENNNNNND OF GET LISIIIASfASIFKAOSFNNSFOINF");
     // check the internet connection
     checkNetworkStatus();
   }
