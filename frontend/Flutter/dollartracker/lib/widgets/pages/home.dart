@@ -392,6 +392,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               physics: BouncingScrollPhysics(),
                               itemCount: global.length,
                               itemBuilder: (context, index) {
+                                if(global[index]['rateofchange'] == null || global[index]['rateofchange'] == 0) return SizedBox();
                                 return CurrencyTable(
                                   backgroundColor:
                                       Theme.of(context).colorScheme.tertiary,
