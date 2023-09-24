@@ -3,36 +3,42 @@
     {
       "channel_name": "nerkhedollarr",
       "regex": "(فردایی|نقدی|نـــقـدی|نـــقـدۍ|پایان معاملات).*?(\\d{1,3}(?:,\\d{3})*).(\\w*)",
-      "nonstop": true
+      "nonstop": true,
+      "price": true
     },
     {
       "channel_name": "dollar_tehran3bze",
       "regex": "(فردایی|نقدی|نـــقـدی|نـــقـدۍ|پایان معاملات).*?(\\d{1,3}(?:,\\d{3})*).(\\w*)",
-      "nonstop": false
+      "nonstop": false,
+      "price": true
     },
     {
       "channel_name": "sarafha_rate",
       "regex": "",
-      "nonstop": false
+      "nonstop": false,
+      "price": true
     }
   ],
   "EUR": [
     {
       "channel_name": "sarafha_rate",
       "regex": "",
-      "nonstop": false
+      "nonstop": false,
+      "price": true
     }
   ],
   "DHS": [
     {
       "channel_name": "DHS_Dirham",
       "regex": "",
-      "nonstop": true
+      "nonstop": true,
+      "price": true
     },
     {
       "channel_name": "testderham",
       "regex": "",
-      "nonstop": false
+      "nonstop": false,
+      "price": true
     }
   ],
   "CNY": [],
