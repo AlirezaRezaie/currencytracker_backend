@@ -115,7 +115,7 @@ def extract_prices(messages, count=10, reverse=False):
         except ValueError as e:
             # keep in mind that this exception is not an actual error
             # its my way of handling data text and non-data text
-            logger.info(e)
+            logger.debug(e)
     if reverse:
         parsed_prices.reverse()
     return parsed_prices
