@@ -50,7 +50,7 @@ async def shutdown_event():
 if __name__ == "__main__":
     import uvicorn
 
-    # network_stability_check()
+    #network_stability_check()
     logger.info(f"env port is set to: {get_port()}")
     uvicorn.run(
         "server:app",
