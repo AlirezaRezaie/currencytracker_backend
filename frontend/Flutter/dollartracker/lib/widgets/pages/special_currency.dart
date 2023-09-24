@@ -12,7 +12,7 @@ import '../utilities/Menu/side_menu.dart';
 import '../utilities/header.dart';
 import '../utilities/network_error.dart';
 import 'package:http/http.dart' as http;
-import 'package:dollartracker/services/get_time_for_iran';
+import 'package:dollartracker/services/get_time_for_iran.dart';
 
 class SpecialCurrency extends StatefulWidget {
   const SpecialCurrency({super.key});
@@ -244,7 +244,8 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
                             padding: EdgeInsets.symmetric(horizontal: 20),
                             itemBuilder: (context, index) {
                               return CurrencyTable(
-                                backgroundColor: Theme.of(context).colorScheme.secondary,
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.secondary,
                                 price: data_list[index]['price'],
                                 persentColor:
                                     data_list[index]['rateofchange'] != null

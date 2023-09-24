@@ -3,7 +3,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dollartracker/widgets/utilities/Chart/chart.dart';
 import 'package:dollartracker/widgets/utilities/header.dart';
 import 'package:dollartracker/widgets/utilities/network_error.dart';
-import 'package:dollartracker/services/get_time_for_iran';
+import 'package:dollartracker/services/get_time_for_iran.dart';
 import 'package:dollartracker/widgets/utilities/currency_table.dart';
 import 'package:flash/flash.dart';
 import 'package:flash/flash_helper.dart';
@@ -392,7 +392,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               physics: BouncingScrollPhysics(),
                               itemCount: global.length,
                               itemBuilder: (context, index) {
-                                if(global[index]['rateofchange'] == null || global[index]['rateofchange'] == 0) return SizedBox();
+                                if (global[index]['rateofchange'] == null ||
+                                    global[index]['rateofchange'] == 0)
+                                  return SizedBox();
                                 return CurrencyTable(
                                   backgroundColor:
                                       Theme.of(context).colorScheme.tertiary,
