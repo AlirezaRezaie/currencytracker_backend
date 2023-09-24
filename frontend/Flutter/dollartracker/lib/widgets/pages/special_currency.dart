@@ -76,7 +76,7 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
     isLoading = true;
     final response = await http.get(
       Uri.parse(
-        'http://$host/counter/get_last/$selectedCurrency/0/60',
+        'http://$host/counter/get_last/$selectedCurrency/0/40',
       ),
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
     );
@@ -243,6 +243,9 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
                             itemCount: data_list.length,
                             padding: EdgeInsets.symmetric(horizontal: 20),
                             itemBuilder: (context, index) {
+                              if (data_list[index]['rateofchange'] == null ||
+                                  data_list[index]['rateofchange'] == 0)
+                                return SizedBox();
                               return CurrencyTable(
                                 backgroundColor:
                                     Theme.of(context).colorScheme.secondary,
