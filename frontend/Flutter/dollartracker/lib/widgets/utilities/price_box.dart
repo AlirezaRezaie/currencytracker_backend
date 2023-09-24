@@ -44,7 +44,7 @@ class _PriceBoxState extends State<PriceBox> {
           Text(
             "قیمت مستقیم صرافی",
             style: TextStyle(
-              color: Theme.of(context).colorScheme.primaryContainer,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
               fontWeight: FontWeight.w600,
               fontSize: 9,
               fontFamily: 'Iransans',
@@ -53,7 +53,7 @@ class _PriceBoxState extends State<PriceBox> {
           Text(
             widget.title,
             style: TextStyle(
-              color: Color.fromARGB(255, 255, 255, 255),
+              color: Theme.of(context).colorScheme.onPrimary,
               fontWeight: FontWeight.bold,
               fontSize: 25,
               fontFamily: 'IransansBlack',

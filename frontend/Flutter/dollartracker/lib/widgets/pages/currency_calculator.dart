@@ -89,7 +89,6 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
     } else {
       // If the server did not return a 200 OK response
       print("Error");
-      
     }
   }
 
@@ -140,7 +139,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
         ),
         margin: const EdgeInsets.all(32.0),
         clipBehavior: Clip.antiAlias,
-        iconColor: Theme.of(context).colorScheme.onPrimary,
+        iconColor: Theme.of(context).colorScheme.onBackground,
         backgroundColor: Color.fromARGB(255, 15, 15, 16),
         indicatorColor: Color.fromARGB(255, 255, 204, 0),
         icon: Icon(BootstrapIcons.exclamation_circle),
@@ -149,7 +148,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
           child: Text(
             'مشکل در اتصال به اینترنت',
             style: TextStyle(
-              color: Theme.of(context).colorScheme.onPrimary,
+              color: Theme.of(context).colorScheme.onBackground,
               fontWeight: FontWeight.bold,
               fontSize: 14,
               fontFamily: 'IransansBlack',
@@ -161,7 +160,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
           child: Text(
             'بنظر میرسد اتصال اینترنت شما دچار مشکل شده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و سپس دوباره تلاش کنید',
             style: TextStyle(
-              color: Theme.of(context).colorScheme.onPrimary,
+              color: Theme.of(context).colorScheme.onBackground,
               fontWeight: FontWeight.w400,
               fontSize: 10,
               fontFamily: 'IransansBlack',
@@ -198,7 +197,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
         children: [
           Header(
             backgroundColor: Color.fromARGB(0, 255, 255, 255),
-            color: Theme.of(context).colorScheme.onPrimary,
+            color: Theme.of(context).colorScheme.onBackground,
             profileImage:
                 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
           ),
@@ -212,7 +211,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                 Text(
                   "تبدیل لحظه ای ارز",
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
+                    color: Theme.of(context).colorScheme.onBackground,
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                     fontFamily: 'IransansBlack',
@@ -240,7 +239,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                     Text(
                       " : ارز مورد نظر را انتخواب کنید",
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.onPrimary,
+                        color: Theme.of(context).colorScheme.onBackground,
                         fontWeight: FontWeight.w600,
                         fontSize: 14,
                         fontFamily: 'IransansBlack',
@@ -271,7 +270,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                     Text(
                       " : ارز دوم را انتخواب کنید",
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.onPrimary,
+                        color: Theme.of(context).colorScheme.onBackground,
                         fontWeight: FontWeight.w600,
                         fontSize: 14,
                         fontFamily: 'IransansBlack',
@@ -299,7 +298,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                         ],
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary,
+                          color: Theme.of(context).colorScheme.onBackground,
                         ),
                         decoration: InputDecoration(
                           filled: true,
@@ -319,7 +318,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                     Text(
                       " : مقدار ارز مورد نظر",
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.onPrimary,
+                        color: Theme.of(context).colorScheme.onBackground,
                         fontWeight: FontWeight.w600,
                         fontSize: 14,
                         fontFamily: 'IransansBlack',
@@ -369,7 +368,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                       child: Text(
                         "تبدیل ارز",
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary,
+                          color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
                           fontFamily: 'IransansBlack',
@@ -405,7 +404,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                                         Theme.of(context).colorScheme.secondary,
                                     spreadRadius: 1,
                                     blurRadius: 35,
-                                    offset: Offset(0, 30),
+                                    offset: Offset(0, 20),
                                   )
                                 ],
                               ),
@@ -430,7 +429,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                                               border: Border.all(
                                                 color: Theme.of(context)
                                                     .colorScheme
-                                                    .onPrimary,
+                                                    .onBackground,
                                                 width: 3,
                                               ),
                                             ),
@@ -438,7 +437,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                                               BootstrapIcons.currency_dollar,
                                               color: Theme.of(context)
                                                   .colorScheme
-                                                  .onPrimary,
+                                                  .onBackground,
                                               size: 35,
                                             ),
                                           )),
@@ -447,7 +446,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                                         style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme
-                                              .onPrimary,
+                                              .onBackground,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 15,
                                           fontFamily: 'IransansBlack',

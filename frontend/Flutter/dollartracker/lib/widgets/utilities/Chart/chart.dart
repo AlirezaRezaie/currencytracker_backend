@@ -20,18 +20,18 @@ class Chart extends StatelessWidget {
           show: true,
           getDrawingHorizontalLine: (value) {
             return FlLine(
-                color: Theme.of(context).colorScheme.onPrimaryContainer, strokeWidth: 2);
+                color: Theme.of(context).colorScheme.secondaryContainer, strokeWidth: 2);
           },
           getDrawingVerticalLine: (value) {
             return FlLine(
-                color: Theme.of(context).colorScheme.onPrimaryContainer, strokeWidth: 2);
+                color: Theme.of(context).colorScheme.secondaryContainer, strokeWidth: 2);
           },
           drawHorizontalLine: true,
         ),
         borderData: FlBorderData(
           show: true,
           border: Border.all(
-              color: Theme.of(context).colorScheme.onPrimaryContainer, width: 2),
+              color: Theme.of(context).colorScheme.secondaryContainer, width: 2),
         ),
         lineTouchData: LineTouchData(
             touchTooltipData: LineTouchTooltipData(
@@ -59,7 +59,7 @@ class Chart extends StatelessWidget {
             barWidth: 3,
             belowBarData: BarAreaData(
               show: true,
-              color: Theme.of(context).colorScheme.onPrimaryContainer,
+              color: Theme.of(context).colorScheme.onSecondaryContainer,
             ),
           )
         ],

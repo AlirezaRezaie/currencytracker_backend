@@ -79,7 +79,7 @@ class _NewsPageState extends State<NewsPage> {
       body: Column(
         children: [
           Header(
-            color: Theme.of(context).colorScheme.onPrimary,
+            color: Theme.of(context).colorScheme.onBackground,
             backgroundColor: const Color.fromARGB(0, 255, 255, 255),
             profileImage:
                 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
@@ -111,7 +111,7 @@ class _NewsPageState extends State<NewsPage> {
               },
               textAlign: TextAlign.right,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimary,
+                color: Theme.of(context).colorScheme.onBackground,
               ),
               decoration: InputDecoration(
                 prefixIcon: Icon(
@@ -135,7 +135,7 @@ class _NewsPageState extends State<NewsPage> {
               ? isLoading
                   ? Expanded(
                       child: RefreshIndicator(
-                        color: Theme.of(context).colorScheme.onPrimary,
+                        color: Theme.of(context).colorScheme.onBackground,
                         backgroundColor:
                             Theme.of(context).colorScheme.background,
                         onRefresh: () async {
@@ -152,7 +152,7 @@ class _NewsPageState extends State<NewsPage> {
                     )
                   : Expanded(
                       child: RefreshIndicator(
-                        color: Theme.of(context).colorScheme.onPrimary,
+                        color: Theme.of(context).colorScheme.onBackground,
                         backgroundColor:
                             Theme.of(context).colorScheme.background,
                         onRefresh: () async {

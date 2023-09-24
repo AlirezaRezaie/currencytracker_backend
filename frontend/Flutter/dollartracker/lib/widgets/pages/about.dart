@@ -50,7 +50,7 @@ class AboutPage extends StatelessWidget {
                 Text(
                   "درباره کارنسی ترکر ",
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
+                    color: Theme.of(context).colorScheme.onBackground,
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                     fontFamily: 'IransansBlack',
@@ -77,7 +77,7 @@ class AboutPage extends StatelessWidget {
                 Text(
                   "راه های ارتباطی با ما ",
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
+                    color: Theme.of(context).colorScheme.onBackground,
                     fontWeight: FontWeight.w600,
                     fontSize: 18,
                     fontFamily: 'IransansBlack',

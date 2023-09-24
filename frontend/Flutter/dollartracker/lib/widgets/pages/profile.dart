@@ -21,7 +21,7 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           Header(
             backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-            color: Theme.of(context).colorScheme.onPrimary,
+            color: Theme.of(context).colorScheme.onBackground,
             profileImage:
                 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
           ),

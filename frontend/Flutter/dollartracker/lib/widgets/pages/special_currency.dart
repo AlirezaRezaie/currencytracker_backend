@@ -198,7 +198,7 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
         children: [
           Header(
             backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-            color: Theme.of(context).colorScheme.onPrimary,
+            color: Theme.of(context).colorScheme.onBackground,
             profileImage:
                 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
           ),
@@ -241,7 +241,7 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
                         Text(
                           "... در حال بارگیری لیست ارز ها",
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimary,
+                            color: Theme.of(context).colorScheme.onBackground,
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
                             fontFamily: 'IransansBlack',
@@ -263,7 +263,7 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
                             Text(
                               "... در حال بارگیری اطلاعات",
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimary,
+                                color: Theme.of(context).colorScheme.onBackground,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 15,
                                 fontFamily: 'IransansBlack',
