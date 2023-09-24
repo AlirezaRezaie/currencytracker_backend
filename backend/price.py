@@ -62,7 +62,7 @@ class priceInfo:
         }
 
     def calculate_and_set_rate_of_change(self, last_price):
-        if last_price and local.channel_info.get("price"):
+        if last_price and local.currency_info.get("currency_info"):
                 prev_prc = last_price.price
                 new_prc = self.price
                 calculated_rate_of_change = round(
