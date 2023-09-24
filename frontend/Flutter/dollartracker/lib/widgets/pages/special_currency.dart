@@ -1,11 +1,18 @@
+import 'dart:convert';
+
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dollartracker/widgets/utilities/Skeleton/currency_table_skeleton.dart';
 import 'package:dollartracker/widgets/utilities/currency_selector.dart';
 import 'package:dollartracker/widgets/utilities/special_currency_table.dart';
+import 'package:flash/flash.dart';
+import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../utilities/Menu/side_menu.dart';
 import '../utilities/header.dart';
 import '../utilities/network_error.dart';
+import 'package:http/http.dart' as http;
 
 class SpecialCurrency extends StatefulWidget {
   const SpecialCurrency({super.key});
@@ -18,6 +25,12 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
   bool isLoading = false;
   bool isConnected = false;
 
+  // get the host name
+  String? host = dotenv.env['SERVER_HOST'];
+
+  // list of currencies to show user
+  List<String> currencyList = [];
+
   Future<void> checkNetworkStatus() async {
     var connectivityResult = await Connectivity().checkConnectivity();
     setState(() {
@@ -25,65 +38,88 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
     });
   }
 
+  Future<void> getCurrencyList() async {
+    final response = await http.get(
+      Uri.parse(
+        'http://$host/counter/get_supported',
+      ),
+      headers: {'Content-Type': 'application/json; charset=UTF-8'},
+    );
+    // if the fetch is successful
+    if (response.statusCode == 200) {
+      // If the server returns a 200 OK response, parse the JSON data
+      String responseBody = utf8.decode(response.bodyBytes);
+      final data = json.decode(responseBody);
+      // You can now work with the data
+      currencyList = data.keys.toList();
+    } else {
+      // If the server did not return a 200 OK response
+      print("Error");
+      showFlash();
+    }
+  }
+
+// a flash message to show user the internet is not connected
+  showFlash() {
+    context.showFlash<bool>(
+      duration: const Duration(seconds: 8),
+      builder: (context, controller) => FlashBar(
+        controller: controller,
+        behavior: FlashBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+          side: BorderSide(
+            color: Color.fromARGB(255, 15, 15, 16),
+            strokeAlign: BorderSide.strokeAlignInside,
+          ),
+        ),
+        margin: const EdgeInsets.all(32.0),
+        clipBehavior: Clip.antiAlias,
+        iconColor: Theme.of(context).colorScheme.onPrimary,
+        backgroundColor: Color.fromARGB(255, 15, 15, 16),
+        indicatorColor: Color.fromARGB(255, 255, 204, 0),
+        icon: Icon(BootstrapIcons.exclamation_circle),
+        title: Directionality(
+          textDirection: TextDirection.rtl,
+          child: Text(
+            'مشکل در اتصال به اینترنت',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+              fontFamily: 'IransansBlack',
+            ),
+          ),
+        ),
+        content: Directionality(
+          textDirection: TextDirection.rtl,
+          child: Text(
+            'بنظر میرسد اتصال اینترنت شما دچار مشکل شده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و سپس دوباره تلاش کنید',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontWeight: FontWeight.w400,
+              fontSize: 10,
+              fontFamily: 'IransansBlack',
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
+    // fetch the list of currencies
+    getCurrencyList();
+    // check the internet connection
     checkNetworkStatus();
   }
 
   @override
   Widget build(BuildContext context) {
     // set the currency list to map and display to the user
-    List currency_list = [
-      {
-        "title": "title",
-        "price": 57000,
-        "subtitle": 'subtitle',
-        "persent": 25.0,
-        "imageLink":
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg",
-      },
-      {
-        "title": "title",
-        "price": 58000,
-        "subtitle": 'subtitle',
-        "persent": -12.0,
-        "imageLink":
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg",
-      },
-      {
-        "title": "title",
-        "price": 60000,
-        "subtitle": 'subtitle',
-        "persent": 60.0,
-        "imageLink":
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg",
-      },
-      {
-        "title": "title",
-        "price": 58000,
-        "subtitle": 'subtitle',
-        "persent": 60.0,
-        "imageLink":
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg",
-      },
-      {
-        "title": "title",
-        "price": 58000,
-        "subtitle": 'subtitle',
-        "persent": 60.0,
-        "imageLink":
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg",
-      },
-      {
-        "title": "title",
-        "price": 58000,
-        "subtitle": 'subtitle',
-        "persent": 60.0,
-        "imageLink":
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg",
-      },
-    ];
+    List data_list = [];
 
     return Scaffold(
       endDrawer: SideMenu(),
@@ -100,20 +136,14 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
             height: 30,
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 45),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
                   child: CurrencySelector(
-                    listOfCurrency: [
-                      'USD',
-                      'EUR',
-                      'GBP',
-                      'JPY',
-                      'AUD',
-                    ],
-                    width: 350,
+                    listOfCurrency: currencyList,
+                    width: 300,
                     height: 60,
                     getCurrency: (currency) {},
                   ),
@@ -139,18 +169,18 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
                   : Expanded(
                       child: ListView.builder(
                         physics: BouncingScrollPhysics(),
-                        itemCount: currency_list.length,
+                        itemCount: data_list.length,
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         itemBuilder: (context, index) {
                           return SpecialCurrencyTable(
-                            price: currency_list[index]['price'],
-                            persentColor: currency_list[index]['persent'] > 0
+                            price: data_list[index]['price'],
+                            persentColor: data_list[index]['persent'] > 0
                                 ? Colors.greenAccent
                                 : Colors.redAccent,
-                            currencyName: currency_list[index]['title'],
-                            imageLink: currency_list[index]['imageLink'],
-                            persent: currency_list[index]['persent'],
-                            volatility: currency_list[index]['subtitle'],
+                            currencyName: data_list[index]['title'],
+                            imageLink: data_list[index]['imageLink'],
+                            persent: data_list[index]['persent'],
+                            volatility: data_list[index]['subtitle'],
                           );
                         },
                       ),
