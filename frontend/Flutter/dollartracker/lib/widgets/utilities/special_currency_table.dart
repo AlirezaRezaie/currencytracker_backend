@@ -23,7 +23,7 @@ class SpecialCurrencyTable extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.only(left: 10, top: 4, bottom: 4),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
+          color: Theme.of(context).colorScheme.secondary,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
@@ -90,7 +90,7 @@ class SpecialCurrencyTable extends StatelessWidget {
                               fontSize: 10,
                               color: Theme.of(context)
                                   .colorScheme
-                                  .onPrimary,
+                                  .primaryContainer,
                               fontWeight: FontWeight.w600,
                               fontFamily: 'IransansBlack',
                             ),
