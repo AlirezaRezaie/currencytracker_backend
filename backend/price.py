@@ -28,11 +28,13 @@ class priceInfo:
         else:
             raise ValueError("Invalid data. Object cannot be created.")
 
-        if local.channel_info.get("price"):
+        if local.args.currency_info:
             self.price = int(price.replace(",", ""))
+            self.persian_name = local.args.currency_info["persian_name"]
         else:
             #might not be a price
             self.price = price
+            self.persian_name = None
             
         self.action = action
         self.exchtype = exchtype
@@ -54,13 +56,14 @@ class priceInfo:
         return {
             "action": self.action,
             "price": self.text if self.action == "پایان معاملات" else self.price,
+            "persian_name":self.persian_name,
             "exchtype": self.exchtype,
             "posttime": self.posttime,
             "rateofchange": self.rate_of_change,
         }
 
     def calculate_and_set_rate_of_change(self, last_price):
-        if last_price and local.channel_info.get("price"):
+        if last_price and local.args.currency_info:
                 prev_prc = last_price.price
                 new_prc = self.price
                 calculated_rate_of_change = round(

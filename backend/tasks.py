@@ -25,9 +25,11 @@ class Arg:
             default_channels = local.default_channels
         except:
             default_channels = get_defaults()
-
-        self.channel_info = default_channels[code][channel_index]
-        self.channel_id = self.channel_info["channel_name"]
+            
+        currency_obj = default_channels[code]
+        self.currency_info = currency_obj.get("currency_info")
+        self.channel_info = currency_obj.get("list_of_channels")[channel_index]
+        self.channel_id = self.channel_info.get("channel_name")
 
 
 class Task:
