@@ -5,6 +5,8 @@ from fastapi import (
     Form,
     HTTPException,
 )
+
+from enum import Enum
 from fastapi.responses import HTMLResponse
 
 from sqlalchemy.orm import Session
@@ -103,9 +105,18 @@ async def upload_file(
     # Here, I'm just returning a message with the received data
     return {"status": "ok"}
 
+class QueryMode(str, Enum):
+    LATEST = 'latest'
+    ALL = 'all'
 
-@router.get("/get_news")
-def get_all_people(db: Session = Depends(get_db)):
-    news = db.query(News).all()
+
+@router.get("/get_news/{value}")
+def get_all_people(value:QueryMode,db: Session = Depends(get_db)):
+    db_query = db.query(News)
+    if value == QueryMode.LATEST:
+            news = db_query.order_by(News.id.desc()).first()
+    elif value == QueryMode.ALL:
+            news = db_query.all()
+        
     db.close()
     return news
