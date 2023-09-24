@@ -14,7 +14,7 @@ tasks = []
 
 # args object for task configs
 class Arg:
-    def __init__(self, code,channel_index,count=None, timeout=None, retry=None, fetchrate=None):
+    def __init__(self, code,channel_index=0,count=None, timeout=None, retry=None, fetchrate=None):
         self.code = code
         self.timeout = timeout
         self.retry = retry
@@ -36,7 +36,7 @@ class Task:
         TODO : this might return error or None as memory limit reaches
         """
         self.main_loop = loop
-        self.args = Arg(code,channel_index)
+        self.args = Arg(code,channel_index=channel_index)
         self.users = []
         self.stop_event = threading.Event()
         self.lastprice = None

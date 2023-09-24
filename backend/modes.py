@@ -76,10 +76,10 @@ def run_counter(args):
             full_prices.insert(0, msg)
             logger.info(f"accumulated {len(full_prices)} prices")
             previous_price = msg
-            if local.count == len(full_prices):
+            if local.args.count == len(full_prices):
                 break
 
-        if local.count == len(full_prices):
+        if local.args.count == len(full_prices):
             break
 
     server_ret = list(map(lambda price: price.get_json_data(), full_prices))
