@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 
-class SpecialCurrencyTable extends StatelessWidget {
+class CurrencyTable extends StatelessWidget {
   final String time, volatility, imageLink;
   final int price;
   final double persent;
-  final Color persentColor;
+  final Color persentColor, backgroundColor;
 
-  const SpecialCurrencyTable({
+  const CurrencyTable({
     super.key,
     required this.volatility,
     required this.price,
     required this.time,
     required this.persent,
     required this.persentColor,
+    required this.backgroundColor,
     required this.imageLink,
   });
 
@@ -23,7 +24,7 @@ class SpecialCurrencyTable extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.only(left: 10, top: 4, bottom: 4),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.secondary,
+          color: backgroundColor,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(

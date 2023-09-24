@@ -23,7 +23,7 @@ class NetworkError extends StatelessWidget {
         Text(
           "مشکل در اتصال به سرور",
           style: TextStyle(
-            color: Theme.of(context).colorScheme.onPrimary,
+            color: Theme.of(context).colorScheme.onBackground,
             fontWeight: FontWeight.w600,
             fontSize: 16,
             fontFamily: 'IransansBlack',

@@ -23,6 +23,4 @@ class BarData {
       IndividualBar(x: 3, y: data4),
     ];
   }
-
-
 }

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dollartracker/widgets/utilities/currency_selector.dart';
-import 'package:dollartracker/widgets/utilities/special_currency_table.dart';
+import 'package:dollartracker/widgets/utilities/currency_table.dart';
 import 'package:flash/flash.dart';
 import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +12,7 @@ import '../utilities/Menu/side_menu.dart';
 import '../utilities/header.dart';
 import '../utilities/network_error.dart';
 import 'package:http/http.dart' as http;
+import 'package:dollartracker/services/get_time_for_iran';
 
 class SpecialCurrency extends StatefulWidget {
   const SpecialCurrency({super.key});
@@ -94,42 +95,6 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
       print("Error");
       showFlash();
     }
-  }
-
-  String getTimeForIran(time) {
-    // Time strings in "HH:mm" format
-    String time1String = time;
-    String time2String = "03:30";
-    // Parse the time strings into Duration objects
-    List<String> time1Parts = time1String.split(':');
-    List<String> time2Parts = time2String.split(':');
-
-    int hours1 = int.parse(time1Parts[0]);
-    int minutes1 = int.parse(time1Parts[1]);
-
-    int hours2 = int.parse(time2Parts[0]);
-    int minutes2 = int.parse(time2Parts[1]);
-
-    Duration time1 = Duration(hours: hours1, minutes: minutes1);
-    Duration time2 = Duration(hours: hours2, minutes: minutes2);
-
-    // Add the two Duration objects together
-    Duration totalTime = time1 + time2;
-
-    // Ensure the total time does not exceed 24 hours (1 day)
-    if (totalTime.inHours >= 24) {
-      totalTime = Duration(hours: 23, minutes: 59); // Set it to 23:59
-    }
-
-    // Extract hours and minutes from the totalTime
-    int totalHours = totalTime.inHours;
-    int totalMinutes = totalTime.inMinutes.remainder(60);
-
-    // Format the result as "HH:mm"
-    String result =
-        '${totalHours.toString().padLeft(2, '0')}:${totalMinutes.toString().padLeft(2, '0')}';
-
-    return result;
   }
 
   // a flash message to show user the internet is not connected
@@ -263,7 +228,8 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
                             Text(
                               "... در حال بارگیری اطلاعات",
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onBackground,
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 15,
                                 fontFamily: 'IransansBlack',
@@ -277,7 +243,8 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
                             itemCount: data_list.length,
                             padding: EdgeInsets.symmetric(horizontal: 20),
                             itemBuilder: (context, index) {
-                              return SpecialCurrencyTable(
+                              return CurrencyTable(
+                                backgroundColor: Theme.of(context).colorScheme.secondary,
                                 price: data_list[index]['price'],
                                 persentColor:
                                     data_list[index]['rateofchange'] != null

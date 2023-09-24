@@ -3,7 +3,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dollartracker/widgets/utilities/Chart/chart.dart';
 import 'package:dollartracker/widgets/utilities/header.dart';
 import 'package:dollartracker/widgets/utilities/network_error.dart';
-import 'package:dollartracker/widgets/utilities/new_updates_table.dart';
+import 'package:dollartracker/services/get_time_for_iran';
+import 'package:dollartracker/widgets/utilities/currency_table.dart';
 import 'package:flash/flash.dart';
 import 'package:flash/flash_helper.dart';
 import 'package:http/http.dart' as http;
@@ -29,7 +30,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late WebSocketChannel channel;
   late BuildContext buildContext;
 
-  List newsList = [];
+  String lastNew = '';
   int receivedData = 0;
   double changeRate = 0;
   int value = 9999;
@@ -43,6 +44,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     50500.0,
     55500.0,
   ];
+
+  List global = [];
 
   Future<void> checkNetworkStatus() async {
     var connectivityResult = await Connectivity().checkConnectivity();
@@ -84,11 +87,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           // Parse the received data as JSON
           Map<String, dynamic> jsonData = jsonDecode(data);
           // Check if the 'price' field exists and is a numeric value
-          if (jsonData.containsKey('price')) {
+          if (jsonData.containsKey('local')) {
             // Update the animation when the price changes
             setState(() {
-              receivedData =
-                  jsonData['price']; // Format the price to two decimal places
+              receivedData = jsonData['local']['latests'].last['price'];
+              global = jsonData['global']['latests'].reversed.toList();
             });
           }
         },
@@ -117,7 +120,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   Future<void> getNews(host) async {
     final response = await http.get(
       Uri.parse(
-        'http://$host/news/get_news',
+        'http://$host/news/get_news/latest',
       ),
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
     );
@@ -129,11 +132,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       // You can now work with the data
       setState(() {
         // set the list of news
-        newsList = data.cast();
+        lastNew = data['title'];
         // reverse the list to sort the news currectly
-        newsList = newsList.reversed.toList();
       });
-      print(newsList);
     } else {
       // If the server did not return a 200 OK response
       print("Error");
@@ -320,9 +321,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             child: Directionality(
                               textDirection: TextDirection.rtl,
                               child: Text(
-                                "helllllll",
+                                lastNew,
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.onPrimary,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
                                   fontFamily: "IransansBlack",
                                 ),
                                 maxLines: 1,
@@ -373,8 +375,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                 Text(
                                   "جدید ترین آپدیت های قیمت",
                                   style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.onSecondary,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSecondary,
                                     fontWeight: FontWeight.w600,
                                     fontSize: 15,
                                     fontFamily: 'IransansBlack',
@@ -384,35 +387,40 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             ),
                           ),
                           Expanded(
-                            child: ListView(
+                            child: ListView.builder(
                               padding: const EdgeInsets.all(25),
                               physics: BouncingScrollPhysics(),
-                              children: const [
-                                NewUpdatesTable(
-                                  title: "دلار",
-                                  subtitle: "صعودی",
-                                  imageLink: "",
-                                  persent: 45,
-                                ),
-                                NewUpdatesTable(
-                                  title: "دلار",
-                                  subtitle: "صعودی",
-                                  imageLink: "",
-                                  persent: 65,
-                                ),
-                                NewUpdatesTable(
-                                  title: "دلار",
-                                  subtitle: "صعودی",
-                                  imageLink: "",
-                                  persent: 0.25,
-                                ),
-                                NewUpdatesTable(
-                                  title: "دلار",
-                                  subtitle: "صعودی",
-                                  imageLink: "",
-                                  persent: 2,
-                                ),
-                              ],
+                              itemCount: global.length,
+                              itemBuilder: (context, index) {
+                                return CurrencyTable(
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.tertiary,
+                                  price: global[index]['price'],
+                                  persentColor:
+                                      global[index]['rateofchange'] != null
+                                          ? global[index]['rateofchange'] > 0
+                                              ? Colors.greenAccent
+                                              : Colors.redAccent
+                                          : Colors.white,
+                                  time:
+                                      getTimeForIran(global[index]['posttime']),
+                                  imageLink:
+                                      global[index]['rateofchange'] != null
+                                          ? global[index]['rateofchange'] > 0
+                                              ? 'assets/upArrow.png'
+                                              : 'assets/downArrrow.png'
+                                          : 'assets/line.png',
+                                  persent: global[index]['rateofchange'] == null
+                                      ? 0
+                                      : global[index]['rateofchange'],
+                                  volatility:
+                                      global[index]['rateofchange'] != null
+                                          ? global[index]['rateofchange'] > 0
+                                              ? 'صعودی'
+                                              : 'نزولی'
+                                          : 'نامشخص',
+                                );
+                              },
                             ),
                           ),
                         ],
