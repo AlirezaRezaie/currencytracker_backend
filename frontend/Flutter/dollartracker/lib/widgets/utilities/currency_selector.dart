@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 class CurrencySelector extends StatefulWidget {
   final List<String> listOfCurrency;
   final double width, height;
+  final Function(String) getCurrency;
 
   const CurrencySelector({
     super.key,
     required this.listOfCurrency,
     required this.width,
     required this.height,
+    required this.getCurrency,
   });
 
   @override
@@ -57,6 +59,7 @@ class _CurrencySelectorState extends State<CurrencySelector> {
                 );
           }).toList(),
           onChanged: (String? newValue) => {
+            widget.getCurrency(newValue!),
             setState(() {
               current_currency = newValue!;
             })

@@ -20,22 +20,22 @@ class Chart extends StatelessWidget {
           show: true,
           getDrawingHorizontalLine: (value) {
             return FlLine(
-                color: Color.fromARGB(40, 255, 255, 255), strokeWidth: 2);
+                color: Theme.of(context).colorScheme.onPrimaryContainer, strokeWidth: 2);
           },
           getDrawingVerticalLine: (value) {
             return FlLine(
-                color: Color.fromARGB(40, 255, 255, 255), strokeWidth: 2);
+                color: Theme.of(context).colorScheme.onPrimaryContainer, strokeWidth: 2);
           },
           drawHorizontalLine: true,
         ),
         borderData: FlBorderData(
           show: true,
           border: Border.all(
-              color: const Color.fromARGB(40, 255, 255, 255), width: 2),
+              color: Theme.of(context).colorScheme.onPrimaryContainer, width: 2),
         ),
         lineTouchData: LineTouchData(
             touchTooltipData: LineTouchTooltipData(
-          tooltipBgColor: Color.fromARGB(255, 35, 36, 42),
+          tooltipBgColor: Theme.of(context).colorScheme.background,
         )),
         lineBarsData: [
           LineChartBarData(
