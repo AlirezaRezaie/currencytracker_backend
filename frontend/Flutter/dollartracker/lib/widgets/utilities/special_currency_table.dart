@@ -19,11 +19,11 @@ class SpecialCurrencyTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 18),
+      padding: EdgeInsets.only(top: 18),
       child: Container(
         padding: EdgeInsets.only(left: 10, top: 4, bottom: 4),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.secondary,
+          color: Theme.of(context).colorScheme.primary,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
@@ -90,7 +90,7 @@ class SpecialCurrencyTable extends StatelessWidget {
                               fontSize: 10,
                               color: Theme.of(context)
                                   .colorScheme
-                                  .primaryContainer,
+                                  .onPrimary,
                               fontWeight: FontWeight.w600,
                               fontFamily: 'IransansBlack',
                             ),

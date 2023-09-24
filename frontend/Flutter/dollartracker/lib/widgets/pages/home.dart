@@ -159,14 +159,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16)),
           side: BorderSide(
-            color: Theme.of(context).colorScheme.background,
+            color: Color.fromARGB(255, 15, 15, 16),
             strokeAlign: BorderSide.strokeAlignInside,
           ),
         ),
         margin: const EdgeInsets.all(32.0),
         clipBehavior: Clip.antiAlias,
         iconColor: Theme.of(context).colorScheme.onPrimary,
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Color.fromARGB(255, 15, 15, 16),
         indicatorColor: Color.fromARGB(255, 255, 204, 0),
         icon: Icon(BootstrapIcons.exclamation_circle),
         title: Directionality(
