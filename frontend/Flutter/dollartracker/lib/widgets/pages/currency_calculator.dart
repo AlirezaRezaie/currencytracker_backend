@@ -43,6 +43,10 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
   // list of currencies to show user
   List<String> currencyList = [];
 
+  // get the currency to calculate
+  String firstCurrency = '';
+  String secondCurrency = '';
+
   // get the host name
   String? host = dotenv.env['SERVER_HOST'];
   // check the internet connection
@@ -67,7 +71,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
     isFetchingData = true;
     final response = await http.get(
       Uri.parse(
-        'http://$host/calculator/USD:DHS',
+        'http://$host/calculator/$firstCurrency:$secondCurrency',
       ),
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
     );
@@ -76,8 +80,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
       // If the server returns a 200 OK response, parse the JSON data
       String responseBody = utf8.decode(response.bodyBytes);
       final data = json.decode(responseBody);
-      // You can now work with the data
-
+      // calculate the price
       setState(() {
         calculatedData = (data['from'] * number_of_currency) / data['to'];
       });
@@ -86,6 +89,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
     } else {
       // If the server did not return a 200 OK response
       print("Error");
+      showFlash();
     }
   }
 
@@ -107,6 +111,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
     } else {
       // If the server did not return a 200 OK response
       print("Error");
+      showFlash();
     }
   }
 
@@ -218,6 +223,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                             listOfCurrency: currencyList,
                             width: 100,
                             height: 60,
+                            getCurrency: (currency) => firstCurrency = currency,
                           )
                         ],
                       ),
@@ -247,6 +253,8 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                             listOfCurrency: currencyList,
                             width: 100,
                             height: 60,
+                            getCurrency: (currency) =>
+                                secondCurrency = currency,
                           )
                         ],
                       ),
