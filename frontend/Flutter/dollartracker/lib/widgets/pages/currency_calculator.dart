@@ -40,6 +40,11 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
   // for shoing the loading to the user while the data is fetching
   bool isFetchingData = false;
 
+  // list of currencies to show user
+  List<String> currencyList = [];
+
+  // get the host name
+  String? host = dotenv.env['SERVER_HOST'];
   // check the internet connection
   Future<void> checkNetworkStatus() async {
     var connectivityResult = await Connectivity().checkConnectivity();
@@ -57,7 +62,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
     });
   }
 
-  String? host = dotenv.env['SERVER_HOST'];
+  // a function for fetch the live price of the currency and calculate the price
   Future<void> calculate() async {
     isFetchingData = true;
     final response = await http.get(
@@ -66,19 +71,39 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
       ),
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
     );
-
+    // if the fetch is successful
     if (response.statusCode == 200) {
       // If the server returns a 200 OK response, parse the JSON data
       String responseBody = utf8.decode(response.bodyBytes);
       final data = json.decode(responseBody);
       // You can now work with the data
-      print("hooooooooooooooooooooooooooooo $data");
 
       setState(() {
         calculatedData = (data['from'] * number_of_currency) / data['to'];
       });
       isFetchingData = false;
       showAnswer();
+    } else {
+      // If the server did not return a 200 OK response
+      print("Error");
+    }
+  }
+
+  // fetch the list of currencies
+  Future<void> getCurrencyList() async {
+    final response = await http.get(
+      Uri.parse(
+        'http://$host/counter/get_supported',
+      ),
+      headers: {'Content-Type': 'application/json; charset=UTF-8'},
+    );
+    // if the fetch is successful
+    if (response.statusCode == 200) {
+      // If the server returns a 200 OK response, parse the JSON data
+      String responseBody = utf8.decode(response.bodyBytes);
+      final data = json.decode(responseBody);
+      // You can now work with the data
+      currencyList = data.keys.toList();
     } else {
       // If the server did not return a 200 OK response
       print("Error");
@@ -136,6 +161,8 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
   @override
   void initState() {
     super.initState();
+    // fetch the list of currencies
+    getCurrencyList();
     // check the internet connection
     checkNetworkStatus();
   }
@@ -188,13 +215,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                       child: Row(
                         children: [
                           CurrencySelector(
-                            listOfCurrency: [
-                              'USD',
-                              'EUR',
-                              'GBP',
-                              'JPY',
-                              'AUD',
-                            ],
+                            listOfCurrency: currencyList,
                             width: 100,
                             height: 60,
                           )
@@ -223,13 +244,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                       child: Row(
                         children: [
                           CurrencySelector(
-                            listOfCurrency: [
-                              'USD',
-                              'EUR',
-                              'GBP',
-                              'JPY',
-                              'AUD',
-                            ],
+                            listOfCurrency: currencyList,
                             width: 100,
                             height: 60,
                           )
