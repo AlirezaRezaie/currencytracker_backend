@@ -24,11 +24,16 @@ app.include_router(calculator.router, prefix="/calculator", tags=["calculator"])
 async def startup_event():
     # start the default channels on startup :O
     currencies = get_defaults()
-    for currency,channel_list in currencies.items():
+    for currency_code, currency_obj in currencies.items():
+        if not currency_obj or not type(currency_obj) == dict:
+            continue
+        if not currency_obj.get("currency_info"):
+            continue
+        
+        channel_list = currency_obj["list_of_channels"]
         for channel in channel_list:
             if channel["nonstop"]:
-                Task(currency,channel_index=channel_list.index(channel))
-
+                Task(currency_code, channel_index=channel_list.index(channel))
 
 @app.on_event("shutdown")
 async def shutdown_event():
@@ -45,7 +50,7 @@ async def shutdown_event():
 if __name__ == "__main__":
     import uvicorn
 
-    #network_stability_check()
+    network_stability_check()
     logger.info(f"env port is set to: {get_port()}")
     uvicorn.run(
         "server:app",

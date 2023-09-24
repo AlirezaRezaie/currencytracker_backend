@@ -40,6 +40,7 @@ class priceInfo:
         self.posttime = raw_price_obj["info"]
         self.text = raw_price_obj["text"]
         self.postnumber = raw_price_obj["number"]
+        self.persian_name = local.args.currency_info["persian_name"]
         self.rate_of_change = None
 
     def __eq__(self, other):
@@ -54,6 +55,7 @@ class priceInfo:
         return {
             "action": self.action,
             "price": self.text if self.action == "پایان معاملات" else self.price,
+            "persian_name":self.persian_name,
             "exchtype": self.exchtype,
             "posttime": self.posttime,
             "rateofchange": self.rate_of_change,

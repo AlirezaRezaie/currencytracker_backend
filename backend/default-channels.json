@@ -1,59 +1,79 @@
 {
-  "USD": [
-    {
-      "channel_name": "nerkhedollarr",
-      "regex": "(فردایی|نقدی|نـــقـدی|نـــقـدۍ|پایان معاملات).*?(\\d{1,3}(?:,\\d{3})*).(\\w*)",
-      "nonstop": true,
-      "price": true
-    },
-    {
-      "channel_name": "dollar_tehran3bze",
-      "regex": "(فردایی|نقدی|نـــقـدی|نـــقـدۍ|پایان معاملات).*?(\\d{1,3}(?:,\\d{3})*).(\\w*)",
-      "nonstop": false,
-      "price": true
-    },
-    {
-      "channel_name": "sarafha_rate",
-      "regex": "",
-      "nonstop": false,
-      "price": true
-    }
-  ],
-  "EUR": [
-    {
-      "channel_name": "sarafha_rate",
-      "regex": "",
-      "nonstop": false,
-      "price": true
-    }
-  ],
-  "DHS": [
-    {
-      "channel_name": "DHS_Dirham",
-      "regex": "",
-      "nonstop": true,
-      "price": true
-    },
-    {
-      "channel_name": "testderham",
-      "regex": "",
-      "nonstop": false,
-      "price": true
-    }
-  ],
-  "CNY": [],
-  "GBP": [],
-  "AED": [],
-  "TRY": [],
-  "RUB": [],
-  "IQD": [],
+  "USD": {
+    "list_of_channels": [
+      {
+        "channel_name": "nerkhedollarr",
+        "regex": "(فردایی|نقدی|نـــقـدی|نـــقـدۍ|پایان معاملات).*?(\\d{1,3}(?:,\\d{3})*).(\\w*)",
+        "nonstop": true
+      },
+      {
+        "channel_name": "dollar_tehran3bze",
+        "regex": "(فردایی|نقدی|نـــقـدی|نـــقـدۍ|پایان معاملات).*?(\\d{1,3}(?:,\\d{3})*).(\\w*)",
+        "nonstop": false
+      },
+      {
+        "channel_name": "sarafha_rate",
+        "regex": "",
+        "nonstop": false
+      }
+    ],
+    "currency_info": { "persian_name": "دلار آمریکا" }
+  },
+  "EUR": {
+    "list_of_channels": [
+      {
+        "channel_name": "sarafha_rate",
+        "regex": "",
+        "nonstop": false
+      }
+    ],
+    "currency_info": { "persian_name": "یورو" }
+  },
+  "DHS": {
+    "list_of_channels": [
+      {
+        "channel_name": "DHS_Dirham",
+        "regex": "",
+        "nonstop": true
+      },
+      {
+        "channel_name": "testderham",
+        "regex": "",
+        "nonstop": false
+      }
+    ],
+    "currency_info": { "persian_name": "درهم" }
+  },
+  "CNY": {
+    "list_of_channels": [],
+    "currency_info": { "persian_name": "یوآن چین" }
+  },
+  "GBP": {
+    "list_of_channels": [],
+    "currency_info": { "persian_name": "پوند" }
+  },
+  "AED": {
+    "list_of_channels": [],
+    "currency_info": { "persian_name": "درهم امارات" }
+  },
+  "TRY": {
+    "list_of_channels": [],
+    "currency_info": { "persian_name": "لیر ترکیه" }
+  },
+  "RUB": {
+    "list_of_channels": [],
+    "currency_info": { "persian_name": "روبل روسیه" }
+  },
+  "IQD": {
+    "list_of_channels": [],
+    "currency_info": { "persian_name": "دینار عراق" }
+  },
   "VPN": [
     {
       "channel_name": "melov2ray",
       "regex": "vless://[^\n]+",
       "findall": true,
-      "nonstop": false,
-      "price": false
+      "nonstop": false
     }
   ]
 }
