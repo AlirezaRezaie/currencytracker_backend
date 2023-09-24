@@ -26,7 +26,7 @@ class NewsPostPage extends StatelessWidget {
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      color: Theme.of(context).colorScheme.outline,
                       spreadRadius: 1,
                       blurRadius: 50,
                       offset: Offset(0, -10),
@@ -105,7 +105,7 @@ class NewsPostPage extends StatelessWidget {
                   child: Text(
                     title,
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.onPrimary,
+                      color: Theme.of(context).colorScheme.onBackground,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                       fontFamily: 'IransansBlack',

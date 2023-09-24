@@ -41,7 +41,7 @@ class _SideMenuState extends State<SideMenu> {
                               lightMode
                           ? BootstrapIcons.moon_fill
                           : BootstrapIcons.sun_fill,
-                      color: Theme.of(context).colorScheme.onPrimary,
+                      color: Theme.of(context).colorScheme.onBackground,
                     ),
                   ),
                   Row(
@@ -56,7 +56,7 @@ class _SideMenuState extends State<SideMenu> {
                             Text(
                               "سلام، علیرضا",
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimary,
+                                color: Theme.of(context).colorScheme.onSecondary,
                                 fontFamily: 'IransansBlack',
                                 fontWeight: FontWeight.bold,
                                 fontSize: 17,
@@ -67,7 +67,7 @@ class _SideMenuState extends State<SideMenu> {
                               style: TextStyle(
                                 color: Theme.of(context)
                                     .colorScheme
-                                    .primaryContainer,
+                                    .secondaryContainer,
                                 fontFamily: 'IransansBlack',
                                 fontWeight: FontWeight.bold,
                                 fontSize: 10,
@@ -94,49 +94,67 @@ class _SideMenuState extends State<SideMenu> {
             MenuItem(
               title: "صفحه اصلی",
               icon: BootstrapIcons.house_fill,
-              color: currentRoute == "/home"
+              background_color: currentRoute == "/home"
                   ? Theme.of(context).colorScheme.primary
                   : Color.fromARGB(0, 27, 28, 34),
+              color: currentRoute == "/home"
+                  ? Theme.of(context).colorScheme.onPrimary
+                  : Theme.of(context).colorScheme.onSecondary,
               routName: "home",
             ),
             MenuItem(
               title: "تبدیل ارز",
               icon: BootstrapIcons.clipboard2_data_fill,
-              color: currentRoute == "/calculator"
+              background_color: currentRoute == "/calculator"
                   ? Theme.of(context).colorScheme.primary
                   : Color.fromARGB(0, 27, 28, 34),
+              color: currentRoute == "/calculator"
+                  ? Theme.of(context).colorScheme.onPrimary
+                  : Theme.of(context).colorScheme.onSecondary,
               routName: "calculator",
             ),
             MenuItem(
               title: "اخبار",
               icon: BootstrapIcons.newspaper,
-              color: currentRoute == "/news"
+              background_color: currentRoute == "/news"
                   ? Theme.of(context).colorScheme.primary
                   : Color.fromARGB(0, 27, 28, 34),
+              color: currentRoute == "/news"
+                  ? Theme.of(context).colorScheme.onPrimary
+                  : Theme.of(context).colorScheme.onSecondary,
               routName: "news",
             ),
             MenuItem(
               title: "ارز اختصاصی",
               icon: BootstrapIcons.currency_dollar,
-              color: currentRoute == "/special_currency"
+              background_color: currentRoute == "/special_currency"
                   ? Theme.of(context).colorScheme.primary
                   : Color.fromARGB(0, 27, 28, 34),
+              color: currentRoute == "/special_currency"
+                  ? Theme.of(context).colorScheme.onPrimary
+                  : Theme.of(context).colorScheme.onSecondary,
               routName: "special_currency",
             ),
             MenuItem(
               title: "پروفایل",
               icon: BootstrapIcons.person_fill,
-              color: currentRoute == "/profile"
+              background_color: currentRoute == "/profile"
                   ? Theme.of(context).colorScheme.primary
                   : Color.fromARGB(0, 27, 28, 34),
+              color: currentRoute == "/profile"
+                  ? Theme.of(context).colorScheme.onPrimary
+                  : Theme.of(context).colorScheme.onSecondary,
               routName: "profile",
             ),
             MenuItem(
               title: "درباره ما",
               icon: BootstrapIcons.info_circle_fill,
-              color: currentRoute == "/about"
+              background_color: currentRoute == "/about"
                   ? Theme.of(context).colorScheme.primary
                   : Color.fromARGB(0, 27, 28, 34),
+              color: currentRoute == "/about"
+                  ? Theme.of(context).colorScheme.onPrimary
+                  : Theme.of(context).colorScheme.onSecondary,
               routName: "about",
             ),
           ],

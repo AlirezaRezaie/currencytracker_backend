@@ -19,7 +19,7 @@ class SpecialCurrencyTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 18),
+      padding: EdgeInsets.only(top: 18),
       child: Container(
         padding: EdgeInsets.only(left: 10, top: 4, bottom: 4),
         decoration: BoxDecoration(

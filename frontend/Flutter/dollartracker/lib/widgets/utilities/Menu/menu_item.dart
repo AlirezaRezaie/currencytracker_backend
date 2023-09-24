@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 class MenuItem extends StatelessWidget {
   final String title;
   final IconData icon;
+  final Color background_color;
   final Color color;
   final String routName;
   const MenuItem({
     super.key,
     required this.title,
     required this.icon,
+    required this.background_color,
     required this.color,
     required this.routName,
   });
@@ -21,10 +23,10 @@ class MenuItem extends StatelessWidget {
         onTap: () => Navigator.pushReplacementNamed(context, "/$routName"),
         child: Container(
           width: 250,
-          padding: EdgeInsets.all(5),
+          padding: EdgeInsets.all(7),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(3),
-            color: color,
+            borderRadius: BorderRadius.circular(7),
+            color: background_color,
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -33,7 +35,7 @@ class MenuItem extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
+                  color: color,
                   fontFamily: 'IransansBlack',
                   fontSize: 15,
                 ),
@@ -43,7 +45,7 @@ class MenuItem extends StatelessWidget {
               ),
               Icon(
                 icon,
-                color: Theme.of(context).colorScheme.onPrimary,
+                color: color,
               ),
             ],
           ),

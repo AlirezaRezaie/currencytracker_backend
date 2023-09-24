@@ -159,14 +159,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16)),
           side: BorderSide(
-            color: Theme.of(context).colorScheme.background,
+            color: Color.fromARGB(255, 15, 15, 16),
             strokeAlign: BorderSide.strokeAlignInside,
           ),
         ),
         margin: const EdgeInsets.all(32.0),
         clipBehavior: Clip.antiAlias,
         iconColor: Theme.of(context).colorScheme.onPrimary,
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Color.fromARGB(255, 15, 15, 16),
         indicatorColor: Color.fromARGB(255, 255, 204, 0),
         icon: Icon(BootstrapIcons.exclamation_circle),
         title: Directionality(
@@ -217,7 +217,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   children: [
                     Header(
                       backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-                      color: Theme.of(context).colorScheme.onPrimary,
+                      color: Theme.of(context).colorScheme.onBackground,
                       profileImage:
                           'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
                     ),
@@ -273,7 +273,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                 "قیمت دلار امروز",
                                 style: TextStyle(
                                   color:
-                                      Theme.of(context).colorScheme.onPrimary,
+                                      Theme.of(context).colorScheme.onSecondary,
                                   fontFamily: "IransansBlack",
                                 ),
                               ),
@@ -322,7 +322,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               child: Text(
                                 "helllllll",
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: Theme.of(context).colorScheme.onPrimary,
                                   fontFamily: "IransansBlack",
                                 ),
                                 maxLines: 1,
@@ -374,7 +374,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                   "جدید ترین آپدیت های قیمت",
                                   style: TextStyle(
                                     color:
-                                        Theme.of(context).colorScheme.onPrimary,
+                                        Theme.of(context).colorScheme.onSecondary,
                                     fontWeight: FontWeight.w600,
                                     fontSize: 15,
                                     fontFamily: 'IransansBlack',
