@@ -28,7 +28,12 @@ class priceInfo:
         else:
             raise ValueError("Invalid data. Object cannot be created.")
 
-        self.price = int(price.replace(",", ""))
+        if local.channel_info.get("price"):
+            self.price = int(price.replace(",", ""))
+        else:
+            #might not be a price
+            self.price = price
+            
         self.action = action
         self.exchtype = exchtype
         # TODO: it gives UTC turn it into iran local time
@@ -55,13 +60,13 @@ class priceInfo:
         }
 
     def calculate_and_set_rate_of_change(self, last_price):
-        if last_price:
-            prev_prc = last_price.price
-            new_prc = self.price
-            calculated_rate_of_change = round(
-                ((new_prc - prev_prc) / prev_prc) * 100, 3
-            )
-            self.rate_of_change = calculated_rate_of_change
+        if last_price and local.channel_info.get("price"):
+                prev_prc = last_price.price
+                new_prc = self.price
+                calculated_rate_of_change = round(
+                    ((new_prc - prev_prc) / prev_prc) * 100, 3
+                )
+                self.rate_of_change = calculated_rate_of_change
 
     def parse_price_info(self, price_text) -> tuple:
         groups = None
@@ -69,11 +74,17 @@ class priceInfo:
         # code = local.code
         regex = local.channel_info["regex"]
         if regex:
-            groups = re.search(regex, price_text)
+            if local.channel_info.get("findall"):
+                groups = re.findall(regex,price_text)
+                #print(groups)
+
+            else:
+                groups = re.search(regex, price_text)
         else:
             # use the default regex
             groups = re.findall(r"(\d{1,3}(?:,\d{3})*)", price_text)
 
+        #exit()
         if groups:
             try:
                 checked_parsed = groups.groups()
@@ -86,10 +97,13 @@ class priceInfo:
 
 # accepts raw messages and returns price objects
 def extract_prices(messages, count=10, reverse=False):
+    
     if not messages:
         return "id is not valid"
+
     parsed_prices = []
     latest = len(messages) - 1
+    
 
     for price in reversed(messages[: latest + 1]):
         try:
@@ -101,7 +115,7 @@ def extract_prices(messages, count=10, reverse=False):
         except ValueError as e:
             # keep in mind that this exception is not an actual error
             # its my way of handling data text and non-data text
-            logger.debug(e)
+            logger.info(e)
     if reverse:
         parsed_prices.reverse()
     return parsed_prices

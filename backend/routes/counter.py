@@ -8,10 +8,9 @@ default_currencies = get_defaults()
 router = APIRouter()
 
 @router.get("/get_last/{code}/{channel}/{count}")
-def get_live_counter(code: str, channel: int, count: int) -> str:
-    local.count = count
-    arg = Arg(code)
-    return str(run_counter(arg))
+def get_live_counter(code: str, channel: int, count: int) -> list[dict]:
+    arg = Arg(code,count=count)
+    return run_counter(arg)
 
 
 @router.get("/get_supported")
