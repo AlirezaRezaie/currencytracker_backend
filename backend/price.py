@@ -30,9 +30,11 @@ class priceInfo:
 
         if local.args.currency_info:
             self.price = int(price.replace(",", ""))
+            self.persian_name = local.args.currency_info["persian_name"]
         else:
             #might not be a price
             self.price = price
+            self.persian_name = None
             
         self.action = action
         self.exchtype = exchtype
@@ -40,7 +42,6 @@ class priceInfo:
         self.posttime = raw_price_obj["info"]
         self.text = raw_price_obj["text"]
         self.postnumber = raw_price_obj["number"]
-        self.persian_name = local.args.currency_info["persian_name"]
         self.rate_of_change = None
 
     def __eq__(self, other):

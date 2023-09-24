@@ -68,12 +68,14 @@
     "list_of_channels": [],
     "currency_info": { "persian_name": "دینار عراق" }
   },
-  "VPN": [
-    {
-      "channel_name": "melov2ray",
-      "regex": "vless://[^\n]+",
-      "findall": true,
-      "nonstop": false
-    }
-  ]
+  "VPN": {
+    "list_of_channels": [
+      {
+        "channel_name": "melov2ray",
+        "regex": "vless://[^\n]+",
+        "findall": true,
+        "nonstop": false
+      }
+    ]
+  }
 }
