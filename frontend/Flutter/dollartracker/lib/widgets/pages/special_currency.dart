@@ -116,6 +116,11 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
     // Add the two Duration objects together
     Duration totalTime = time1 + time2;
 
+    // Ensure the total time does not exceed 24 hours (1 day)
+    if (totalTime.inHours >= 24) {
+      totalTime = Duration(hours: 23, minutes: 59); // Set it to 23:59
+    }
+
     // Extract hours and minutes from the totalTime
     int totalHours = totalTime.inHours;
     int totalMinutes = totalTime.inMinutes.remainder(60);
