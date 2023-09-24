@@ -233,7 +233,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             value: receivedData,
                             enableSeparator: true,
                             textStyle: GoogleFonts.aladin(
-                              color: const Color.fromARGB(255, 255, 255, 255),
+                              color: Color.fromARGB(255, 255, 255, 255),
                               fontWeight: FontWeight.w600,
                               fontSize: 20,
                             ),
@@ -247,7 +247,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             value: receivedData,
                             enableSeparator: true,
                             textStyle: GoogleFonts.aladin(
-                              color: const Color.fromARGB(255, 255, 255, 255),
+                              color: Color.fromARGB(255, 255, 255, 255),
                               fontWeight: FontWeight.w600,
                               fontSize: 20,
                             ),
@@ -320,10 +320,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             child: Directionality(
                               textDirection: TextDirection.rtl,
                               child: Text(
-                                newsList[0]["title"],
+                                "helllllll",
                                 style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
+                                  color: Colors.white,
                                   fontFamily: "IransansBlack",
                                 ),
                                 maxLines: 1,
@@ -345,7 +344,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 ),
                 Expanded(
                   child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
+                    borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(40),
                       topRight: Radius.circular(40),
                     ),
@@ -357,7 +356,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             padding: EdgeInsets.only(top: 2, bottom: 5),
                             child: Container(
                               decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 196, 209, 225),
+                                color: Theme.of(context).colorScheme.onPrimary,
                                 borderRadius: BorderRadius.circular(50),
                               ),
                               alignment: Alignment.center,

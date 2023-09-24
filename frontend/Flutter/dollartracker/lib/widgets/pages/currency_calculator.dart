@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dollartracker/widgets/utilities/currency_selector.dart';
@@ -7,6 +8,9 @@ import 'package:flash/flash.dart';
 import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+import 'package:lottie/lottie.dart';
 
 class CurrencyCalculator extends StatefulWidget {
   const CurrencyCalculator({super.key});
@@ -26,6 +30,16 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
   EdgeInsets answerPadding = EdgeInsets.only(top: 80);
   Duration answerDuration = Duration(milliseconds: 300);
 
+  // store the calculated currency
+  double calculatedData = 0;
+
+  // get the number of currency to calculate
+  int number_of_currency = 0;
+
+  // track if the data is fetching or not
+  // for shoing the loading to the user while the data is fetching
+  bool isFetchingData = false;
+
   // check the internet connection
   Future<void> checkNetworkStatus() async {
     var connectivityResult = await Connectivity().checkConnectivity();
@@ -41,6 +55,34 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
       answerBorderRadius = BorderRadius.circular(25);
       answerPadding = EdgeInsets.only(top: 60);
     });
+  }
+
+  String? host = dotenv.env['SERVER_HOST'];
+  Future<void> calculate() async {
+    isFetchingData = true;
+    final response = await http.get(
+      Uri.parse(
+        'http://$host/calculator/USD:DHS',
+      ),
+      headers: {'Content-Type': 'application/json; charset=UTF-8'},
+    );
+
+    if (response.statusCode == 200) {
+      // If the server returns a 200 OK response, parse the JSON data
+      String responseBody = utf8.decode(response.bodyBytes);
+      final data = json.decode(responseBody);
+      // You can now work with the data
+      print("hooooooooooooooooooooooooooooo $data");
+
+      setState(() {
+        calculatedData = (data['from'] * number_of_currency) / data['to'];
+      });
+      isFetchingData = false;
+      showAnswer();
+    } else {
+      // If the server did not return a 200 OK response
+      print("Error");
+    }
   }
 
   // a flash message to show user the internet is not connected
@@ -97,6 +139,8 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
     // check the internet connection
     checkNetworkStatus();
   }
+
+  TextEditingController _textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -215,6 +259,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                       height: 60,
                       padding: EdgeInsets.only(left: 8),
                       child: TextField(
+                        controller: _textEditingController,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter
@@ -260,7 +305,10 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                       onPressed: () {
                         if (isConnected) {
                           // get the coverted currency and show to the user
-                          showAnswer();
+                          number_of_currency = _textEditingController.text == ''
+                              ? 1
+                              : int.parse(_textEditingController.text);
+                          calculate();
                         } else {
                           // show a network connection error to the user
                           showFlash();
@@ -298,100 +346,111 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                     ),
                   ],
                 ),
-                AnimatedPadding(
-                  duration: answerDuration,
-                  padding: answerPadding,
-                  child: AnimatedOpacity(
-                    opacity: _answerOpacity,
-                    duration: answerDuration,
-                    child: AnimatedContainer(
-                        padding: EdgeInsets.only(top: 25, right: 20, left: 20),
+                isFetchingData
+                    ? Container(
+                        width: 400,
+                        height: 350,
+                        child: Lottie.asset("assets/Loading3.json"),
+                      )
+                    : AnimatedPadding(
                         duration: answerDuration,
-                        width: 350,
-                        height: 180,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.secondary,
-                          borderRadius: answerBorderRadius,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Theme.of(context).colorScheme.secondary,
-                              spreadRadius: 1,
-                              blurRadius: 35,
-                              offset: Offset(0, 30),
-                            )
-                          ],
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Transform.rotate(
-                                    angle: -30 * 3.14159265359 / 180,
-                                    child: Container(
-                                      padding: EdgeInsets.only(
-                                        top: 3,
-                                        right: 3,
-                                        left: 3,
-                                        bottom: 6,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
+                        padding: answerPadding,
+                        child: AnimatedOpacity(
+                          opacity: _answerOpacity,
+                          duration: answerDuration,
+                          child: AnimatedContainer(
+                              padding:
+                                  EdgeInsets.only(top: 25, right: 20, left: 20),
+                              duration: answerDuration,
+                              width: 350,
+                              height: 180,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.secondary,
+                                borderRadius: answerBorderRadius,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                    spreadRadius: 1,
+                                    blurRadius: 35,
+                                    offset: Offset(0, 30),
+                                  )
+                                ],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Transform.rotate(
+                                          angle: -30 * 3.14159265359 / 180,
+                                          child: Container(
+                                            padding: EdgeInsets.only(
+                                              top: 3,
+                                              right: 3,
+                                              left: 3,
+                                              bottom: 6,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary,
+                                                width: 3,
+                                              ),
+                                            ),
+                                            child: Icon(
+                                              BootstrapIcons.currency_dollar,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary,
+                                              size: 35,
+                                            ),
+                                          )),
+                                      Text(
+                                        " : مقدار ارز تبدیل شده",
+                                        style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme
                                               .onPrimary,
-                                          width: 3,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                          fontFamily: 'IransansBlack',
                                         ),
                                       ),
-                                      child: Icon(
-                                        BootstrapIcons.currency_dollar,
+                                    ],
+                                  ),
+                                  Text(
+                                    calculatedData.toStringAsFixed(6),
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 25,
+                                      fontFamily: 'IransansBlack',
+                                    ),
+                                  ),
+                                  Directionality(
+                                    textDirection: TextDirection.rtl,
+                                    child: Text(
+                                      "تبدیل ارز شما بر اساس جدید ترین قیمت ارز ها بوده، همچنین میتوانید این ارز ها رو درون اپلیکیشن بصورت جداگانه مشاهده کنید",
+                                      style: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .onPrimary,
-                                        size: 35,
+                                            .primaryContainer,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 10,
+                                        fontFamily: 'IransansBlack',
                                       ),
-                                    )),
-                                Text(
-                                  " : مقدار ارز تبدیل شده",
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                    fontFamily: 'IransansBlack',
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            Text(
-                              "3.2512",
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 25,
-                                fontFamily: 'IransansBlack',
-                              ),
-                            ),
-                            Directionality(
-                              textDirection: TextDirection.rtl,
-                              child: Text(
-                                "تبدیل ارز شما بر اساس جدید ترین قیمت ارز ها بوده، همچنین میتوانید این ارز ها رو درون اپلیکیشن بصورت جداگانه مشاهده کنید",
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primaryContainer,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 10,
-                                  fontFamily: 'IransansBlack',
-                                ),
-                              ),
-                            ),
-                          ],
-                        )),
-                  ),
-                )
+                                ],
+                              )),
+                        ),
+                      )
               ],
             ),
           )

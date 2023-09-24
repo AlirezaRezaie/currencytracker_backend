@@ -53,7 +53,7 @@ class _PriceBoxState extends State<PriceBox> {
           Text(
             widget.title,
             style: TextStyle(
-              color: Theme.of(context).colorScheme.onPrimary,
+              color: Color.fromARGB(255, 255, 255, 255),
               fontWeight: FontWeight.bold,
               fontSize: 25,
               fontFamily: 'IransansBlack',
