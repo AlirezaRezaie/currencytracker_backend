@@ -1,4 +1,4 @@
-export 'package:dollartracker/services/get_time_for_iran';
+export 'package:dollartracker/services/get_time_for_iran.dart';
 
 String getTimeForIran(String time) {
   // Time strings in "HH:mm" format
