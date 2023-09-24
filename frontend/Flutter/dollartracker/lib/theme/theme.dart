@@ -15,7 +15,7 @@ ThemeData lightMode = ThemeData(
     onSecondaryContainer: Color.fromARGB(35, 27, 42, 72),
     tertiary: Color.fromARGB(255, 35, 36, 42),
     outline: Color.fromARGB(40, 255, 255, 255),
-    shadow: Color.fromARGB(120, 0, 0, 0),
+    shadow: Color.fromARGB(70, 0, 0, 0),
   ),
 );
 

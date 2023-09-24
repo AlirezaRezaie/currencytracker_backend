@@ -28,9 +28,9 @@ class SpecialCurrencyTable extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: Theme.of(context).colorScheme.shadow,
-              spreadRadius: 2,
+              spreadRadius: 1,
               blurRadius: 12,
-              offset: Offset(0, 7),
+              offset: Offset(0, 6),
             )
           ],
         ),
@@ -46,7 +46,7 @@ class SpecialCurrencyTable extends StatelessWidget {
                   Text(
                     price.toString(),
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.onPrimary,
+                      color: Theme.of(context).colorScheme.primaryContainer,
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'IransansBlack',
@@ -77,7 +77,7 @@ class SpecialCurrencyTable extends StatelessWidget {
                         Text(
                           volatility,
                           style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary,
+                              color: Theme.of(context).colorScheme.primaryContainer,
                               fontWeight: FontWeight.w600,
                               fontSize: 15,
                               fontFamily: 'IransansBlack'),
