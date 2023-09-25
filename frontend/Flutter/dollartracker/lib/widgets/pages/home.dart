@@ -96,7 +96,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   receivedData = local['latests'].last['price'];
                   for (final item in local['latests']) {
                     print(extractHour(item['posttime']));
-                    final time = extractHour(item['posttime']).toDouble();
+                    final time = extractHour(item['posttime']);
                     final price = item['price'].toDouble();
                     chartData.add([time, price]);
                   }

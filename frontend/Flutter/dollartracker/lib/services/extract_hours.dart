@@ -1,6 +1,6 @@
 export 'package:dollartracker/services/extract_hours.dart';
 
-int extractHour(String time) {
+double extractHour(String time) {
   // Split the time string into hours and minutes
   List<String> parts = time.split(':');
 
@@ -10,10 +10,11 @@ int extractHour(String time) {
 
   // Extract the hour and parse it as an integer
   int? hour = int.tryParse(parts[0]);
+  int? minutes = int.tryParse(parts[1]);
+  int floating_minutes = (hour! * 60) + minutes!;
 
-  if (hour == null || hour < 0 || hour > 23) {
+  if (hour < 0 || hour > 23) {
     throw FormatException("Invalid hour value.");
   }
-
-  return hour;
+  return floating_minutes.toDouble();
 }
