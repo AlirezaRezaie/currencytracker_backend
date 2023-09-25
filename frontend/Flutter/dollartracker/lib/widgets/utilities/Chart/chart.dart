@@ -46,8 +46,7 @@ class _ChartState extends State<Chart> {
           },
           drawHorizontalLine: true,
         ),
-        minX: 0, // Min X-axis value (time)
-        maxX: 24, // Max X-axis value (adjust as needed)
+        maxX: 1440, // Max X-axis value (adjust as needed)
         minY: 0, // Min Y-axis value (adjust as needed)
         maxY: 200000, // Max Y-axis value (adjust as needed)
 
@@ -73,7 +72,7 @@ class _ChartState extends State<Chart> {
             ),
             isCurved: true,
             color: Theme.of(context).colorScheme.primary,
-            barWidth: 0.5,
+            barWidth: 0.2,
             belowBarData: BarAreaData(
               show: true,
               color: Theme.of(context).colorScheme.onSecondaryContainer,
