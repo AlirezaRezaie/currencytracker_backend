@@ -22,7 +22,6 @@ class _ChartState extends State<Chart> {
     } else {
       // Calculate the distance between the current spot and the previous one
       double distance = (spot.x - barData.spots.last.x).abs();
-      print(distance);
       // Check if the distance is greater than the threshold to show the dot
       return distance >= minDistanceThreshold;
     }
@@ -37,24 +36,25 @@ class _ChartState extends State<Chart> {
           getDrawingHorizontalLine: (value) {
             return FlLine(
                 color: Theme.of(context).colorScheme.secondaryContainer,
-                strokeWidth: 2);
+                strokeWidth: 3);
           },
           getDrawingVerticalLine: (value) {
             return FlLine(
                 color: Theme.of(context).colorScheme.secondaryContainer,
-                strokeWidth: 2);
+                strokeWidth: 3);
           },
           drawHorizontalLine: true,
         ),
         maxX: 24, // Max X-axis value (adjust as needed)
-        minY: 0, // Min Y-axis value (adjust as needed)
-        maxY: 200000, // Max Y-axis value (adjust as needed)
+        minY: 20000, // Min Y-axis value (adjust as needed)
+        maxY: 80000, // Max Y-axis value (adjust as needed)
 
         borderData: FlBorderData(
           show: true,
           border: Border.all(
-              color: Theme.of(context).colorScheme.secondaryContainer,
-              width: 2),
+            color: Theme.of(context).colorScheme.secondaryContainer,
+            width: 3,
+          ),
         ),
         lineTouchData: LineTouchData(
             touchTooltipData: LineTouchTooltipData(
@@ -80,7 +80,9 @@ class _ChartState extends State<Chart> {
           )
         ],
 
-        titlesData: FlTitlesData(show: false),
+        titlesData: FlTitlesData(
+          show: true,
+        ),
       ),
       duration: Duration(milliseconds: 500),
       curve: Curves.linear,

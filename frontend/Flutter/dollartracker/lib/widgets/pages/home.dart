@@ -6,7 +6,6 @@ import 'package:dollartracker/widgets/utilities/currency_update_table.dart';
 import 'package:dollartracker/widgets/utilities/header.dart';
 import 'package:dollartracker/widgets/utilities/network_error.dart';
 import 'package:dollartracker/services/get_time_for_iran.dart';
-import 'package:dollartracker/widgets/utilities/currency_table.dart';
 import 'package:flash/flash.dart';
 import 'package:flash/flash_helper.dart';
 import 'package:http/http.dart' as http;
@@ -102,7 +101,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     chartData.add([time, price]);
                   }
               }
-
               global = jsonData['global']['latests'].reversed.toList();
             });
           }
@@ -292,19 +290,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                right: 15,
-                                left: 15,
-                                top: 10,
-                                bottom: 20,
-                              ),
-                              child: Container(
-                                height: 150,
-                                child: Padding(
-                                  padding: EdgeInsets.all(5),
-                                  child: Chart(data: chartData),
-                                ),
+                            Container(
+                              height: 200,
+                              child: Padding(
+                                padding: EdgeInsets.all(5),
+                                child: Chart(data: chartData),
                               ),
                             )
                           ],
