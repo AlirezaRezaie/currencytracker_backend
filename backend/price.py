@@ -54,9 +54,11 @@ class priceInfo:
 
     def get_json_data(self):
         return {
+            "code":local.args.code,
             "action": self.action,
             "price": self.text if self.action == "پایان معاملات" else self.price,
             "persian_name":self.persian_name,
+            "image_link":f"/static/currency_images/{local.args.code}.png",
             "exchtype": self.exchtype,
             "posttime": self.posttime,
             "rateofchange": self.rate_of_change,
