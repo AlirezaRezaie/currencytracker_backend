@@ -7,7 +7,7 @@ router = APIRouter()
 
 @router.get("/{from_currency_code}:{to_currency_code}")
 def get_last_prices(from_currency_code:str,to_currency_code:str) -> dict:
-    from_last_price = get_task(from_currency_code).lastprice['price']
-    to_last_price = get_task(to_currency_code).lastprice['price']
+    from_last_price = get_task(from_currency_code).lastprice["latests"][-1]['price']
+    to_last_price = get_task(to_currency_code).lastprice["latests"][-1]['price']
 
     return {"from":from_last_price,"to":to_last_price}
