@@ -87,6 +87,7 @@ flutter:
     - "assets/NetworkError.json"
     - "assets/Loading.json"
     - "assets/Loading3.json"
+    - "assets/Loading4.json"
     - "assets/Searching.json"
     - "assets/downArrrow.png"
     - "assets/upArrow.png"

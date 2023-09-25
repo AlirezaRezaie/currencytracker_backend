@@ -279,13 +279,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         child: Column(
                           children: [
                             Padding(
-                              padding: EdgeInsets.only(top: 6),
+                              padding: EdgeInsets.only(top: 12),
                               child: Text(
                                 "قیمت دلار امروز",
                                 style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.onSecondary,
                                   fontFamily: "IransansBlack",
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
@@ -378,7 +380,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(bottom: 5),
+                            padding: EdgeInsets.only(bottom: 1, top: 5),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -388,8 +390,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                     color: Theme.of(context)
                                         .colorScheme
                                         .onSecondary,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
                                     fontFamily: 'IransansBlack',
                                   ),
                                 ),
@@ -402,8 +404,19 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               physics: BouncingScrollPhysics(),
                               itemCount: global.length,
                               itemBuilder: (context, index) {
+                                if (global[index]['rateofchange'] == null ||
+                                    global[index]['rateofchange'] == 0)
+                                  return SizedBox(
+                                    height: 0,
+                                  );
                                 return CurrencyUpdateTable(
                                   name: global[index]['persian_name'],
+                                  priceColor:
+                                      global[index]['rateofchange'] != null
+                                          ? global[index]['rateofchange'] > 0
+                                              ? Colors.greenAccent
+                                              : Colors.redAccent
+                                          : Colors.white,
                                   backgroundColor:
                                       Theme.of(context).colorScheme.tertiary,
                                   price: separateNumberWithCommas(
