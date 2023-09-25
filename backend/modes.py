@@ -10,7 +10,7 @@ def run_live(emmitter_callback, error_callback, stop_event, args=None):
     local.channel_info = args.channel_info
     local.args = args
 
-    local_board = {"latests":[],"limit":20}
+    local_board = {"latests":[],"code":local.args.code,"limit":20}
     server_mode = "live"
     prev_fetch = []
     last_price = None
