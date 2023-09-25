@@ -47,6 +47,8 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
   String firstCurrency = '';
   String secondCurrency = '';
 
+  bool isFetchWrong = false;
+
   // get the host name
   String? host = dotenv.env['SERVER_HOST'];
   // check the internet connection
@@ -71,7 +73,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
     isFetchingData = true;
     final response = await http.get(
       Uri.parse(
-        'http://$host/calculator/USD:DHS',
+        'http://$host/calculator/$firstCurrency:$secondCurrency',
       ),
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
     );
@@ -84,9 +86,12 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
       setState(() {
         calculatedData = (data['from'] * number_of_currency) / data['to'];
       });
+      isFetchWrong = false;
       isFetchingData = false;
       showAnswer();
     } else {
+      isFetchingData = false;
+      isFetchWrong = true;
       // If the server did not return a 200 OK response
       print("Error");
     }
@@ -114,7 +119,11 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
         String responseBody = utf8.decode(response.bodyBytes);
         final data = json.decode(responseBody);
         // You can now work with the data
-        currencyList = data.keys.toList();
+        setState(() {
+          currencyList = data.keys.toList();
+          firstCurrency = currencyList[0];
+          secondCurrency = currencyList[0];
+        });
       } else {
         // If the server did not return a 200 OK response
         print("failed to get currency list");
@@ -231,7 +240,9 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                             listOfCurrency: currencyList,
                             width: 100,
                             height: 60,
-                            getCurrency: (currency) => firstCurrency = currency,
+                            getCurrency: (currency) => setState(() {
+                              firstCurrency = currency;
+                            }),
                           )
                         ],
                       ),
@@ -261,8 +272,9 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                             listOfCurrency: currencyList,
                             width: 100,
                             height: 60,
-                            getCurrency: (currency) =>
-                                secondCurrency = currency,
+                            getCurrency: (currency) => setState(() {
+                              secondCurrency = currency;
+                            }),
                           )
                         ],
                       ),
@@ -378,110 +390,147 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                   ],
                 ),
                 isFetchingData
-                    ? Container(
-                        width: 400,
-                        height: 350,
-                        child: Lottie.asset("assets/Loading3.json"),
+                    ? Column(
+                        children: [
+                          Container(
+                            width: 300,
+                            height: 300,
+                            child: Lottie.asset("assets/Loading3.json"),
+                          ),
+                          Text(
+                            "... در حال بارگیری اطلاعات",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSecondary,
+                              fontFamily: "IransansBlack",
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ],
                       )
-                    : AnimatedPadding(
-                        duration: answerDuration,
-                        padding: answerPadding,
-                        child: AnimatedOpacity(
-                          opacity: _answerOpacity,
-                          duration: answerDuration,
-                          child: AnimatedContainer(
-                              padding:
-                                  EdgeInsets.only(top: 25, right: 20, left: 20),
+                    : isFetchWrong
+                        ? Column(
+                            children: [
+                              Container(
+                                width: 300,
+                                height: 300,
+                                child: Lottie.asset("assets/Error.json"),
+                              ),
+                              Text(
+                                "عملیات ناموفق بود لطفا دوباره تلاش کنید",
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSecondary,
+                                  fontFamily: "IransansBlack",
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ],
+                          )
+                        : AnimatedPadding(
+                            duration: answerDuration,
+                            padding: answerPadding,
+                            child: AnimatedOpacity(
+                              opacity: _answerOpacity,
                               duration: answerDuration,
-                              width: 350,
-                              height: 180,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.secondary,
-                                borderRadius: answerBorderRadius,
-                                boxShadow: [
-                                  BoxShadow(
+                              child: AnimatedContainer(
+                                  padding: EdgeInsets.only(
+                                      top: 25, right: 20, left: 20),
+                                  duration: answerDuration,
+                                  width: 350,
+                                  height: 180,
+                                  decoration: BoxDecoration(
                                     color:
                                         Theme.of(context).colorScheme.secondary,
-                                    spreadRadius: 1,
-                                    blurRadius: 35,
-                                    offset: Offset(0, 20),
-                                  )
-                                ],
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    borderRadius: answerBorderRadius,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                        spreadRadius: 1,
+                                        blurRadius: 35,
+                                        offset: Offset(0, 20),
+                                      )
+                                    ],
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      Transform.rotate(
-                                          angle: -30 * 3.14159265359 / 180,
-                                          child: Container(
-                                            padding: EdgeInsets.only(
-                                              top: 3,
-                                              right: 3,
-                                              left: 3,
-                                              bottom: 6,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onBackground,
-                                                width: 3,
-                                              ),
-                                            ),
-                                            child: Icon(
-                                              BootstrapIcons.currency_dollar,
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Transform.rotate(
+                                              angle: -30 * 3.14159265359 / 180,
+                                              child: Container(
+                                                padding: EdgeInsets.only(
+                                                  top: 3,
+                                                  right: 3,
+                                                  left: 3,
+                                                  bottom: 6,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  border: Border.all(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onBackground,
+                                                    width: 3,
+                                                  ),
+                                                ),
+                                                child: Icon(
+                                                  BootstrapIcons
+                                                      .currency_dollar,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onBackground,
+                                                  size: 35,
+                                                ),
+                                              )),
+                                          Text(
+                                            " : مقدار ارز تبدیل شده",
+                                            style: TextStyle(
                                               color: Theme.of(context)
                                                   .colorScheme
                                                   .onBackground,
-                                              size: 35,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15,
+                                              fontFamily: 'IransansBlack',
                                             ),
-                                          )),
+                                          ),
+                                        ],
+                                      ),
                                       Text(
-                                        " : مقدار ارز تبدیل شده",
+                                        calculatedData.toStringAsFixed(6),
                                         style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme
-                                              .onBackground,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15,
+                                              .primary,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 25,
                                           fontFamily: 'IransansBlack',
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                  Text(
-                                    calculatedData.toStringAsFixed(6),
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 25,
-                                      fontFamily: 'IransansBlack',
-                                    ),
-                                  ),
-                                  Directionality(
-                                    textDirection: TextDirection.rtl,
-                                    child: Text(
-                                      "تبدیل ارز شما بر اساس جدید ترین قیمت ارز ها بوده، همچنین میتوانید این ارز ها رو درون اپلیکیشن بصورت جداگانه مشاهده کنید",
-                                      style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primaryContainer,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 10,
-                                        fontFamily: 'IransansBlack',
+                                      Directionality(
+                                        textDirection: TextDirection.rtl,
+                                        child: Text(
+                                          "تبدیل ارز شما بر اساس جدید ترین قیمت ارز ها بوده، همچنین میتوانید این ارز ها رو درون اپلیکیشن بصورت جداگانه مشاهده کنید",
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primaryContainer,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 10,
+                                            fontFamily: 'IransansBlack',
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ],
-                              )),
-                        ),
-                      )
+                                    ],
+                                  )),
+                            ),
+                          ),
               ],
             ),
           )

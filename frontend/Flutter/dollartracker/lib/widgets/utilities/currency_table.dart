@@ -78,10 +78,12 @@ class CurrencyTable extends StatelessWidget {
                         Text(
                           volatility,
                           style: TextStyle(
-                              color: Theme.of(context).colorScheme.primaryContainer,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 15,
-                              fontFamily: 'IransansBlack'),
+                            color:
+                                Theme.of(context).colorScheme.primaryContainer,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            fontFamily: 'IransansBlack',
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 2),
