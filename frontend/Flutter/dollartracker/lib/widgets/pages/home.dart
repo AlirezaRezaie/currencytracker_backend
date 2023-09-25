@@ -16,10 +16,12 @@ import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
+import '../../services/extract_hours.dart';
 import '../utilities/price_box.dart';
 import '../utilities/Menu/side_menu.dart';
 import 'package:animated_digit/animated_digit.dart';
 import 'package:google_fonts/google_fonts.dart';
+export 'package:dollartracker/services/extract_hours.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -40,12 +42,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   bool isConnecting = false;
   bool isNetworkConnected = true;
   bool isHomeConnected = false;
-  List chartData = [
-    30500.0,
-    40500.0,
-    50500.0,
-    55500.0,
-  ];
+  List chartData = [];
 
   List global = [];
 
@@ -97,6 +94,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               switch (local['code']) {
                 case "USD":
                   receivedData = local['latests'].last['price'];
+                  for (final item in local['latests']) {
+                    print(extractHour(item['posttime']));
+                    final time = extractHour(item['posttime']).toDouble();
+                    final price = item['price'].toDouble();
+                    chartData.add([time, price]);
+                  }
               }
 
               global = jsonData['global']['latests'].reversed.toList();
@@ -214,7 +217,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-// check the internet connection every 1 second
     //buildContext = context;
     return Scaffold(
       endDrawer: SideMenu(),
