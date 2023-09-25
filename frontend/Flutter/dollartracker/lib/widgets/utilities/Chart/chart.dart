@@ -65,8 +65,8 @@ class _ChartState extends State<Chart> {
             spots: widget.data.map((item) => FlSpot(item[0], item[1])).toList(),
             // Configure the appearance of the points (dots)
             dotData: FlDotData(
-              show: true, // Set to true to display dots
-              checkToShowDot: (spot, barData) => shouldShowDot(spot, barData),
+              show: false, // Set to true to display dots
+              //checkToShowDot: (spot, barData) => shouldShowDot(spot, barData),
               // Adjust the size of the dots here
               // You can also configure other dot properties like color, strokeWidth, etc.
             ),
@@ -81,7 +81,25 @@ class _ChartState extends State<Chart> {
         ],
 
         titlesData: FlTitlesData(
-          show: true,
+          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+            reservedSize: 30,
+            showTitles: true,
+            getTitlesWidget: (num, Title) {
+              final roundedNum;
+              if (num - num.floor() == 0.5) {
+                roundedNum = num.toInt().toString() + ":" + "30";
+              } else {
+                roundedNum = num.round().toString();
+              }
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 1),
+                child: Text(roundedNum),
+              );
+            },
+          )),
         ),
       ),
       duration: Duration(milliseconds: 500),
