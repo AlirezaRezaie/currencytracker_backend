@@ -34,12 +34,12 @@
       {
         "channel_name": "DHS_Dirham",
         "regex": "",
-        "nonstop": true
+        "nonstop": false
       },
       {
         "channel_name": "testderham",
         "regex": "",
-        "nonstop": false
+        "nonstop": true
       }
     ],
     "currency_info": { "persian_name": "درهم" }
