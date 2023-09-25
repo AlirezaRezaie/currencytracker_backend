@@ -47,7 +47,7 @@ class _ChartState extends State<Chart> {
           drawHorizontalLine: true,
         ),
         minX: 0, // Min X-axis value (time)
-        maxX: 1440, // Max X-axis value (adjust as needed)
+        maxX: 24, // Max X-axis value (adjust as needed)
         minY: 0, // Min Y-axis value (adjust as needed)
         maxY: 200000, // Max Y-axis value (adjust as needed)
 
