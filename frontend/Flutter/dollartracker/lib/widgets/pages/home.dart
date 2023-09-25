@@ -1,6 +1,8 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dollartracker/services/get_seprate.dart';
 import 'package:dollartracker/widgets/utilities/Chart/chart.dart';
+import 'package:dollartracker/widgets/utilities/currency_update_table.dart';
 import 'package:dollartracker/widgets/utilities/header.dart';
 import 'package:dollartracker/widgets/utilities/network_error.dart';
 import 'package:dollartracker/services/get_time_for_iran.dart';
@@ -73,6 +75,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
       channel = IOWebSocketChannel.connect(host);
       channel.sink.add('SUBSCRIBE USD');
+      channel.sink.add('SUBSCRIBE DHS');
 
       channel.stream.listen(
         (data) {
@@ -89,8 +92,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           // Check if the 'price' field exists and is a numeric value
           if (jsonData.containsKey('local')) {
             // Update the animation when the price changes
+            final local = jsonData['local'];
             setState(() {
-              receivedData = jsonData['local']['latests'].last['price'];
+              switch (local['code']) {
+                case "USD":
+                  receivedData = local['latests'].last['price'];
+              }
+
               global = jsonData['global']['latests'].reversed.toList();
             });
           }
@@ -392,30 +400,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               physics: BouncingScrollPhysics(),
                               itemCount: global.length,
                               itemBuilder: (context, index) {
-                                if (global[index]['rateofchange'] == null ||
-                                    global[index]['rateofchange'] == 0)
-                                  return SizedBox();
-                                return CurrencyTable(
+                                return CurrencyUpdateTable(
+                                  name: global[index]['persian_name'],
                                   backgroundColor:
                                       Theme.of(context).colorScheme.tertiary,
-                                  price: global[index]['price'],
-                                  persentColor:
-                                      global[index]['rateofchange'] != null
-                                          ? global[index]['rateofchange'] > 0
-                                              ? Colors.greenAccent
-                                              : Colors.redAccent
-                                          : Colors.white,
+                                  price: separateNumberWithCommas(
+                                      global[index]['price']),
                                   time:
                                       getTimeForIran(global[index]['posttime']),
-                                  imageLink:
-                                      global[index]['rateofchange'] != null
-                                          ? global[index]['rateofchange'] > 0
-                                              ? 'assets/upArrow.png'
-                                              : 'assets/downArrrow.png'
-                                          : 'assets/line.png',
-                                  persent: global[index]['rateofchange'] == null
-                                      ? 0
-                                      : global[index]['rateofchange'],
+                                  imageLink: global[index]['image_link'],
                                   volatility:
                                       global[index]['rateofchange'] != null
                                           ? global[index]['rateofchange'] > 0
