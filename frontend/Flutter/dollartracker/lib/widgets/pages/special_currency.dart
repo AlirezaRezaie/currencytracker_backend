@@ -35,6 +35,8 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
   // the currency that we want to show the list of them to the user
   String selectedCurrency = 'USD';
 
+  bool isFetchWrong = false;
+
   // set the currency list to map and display to the user
   List data_list = [];
 
@@ -73,6 +75,7 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
   }
 
   Future<void> getCurrencyData() async {
+    isFetchWrong = false;
     isLoading = true;
     final response = await http.get(
       Uri.parse(
@@ -93,7 +96,10 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
     } else {
       // If the server did not return a 200 OK response
       print("Error");
-      showFlash();
+      setState(() {
+        isLoading = false;
+        isFetchWrong = true;
+      });
     }
   }
 
@@ -207,7 +213,7 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
                           "... در حال بارگیری لیست ارز ها",
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.onBackground,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.bold,
                             fontSize: 15,
                             fontFamily: 'IransansBlack',
                           ),
@@ -230,54 +236,119 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
                               style: TextStyle(
                                 color:
                                     Theme.of(context).colorScheme.onBackground,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.bold,
                                 fontSize: 15,
                                 fontFamily: 'IransansBlack',
                               ),
                             ),
                           ],
                         )
-                      : Expanded(
-                          child: ListView.builder(
-                            physics: BouncingScrollPhysics(),
-                            itemCount: data_list.length,
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            itemBuilder: (context, index) {
-                              if (data_list[index]['rateofchange'] == null ||
-                                  data_list[index]['rateofchange'] == 0)
-                                return SizedBox();
-                              return CurrencyTable(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.secondary,
-                                price: data_list[index]['price'],
-                                persentColor:
-                                    data_list[index]['rateofchange'] != null
+                      : isFetchWrong
+                          ? Column(
+                              children: [
+                                Container(
+                                  width: 400,
+                                  height: 350,
+                                  child: Lottie.asset("assets/Error.json"),
+                                ),
+                                Text(
+                                  "عملیات ناموفق بود لطفا دوباره تلاش کنید",
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSecondary,
+                                    fontFamily: "IransansBlack",
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 10),
+                                  child: ElevatedButton(
+                                    onPressed: () => getCurrencyData(),
+                                    style: ButtonStyle(
+                                      padding: MaterialStateProperty.all(
+                                        EdgeInsets.only(
+                                          right: 20,
+                                          left: 20,
+                                          top: 10,
+                                          bottom: 10,
+                                        ),
+                                      ),
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                        Theme.of(context).colorScheme.primary,
+                                      ),
+                                      shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              8), // Border radius
+                                        ),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      "تلاش مجدد",
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 13,
+                                        fontFamily: 'IransansBlack',
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Expanded(
+                              child: ListView.builder(
+                                physics: BouncingScrollPhysics(),
+                                itemCount: data_list.length,
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                itemBuilder: (context, index) {
+                                  if (data_list[index]['rateofchange'] ==
+                                          null ||
+                                      data_list[index]['rateofchange'] == 0)
+                                    return SizedBox();
+                                  return CurrencyTable(
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.secondary,
+                                    price: data_list[index]['price'],
+                                    persentColor: data_list[index]
+                                                ['rateofchange'] !=
+                                            null
                                         ? data_list[index]['rateofchange'] > 0
                                             ? Colors.greenAccent
                                             : Colors.redAccent
                                         : Colors.white,
-                                time: getTimeForIran(
-                                    data_list[index]['posttime']),
-                                imageLink:
-                                    data_list[index]['rateofchange'] != null
+                                    time: getTimeForIran(
+                                        data_list[index]['posttime']),
+                                    imageLink: data_list[index]
+                                                ['rateofchange'] !=
+                                            null
                                         ? data_list[index]['rateofchange'] > 0
                                             ? 'assets/upArrow.png'
                                             : 'assets/downArrrow.png'
                                         : 'assets/line.png',
-                                persent:
-                                    data_list[index]['rateofchange'] == null
-                                        ? 0
-                                        : data_list[index]['rateofchange'],
-                                volatility:
-                                    data_list[index]['rateofchange'] != null
+                                    persent:
+                                        data_list[index]['rateofchange'] == null
+                                            ? 0
+                                            : data_list[index]['rateofchange'],
+                                    volatility: data_list[index]
+                                                ['rateofchange'] !=
+                                            null
                                         ? data_list[index]['rateofchange'] > 0
                                             ? 'صعودی'
                                             : 'نزولی'
                                         : 'نامشخص',
-                              );
-                            },
-                          ),
-                        )
+                                  );
+                                },
+                              ),
+                            )
               : !isNetworkConnected
                   ? Padding(
                       padding: EdgeInsets.only(top: 90),
