@@ -43,6 +43,9 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
   // list of currencies to show user
   List<String> currencyList = [];
 
+  // check the the list fetching status to show the loading to the user
+  bool isTheCurrensyListFetching = false;
+
   // get the currency to calculate
   String firstCurrency = '';
   String secondCurrency = '';
@@ -59,7 +62,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
     });
   }
 
-  // change the container values
+  // change the container values to show the answer to user
   showAnswer() {
     setState(() {
       _answerOpacity = 1;
@@ -70,6 +73,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
 
   // a function for fetch the live price of the currency and calculate the price
   Future<void> calculate() async {
+    // set to true to show a loading to the user
     isFetchingData = true;
     final response = await http.get(
       Uri.parse(
@@ -78,18 +82,22 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
     );
 
+    // if the fetch was successful
     if (response.statusCode == 200) {
       // If the server returns a 200 OK response, parse the JSON data
       String responseBody = utf8.decode(response.bodyBytes);
       final data = json.decode(responseBody);
       // You can now work with the data
       setState(() {
+        // calculate the price to show user
         calculatedData = (data['from'] * number_of_currency) / data['to'];
       });
+      // this bools are for showing the loading to user
       isFetchWrong = false;
       isFetchingData = false;
       showAnswer();
     } else {
+      // this bools are for showing the loading to user
       isFetchingData = false;
       isFetchWrong = true;
       // If the server did not return a 200 OK response
@@ -99,6 +107,9 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
 
   // fetch the list of currencies
   Future<void> getCurrencyList() async {
+    // make this true to show the loading to the user
+    isTheCurrensyListFetching = true;
+    // we make this to make sure the list is fetch currect
     while (currencyList.isEmpty) {
       final response;
       try {
@@ -121,10 +132,15 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
         // You can now work with the data
         setState(() {
           currencyList = data.keys.toList();
+          // set the first and second currency to use it for fetch the calculated data
           firstCurrency = currencyList[0];
           secondCurrency = currencyList[0];
+          // make this false to show the loading to the user
+          isTheCurrensyListFetching = false;
         });
       } else {
+        // make this true to show the result to the user
+        isTheCurrensyListFetching = true;
         // If the server did not return a 200 OK response
         print("failed to get currency list");
         showFlash();
@@ -345,19 +361,24 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: () {
-                        if (isConnected) {
-                          // get the coverted currency and show to the user
-                          number_of_currency = _textEditingController.text == ''
-                              ? 1
-                              : int.parse(_textEditingController.text);
-                          calculate();
-                        } else {
-                          // show a network connection error to the user
-                          showFlash();
-                          checkNetworkStatus();
-                        }
-                      },
+                      // check if the list of currency fetched or not
+                      onPressed: !isTheCurrensyListFetching
+                          ? () {
+                              if (isConnected) {
+                                // get the coverted currency and show to the user
+                                number_of_currency = _textEditingController
+                                            .text ==
+                                        ''
+                                    ? 1
+                                    : int.parse(_textEditingController.text);
+                                calculate();
+                              } else {
+                                // show a network connection error to the user
+                                showFlash();
+                                checkNetworkStatus();
+                              }
+                            }
+                          : null,
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all(
                           EdgeInsets.only(
@@ -389,16 +410,16 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                     ),
                   ],
                 ),
-                isFetchingData
+                isTheCurrensyListFetching
                     ? Column(
                         children: [
                           Container(
                             width: 300,
                             height: 300,
-                            child: Lottie.asset("assets/Loading3.json"),
+                            child: Lottie.asset("assets/Loading4.json"),
                           ),
                           Text(
-                            "... در حال بارگیری اطلاعات",
+                            "... در حال بارگیری لیست ارز ها",
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.onSecondary,
                               fontFamily: "IransansBlack",
@@ -408,16 +429,16 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                           ),
                         ],
                       )
-                    : isFetchWrong
+                    : isFetchingData
                         ? Column(
                             children: [
                               Container(
                                 width: 300,
                                 height: 300,
-                                child: Lottie.asset("assets/Error.json"),
+                                child: Lottie.asset("assets/Loading3.json"),
                               ),
                               Text(
-                                "عملیات ناموفق بود لطفا دوباره تلاش کنید",
+                                "... در حال بارگیری اطلاعات",
                                 style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.onSecondary,
@@ -428,109 +449,133 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                               ),
                             ],
                           )
-                        : AnimatedPadding(
-                            duration: answerDuration,
-                            padding: answerPadding,
-                            child: AnimatedOpacity(
-                              opacity: _answerOpacity,
-                              duration: answerDuration,
-                              child: AnimatedContainer(
-                                  padding: EdgeInsets.only(
-                                      top: 25, right: 20, left: 20),
+                        : isFetchWrong
+                            ? Column(
+                                children: [
+                                  Container(
+                                    width: 300,
+                                    height: 300,
+                                    child: Lottie.asset("assets/Error.json"),
+                                  ),
+                                  Text(
+                                    "عملیات ناموفق بود لطفا دوباره تلاش کنید",
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSecondary,
+                                      fontFamily: "IransansBlack",
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : AnimatedPadding(
+                                duration: answerDuration,
+                                padding: answerPadding,
+                                child: AnimatedOpacity(
+                                  opacity: _answerOpacity,
                                   duration: answerDuration,
-                                  width: 350,
-                                  height: 180,
-                                  decoration: BoxDecoration(
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
-                                    borderRadius: answerBorderRadius,
-                                    boxShadow: [
-                                      BoxShadow(
+                                  child: AnimatedContainer(
+                                      padding: EdgeInsets.only(
+                                          top: 25, right: 20, left: 20),
+                                      duration: answerDuration,
+                                      width: 350,
+                                      height: 180,
+                                      decoration: BoxDecoration(
                                         color: Theme.of(context)
                                             .colorScheme
                                             .secondary,
-                                        spreadRadius: 1,
-                                        blurRadius: 35,
-                                        offset: Offset(0, 20),
-                                      )
-                                    ],
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        borderRadius: answerBorderRadius,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                            spreadRadius: 1,
+                                            blurRadius: 35,
+                                            offset: Offset(0, 20),
+                                          )
+                                        ],
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
                                         children: [
-                                          Transform.rotate(
-                                              angle: -30 * 3.14159265359 / 180,
-                                              child: Container(
-                                                padding: EdgeInsets.only(
-                                                  top: 3,
-                                                  right: 3,
-                                                  left: 3,
-                                                  bottom: 6,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  border: Border.all(
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .onBackground,
-                                                    width: 3,
-                                                  ),
-                                                ),
-                                                child: Icon(
-                                                  BootstrapIcons
-                                                      .currency_dollar,
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Transform.rotate(
+                                                  angle:
+                                                      -30 * 3.14159265359 / 180,
+                                                  child: Container(
+                                                    padding: EdgeInsets.only(
+                                                      top: 3,
+                                                      right: 3,
+                                                      left: 3,
+                                                      bottom: 6,
+                                                    ),
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      border: Border.all(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onBackground,
+                                                        width: 3,
+                                                      ),
+                                                    ),
+                                                    child: Icon(
+                                                      BootstrapIcons
+                                                          .currency_dollar,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onBackground,
+                                                      size: 35,
+                                                    ),
+                                                  )),
+                                              Text(
+                                                " : مقدار ارز تبدیل شده",
+                                                style: TextStyle(
                                                   color: Theme.of(context)
                                                       .colorScheme
                                                       .onBackground,
-                                                  size: 35,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15,
+                                                  fontFamily: 'IransansBlack',
                                                 ),
-                                              )),
+                                              ),
+                                            ],
+                                          ),
                                           Text(
-                                            " : مقدار ارز تبدیل شده",
+                                            calculatedData.toStringAsFixed(6),
                                             style: TextStyle(
                                               color: Theme.of(context)
                                                   .colorScheme
-                                                  .onBackground,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 15,
+                                                  .primary,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 25,
                                               fontFamily: 'IransansBlack',
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                      Text(
-                                        calculatedData.toStringAsFixed(6),
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 25,
-                                          fontFamily: 'IransansBlack',
-                                        ),
-                                      ),
-                                      Directionality(
-                                        textDirection: TextDirection.rtl,
-                                        child: Text(
-                                          "تبدیل ارز شما بر اساس جدید ترین قیمت ارز ها بوده، همچنین میتوانید این ارز ها رو درون اپلیکیشن بصورت جداگانه مشاهده کنید",
-                                          style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primaryContainer,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 10,
-                                            fontFamily: 'IransansBlack',
+                                          Directionality(
+                                            textDirection: TextDirection.rtl,
+                                            child: Text(
+                                              "تبدیل ارز شما بر اساس جدید ترین قیمت ارز ها بوده، همچنین میتوانید این ارز ها رو درون اپلیکیشن بصورت جداگانه مشاهده کنید",
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primaryContainer,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 10,
+                                                fontFamily: 'IransansBlack',
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    ],
-                                  )),
-                            ),
-                          ),
+                                        ],
+                                      )),
+                                ),
+                              ),
               ],
             ),
           )

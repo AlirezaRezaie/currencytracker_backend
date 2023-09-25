@@ -4,7 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class CurrencyUpdateTable extends StatelessWidget {
   final String time, volatility, imageLink, name;
   final String price;
-  final Color backgroundColor;
+  final Color backgroundColor, priceColor;
 
   const CurrencyUpdateTable({
     super.key,
@@ -12,6 +12,7 @@ class CurrencyUpdateTable extends StatelessWidget {
     required this.price,
     required this.time,
     required this.backgroundColor,
+    required this.priceColor,
     required this.imageLink,
     required this.name,
   });
@@ -47,8 +48,8 @@ class CurrencyUpdateTable extends StatelessWidget {
                 child: Text(
                   price,
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                    fontSize: 19,
+                    color: priceColor,
+                    fontSize: 17,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'IransansBlack',
                   ),
@@ -65,8 +66,7 @@ class CurrencyUpdateTable extends StatelessWidget {
                         Text(
                           name,
                           style: TextStyle(
-                            color:
-                                Theme.of(context).colorScheme.primaryContainer,
+                            color: Theme.of(context).colorScheme.onPrimary,
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
                             fontFamily: 'IransansBlack',
@@ -77,10 +77,8 @@ class CurrencyUpdateTable extends StatelessWidget {
                           child: Text(
                             volatility,
                             style: TextStyle(
-                              fontSize: 10,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer,
+                              fontSize: 11,
+                              color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.w600,
                               fontFamily: 'IransansBlack',
                             ),
