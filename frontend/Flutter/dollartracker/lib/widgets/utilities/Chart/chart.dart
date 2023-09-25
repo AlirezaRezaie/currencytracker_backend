@@ -13,7 +13,7 @@ class Chart extends StatefulWidget {
 class _ChartState extends State<Chart> {
   bool shouldShowDot(FlSpot spot, LineChartBarData barData) {
     // Define a threshold for the minimum distance between dots to show them
-    double minDistanceThreshold = 100; // Adjust this threshold as needed
+    double minDistanceThreshold = 1; // Adjust this threshold as needed
 
     // Check the distance between the current spot and the previous one
     if (barData.spots.isEmpty) {
