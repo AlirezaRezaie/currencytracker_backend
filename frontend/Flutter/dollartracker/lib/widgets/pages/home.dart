@@ -278,7 +278,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         child: Column(
                           children: [
                             Padding(
-                              padding: EdgeInsets.only(top: 12),
+                              padding: EdgeInsets.only(top: 12, bottom: 5),
                               child: Text(
                                 "قیمت دلار امروز",
                                 style: TextStyle(
@@ -335,9 +335,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               ),
                             ),
                           ),
-                          Text(
-                            '📰',
-                            style: TextStyle(fontSize: 20),
+                          Padding(
+                            padding: EdgeInsets.only(left: 6),
+                            child: Text(
+                              '📰',
+                              style: TextStyle(fontSize: 25),
+                            ),
                           ),
                         ],
                       ),

@@ -72,7 +72,7 @@ class _ChartState extends State<Chart> {
             ),
             isCurved: true,
             color: Theme.of(context).colorScheme.primary,
-            barWidth: 0.2,
+            barWidth: 3,
             belowBarData: BarAreaData(
               show: true,
               color: Theme.of(context).colorScheme.onSecondaryContainer,
@@ -82,7 +82,6 @@ class _ChartState extends State<Chart> {
 
         titlesData: FlTitlesData(
           topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
           bottomTitles: AxisTitles(
               sideTitles: SideTitles(
             reservedSize: 30,
@@ -95,8 +94,16 @@ class _ChartState extends State<Chart> {
                 roundedNum = num.round().toString();
               }
               return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 1),
-                child: Text(roundedNum),
+                padding: EdgeInsets.only(top: 5),
+                child: Text(
+                  roundedNum,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSecondary,
+                    fontFamily: "IransansBlack",
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               );
             },
           )),

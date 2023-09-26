@@ -31,7 +31,7 @@ ThemeData darkMode = ThemeData(
     secondary: Color.fromARGB(255, 27, 28, 34),
     onSecondary: Colors.white,
     secondaryContainer: Color.fromARGB(50, 255, 255, 255),
-    onSecondaryContainer: Color.fromARGB(35, 60, 79, 250),
+    onSecondaryContainer: Color.fromARGB(60, 60, 79, 250),
     tertiary: Color.fromARGB(255, 35, 36, 42),
     outline: Color.fromARGB(40, 255, 255, 255),
     shadow: Color.fromARGB(140, 0, 0, 0),
