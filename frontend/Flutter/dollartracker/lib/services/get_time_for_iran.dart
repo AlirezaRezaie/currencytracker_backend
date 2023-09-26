@@ -32,6 +32,5 @@ String getTimeForIran(String time) {
   // Format the result as "HH:mm"
   String result =
       '${totalHours.toString().padLeft(2, '0')}:${totalMinutes.toString().padLeft(2, '0')}';
-
   return result;
 }

@@ -87,16 +87,21 @@ class _ChartState extends State<Chart> {
             reservedSize: 30,
             showTitles: true,
             getTitlesWidget: (num, Title) {
-              final roundedNum;
-              if (num - num.floor() == 0.5) {
-                roundedNum = num.toInt().toString() + ":" + "30";
+              int hours = num.toInt();
+              int minutes = ((num - hours) * 60).toInt();
+
+              String timeString;
+
+              if (minutes == 0) {
+                timeString = '$hours'; // No minutes, just the hour
               } else {
-                roundedNum = num.round().toString();
+                timeString = '$hours:${minutes.toString().padLeft(2, '0')}';
               }
+
               return Padding(
                 padding: EdgeInsets.only(top: 5),
                 child: Text(
-                  roundedNum,
+                  timeString,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onSecondary,
                     fontFamily: "IransansBlack",
