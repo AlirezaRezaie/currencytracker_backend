@@ -33,18 +33,30 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late WebSocketChannel channel;
   late BuildContext buildContext;
 
-  String lastNew = '';
-  int receivedData = 0;
-  double changeRate = 0;
-  int value = 9999;
+  // a string to store the lastNews
+  String lastNews = '';
+
+  // store the price of dollar
+  int dollarPrice = 0;
+
+  // store the server host name
   String serverHost = "";
+
   bool isConnecting = false;
+
+  // store the network status from the device
   bool isNetworkConnected = true;
+
+  // check is the data load well whene we open the page
   bool isHomeConnected = false;
+
+  // store the data of the chart to show user
   List chartData = [];
 
+  // store the last price table data in this list to show to the user
   List global = [];
 
+  // check the network status and update the status
   Future<void> checkNetworkStatus() async {
     var connectivityResult = await Connectivity().checkConnectivity();
     setState(() {
@@ -54,10 +66,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
+    // get the host name
     String? host = dotenv.env['SERVER_HOST'];
     super.initState();
 
     buildContext = this.context;
+    // get the latest news whene we open the home page
     getNews(host);
     // Replace 'ws://your_websocket_url' with your actual WebSocket server URL.
     serverHost = "ws://$host/api/";
@@ -92,8 +106,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             setState(() {
               switch (local['code']) {
                 case "USD":
-                  receivedData = local['latests'].last['price'];
+                  // set the dollar price
+                  dollarPrice = local['latests'].last['price'];
+
+                  // clear the chart data
                   chartData = [];
+
+                  // set the chart data
                   for (final item in local['latests']) {
                     final time = extractHour(getTimeForIran(item['posttime']));
                     final price = item['price'].toDouble();
@@ -101,6 +120,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     chartData.add([time, price]);
                   }
               }
+              // set the list of update table data
               global = jsonData['global']['latests'].reversed.toList();
             });
           }
@@ -127,6 +147,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     }
   }
 
+  // a function to get the latest news
   Future<void> getNews(host) async {
     final response = await http.get(
       Uri.parse(
@@ -142,7 +163,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       // You can now work with the data
       setState(() {
         // set the list of news
-        lastNew = data['title'];
+        lastNews = data['title'];
         // reverse the list to sort the news currectly
       });
     } else {
@@ -159,9 +180,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     });
   }
 
+  // a flash message to show the user the network connection is bad and we can't connect to the server
   void showFlash() {
     print("show flash");
-
     buildContext.showFlash<bool>(
       duration: const Duration(seconds: 5),
       builder: (context, controller) => FlashBar(
@@ -240,7 +261,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         PriceBox(
                           title: "🇪🇺 یورو",
                           price: AnimatedDigitWidget(
-                            value: receivedData,
+                            value: dollarPrice,
                             enableSeparator: true,
                             textStyle: GoogleFonts.aladin(
                               color: Color.fromARGB(255, 255, 255, 255),
@@ -254,7 +275,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         PriceBox(
                           title: "🇺🇸 دلار",
                           price: AnimatedDigitWidget(
-                            value: receivedData,
+                            value: dollarPrice,
                             enableSeparator: true,
                             textStyle: GoogleFonts.aladin(
                               color: Color.fromARGB(255, 255, 255, 255),
@@ -324,7 +345,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             child: Directionality(
                               textDirection: TextDirection.rtl,
                               child: Text(
-                                lastNew,
+                                lastNews,
                                 style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.onPrimary,
