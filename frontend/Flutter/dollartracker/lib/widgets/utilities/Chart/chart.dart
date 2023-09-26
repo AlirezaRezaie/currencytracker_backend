@@ -31,6 +31,9 @@ class _ChartState extends State<Chart> {
   Widget build(BuildContext context) {
     return LineChart(
       LineChartData(
+        clipData:
+            FlClipData(bottom: true, left: true, right: false, top: false),
+        baselineX: 10,
         gridData: FlGridData(
           show: true,
           getDrawingHorizontalLine: (value) {
