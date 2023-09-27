@@ -61,7 +61,7 @@ class _CurrencySelectorState extends State<CurrencySelector> {
           onChanged: (String? newValue) => {
             widget.getCurrency(newValue!),
             setState(() {
-              current_currency = newValue!;
+              current_currency = newValue;
             })
           },
         ),
