@@ -3,59 +3,51 @@ import asyncio
 import json
 from modes import run_live
 from logs import logger
-from locals import local
-from utils import get_defaults,push_in_board
+from utils import push_in_board, Arg
 
-# Create a shared dict
-global_board = {"latests":[],"limit":20}
+# this is the global board every currency update gets saved to this board
+global_board = {"latests": [], "limit": 20}
+# since every task (thread) might change the value of global_board
+# we will create a lock to ensure no conflict
 lock = threading.Lock()
 
+# all running tasks list
 tasks = []
-
-# args object for task configs
-class Arg:
-    def __init__(self, code,channel_index=0,count=None, timeout=None, retry=None, fetchrate=None):
-        self.code = code
-        self.timeout = timeout
-        self.retry = retry
-        self.fetchrate = fetchrate
-        self.count = count
-
-        try:
-            default_channels = local.default_channels
-        except:
-            default_channels = get_defaults()
-            
-        currency_obj = default_channels[code]
-        self.currency_info = currency_obj.get("currency_info")
-        self.channel_info = currency_obj.get("list_of_channels")[channel_index]
-        self.channel_id = self.channel_info.get("channel_name")
 
 
 class Task:
-    def __init__(self, code, channel_index=0,loop=None):
+    """
+    ## the import live task class\n
+    upon creation it will create and start a thread\n
+    it also has a `users` list to have more control on it
+    """
+
+    def __init__(self, code, loop=None, channel_index=0):
         """
         TODO : this might return error or None as memory limit reaches
         """
         self.main_loop = loop
-        self.args = Arg(code,channel_index=channel_index)
+        self.args = Arg(code, channel_index=channel_index)
         self.users = []
         self.stop_event = threading.Event()
         self.lastprice = None
 
         try:
+            # creates a new Thread and pass it required arguments
             self.task = self.create_task()
         except:
             logger.critical("error creating thread maybe low memory")
             return None
 
+        # automatically append its task to the list of tasks
         tasks.append(self)
+        # and start it
         self.start_task()
 
     def create_task(self):
         return threading.Thread(
             target=run_live,
-            args=(price_callback, error_callback, self.stop_event, self.args),
+            args=(success_callback, error_callback, self.stop_event, self.args),
         )
 
     def start_task(self):
@@ -66,17 +58,26 @@ class Task:
             self.task.start()
 
     def stop(self):
+        """
+        ### Caution! :
+            after calling this method we have to
+            remove the task from the the list of tasks
+        """
         self.stop_event.set()
         try:
+            # wait for it to fully close
             self.task.join()
         except:
             print("cant stop current thread")
         logger.info(f"removing {self.task.name} because no one is using it")
-        self.task = None
         tasks.remove(self)
 
 
 def get_task(code) -> Task:
+    """
+    Returns:
+        returns the existing task based on `code`
+    """
     for task in tasks:
         if task.args.code == code:
             return task
@@ -106,10 +107,14 @@ def disconnect_websocket(websocket, task=None):
         if len(task.users) < 1 and not task.args.channel_info["nonstop"]:
             task.stop()
 
-def baked_data(local_board,):
-    return json.dumps({"global":global_board,"local":local_board})
 
-async def send_data_to_clients(local_board,clients):
+def baked_data(
+    local_board,
+):
+    return json.dumps({"global": global_board, "local": local_board})
+
+
+async def send_data_to_clients(local_board, clients):
     for client in clients:
         await client.send_text(baked_data(local_board))
 
@@ -122,15 +127,23 @@ async def notify_error_to_all(error_msg, all_clients):
 def error_callback(code):
     task = get_task(code)
     task.stop()
-    task.main_loop.create_task(notify_error_to_all("wrong id bruh", task.users))
+
+    if task.main_loop:
+        task.main_loop.create_task(notify_error_to_all("wrong id bruh", task.users))
 
 
-def price_callback(local_board, channel):
+def success_callback(local_board, channel):
     task = get_task(channel)
     logger.info(f"request:\n{local_board} from channel {channel}")
-    new_price = local_board['latests'][-1]
+    new_price = local_board["latests"][-1]
     task.lastprice = local_board
     with lock:
-        push_in_board(new_price,global_board)
+        push_in_board(new_price, global_board)
     users = task.users
-    asyncio.run(send_data_to_clients(local_board, users))
+
+    if task.main_loop:
+        task.main_loop.create_task(send_data_to_clients(local_board, users))
+    else:
+        logger.info("new data recieved but there is to give it to ")
+    # this was the previous approach use this if the current one conflicts
+    # asyncio.run(send_data_to_clients(local_board, users))

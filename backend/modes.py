@@ -2,15 +2,20 @@ from network import fetch_price_data_u_preview_page as fetch_function
 from price import extract_prices
 from logs import logger
 from locals import local
-from utils import push_in_board
+from utils import push_in_board, Arg
+
+# How To Use:
+
+# the run_live and the counter_live functions must have a an args instance
+# passed to them its some general configs for the tasks
 
 
-def run_live(emmitter_callback, error_callback, stop_event, args=None):
+def run_live(success_callback, error_callback, stop_event, args: Arg):
     local.channel_id = args.channel_info["channel_name"]
     local.channel_info = args.channel_info
     local.args = args
 
-    local_board = {"latests":[],"code":local.args.code,"limit":20}
+    local_board = {"latests": [], "code": args.code, "limit": 20}
     server_mode = "live"
     prev_fetch = []
     last_price = None
@@ -49,8 +54,8 @@ def run_live(emmitter_callback, error_callback, stop_event, args=None):
                 if not price == last_price:
                     price.calculate_and_set_rate_of_change(last_price)
                     to_user = price.get_json_data()
-                    push_in_board(to_user,local_board)
-                    emmitter_callback(local_board, args.code)
+                    push_in_board(to_user, local_board)
+                    success_callback(local_board, args.code)
                     last_price = price
 
         else:
@@ -60,12 +65,12 @@ def run_live(emmitter_callback, error_callback, stop_event, args=None):
     print("FINISH LOOP")
 
 
-def run_counter(args):
+def run_counter(args: Arg):
     local.channel_id = args.channel_info["channel_name"]
     local.channel_info = args.channel_info
-    local.last_post_number = 0
     local.args = args
 
+    local.last_post_number = 0
     server_mode = "count"
     full_prices = []
     previous_price = None

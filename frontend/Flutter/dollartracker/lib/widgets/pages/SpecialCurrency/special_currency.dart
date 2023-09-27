@@ -2,15 +2,15 @@ import 'dart:convert';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dollartracker/widgets/utilities/currency_selector.dart';
-import 'package:dollartracker/widgets/utilities/currency_table.dart';
+import 'package:dollartracker/widgets/pages/SpecialCurrency/special_currency_table.dart';
 import 'package:flash/flash.dart';
 import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:lottie/lottie.dart';
-import '../utilities/Menu/side_menu.dart';
-import '../utilities/header.dart';
-import '../utilities/network_error.dart';
+import '../../utilities/Menu/side_menu.dart';
+import '../../utilities/header.dart';
+import '../../utilities/network_error.dart';
 import 'package:http/http.dart' as http;
 import 'package:dollartracker/services/get_time_for_iran.dart';
 
@@ -314,7 +314,7 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
                                           null ||
                                       data_list[index]['rateofchange'] == 0)
                                     return SizedBox();
-                                  return CurrencyTable(
+                                  return SpecialCurrencyTable(
                                     backgroundColor:
                                         Theme.of(context).colorScheme.secondary,
                                     price: data_list[index]['price'],

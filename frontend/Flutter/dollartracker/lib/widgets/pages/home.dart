@@ -21,6 +21,7 @@ import '../utilities/Menu/side_menu.dart';
 import 'package:animated_digit/animated_digit.dart';
 import 'package:google_fonts/google_fonts.dart';
 export 'package:dollartracker/services/extract_hours.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -123,6 +124,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               // set the list of update table data
               global = jsonData['global']['latests'].reversed.toList();
             });
+            print(global);
           }
         },
         onDone: () {
@@ -301,7 +303,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             Padding(
                               padding: EdgeInsets.only(top: 12, bottom: 5),
                               child: Text(
-                                "قیمت دلار امروز",
+                                "نمودار معاملات امروز",
                                 style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.onSecondary,
@@ -420,7 +422,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               itemCount: global.length,
                               itemBuilder: (context, index) {
                                 if (global[index]['rateofchange'] == null ||
-                                    global[index]['rateofchange'] == 0)
+                                    global[index]['price'].runtimeType ==
+                                        String)
                                   return SizedBox(
                                     height: 0,
                                   );
