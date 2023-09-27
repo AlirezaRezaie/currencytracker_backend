@@ -78,6 +78,10 @@ def fetch_price_data_u_tg_api(apikey=""):
     raise NotImplementedError
 
 
+def fetch_price_data_u_public_api(apikey=""):
+    raise NotImplementedError
+
+
 def fetch_price_data_u_preview_page(
     server_mode,
 ):
@@ -101,18 +105,18 @@ def fetch_price_data_u_preview_page(
     if server_mode == "count":
         session = requests
 
-    for retry_count in range(retry_limit):
+    while True:
         try:
             # TODO: handle network resets and minor error that might cause the whole connection
             # to close
-            #logger.info("connecting...")
+            # logger.info("connecting...")
             t1 = int(time())
             response = session.post(
                 f"https://t.me/s/{local.channel_id}?before={str(postnumber)}",
                 headers=headers,
                 timeout=timeout,
             ).text
-            #logger.info("connected successfully +++")
+            # logger.info("connected successfully +++")
             t2 = int(time())
             if fetchrate:
                 fr.set_rate(t2 - t1)
@@ -124,8 +128,6 @@ def fetch_price_data_u_preview_page(
             # Continuously check the connection stability
             if not is_connection_stable("t.me", timeout=timeout):
                 logger.critical("Connection is not stable. Retrying in 5 seconds...")
-                if retry_count + 1 >= retry_limit:
-                    exit(1)
 
     # Decompress the compressed data (gzip encoding)
     # doesnt actually decodes gzip to html but it works for now

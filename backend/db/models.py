@@ -8,6 +8,7 @@ class News(Base):
     __tablename__ = "news"
 
     id = Column(Integer, primary_key=True, index=True)
+    # collation="utf8mb4_unicode_ci" is for specifying its a persian text
     title = Column(String(255, collation="utf8mb4_unicode_ci"), index=True)
     topic = Column(String(255, collation="utf8mb4_unicode_ci"), index=True)
     description = Column(String(2000, collation="utf8mb4_unicode_ci"), index=True)
