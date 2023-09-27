@@ -56,7 +56,8 @@ class _SideMenuState extends State<SideMenu> {
                             Text(
                               "سلام، علیرضا",
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSecondary,
+                                color:
+                                    Theme.of(context).colorScheme.onSecondary,
                                 fontFamily: 'IransansBlack',
                                 fontWeight: FontWeight.bold,
                                 fontSize: 17,
@@ -114,17 +115,6 @@ class _SideMenuState extends State<SideMenu> {
               routName: "calculator",
             ),
             MenuItem(
-              title: "اخبار",
-              icon: BootstrapIcons.newspaper,
-              background_color: currentRoute == "/news"
-                  ? Theme.of(context).colorScheme.primary
-                  : Color.fromARGB(0, 27, 28, 34),
-              color: currentRoute == "/news"
-                  ? Theme.of(context).colorScheme.onPrimary
-                  : Theme.of(context).colorScheme.onSecondary,
-              routName: "news",
-            ),
-            MenuItem(
               title: "ارز اختصاصی",
               icon: BootstrapIcons.currency_dollar,
               background_color: currentRoute == "/special_currency"
@@ -134,6 +124,28 @@ class _SideMenuState extends State<SideMenu> {
                   ? Theme.of(context).colorScheme.onPrimary
                   : Theme.of(context).colorScheme.onSecondary,
               routName: "special_currency",
+            ),
+            MenuItem(
+              title: "ارز دیجیتال",
+              icon: BootstrapIcons.currency_bitcoin,
+              background_color: currentRoute == "/crypto_currency"
+                  ? Theme.of(context).colorScheme.primary
+                  : Color.fromARGB(0, 27, 28, 34),
+              color: currentRoute == "/crypto_currency"
+                  ? Theme.of(context).colorScheme.onPrimary
+                  : Theme.of(context).colorScheme.onSecondary,
+              routName: "crypto_currency",
+            ),
+            MenuItem(
+              title: "اخبار",
+              icon: BootstrapIcons.newspaper,
+              background_color: currentRoute == "/news"
+                  ? Theme.of(context).colorScheme.primary
+                  : Color.fromARGB(0, 27, 28, 34),
+              color: currentRoute == "/news"
+                  ? Theme.of(context).colorScheme.onPrimary
+                  : Theme.of(context).colorScheme.onSecondary,
+              routName: "news",
             ),
             MenuItem(
               title: "پروفایل",

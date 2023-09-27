@@ -1,11 +1,12 @@
 import 'package:dollartracker/theme/theme_provider.dart';
+import 'package:dollartracker/widgets/pages/CryptoCurrency/cryptoCurrency.dart';
 import 'package:dollartracker/widgets/pages/about.dart';
 import 'package:dollartracker/widgets/pages/currency_calculator.dart';
 import 'package:dollartracker/widgets/pages/home.dart';
 import 'package:dollartracker/widgets/pages/News/news.dart';
 import 'package:dollartracker/widgets/pages/Introduction/introduction_screen.dart';
 import 'package:dollartracker/widgets/pages/profile.dart';
-import 'package:dollartracker/widgets/pages/special_currency.dart';
+import 'package:dollartracker/widgets/pages/SpecialCurrency/special_currency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
@@ -25,9 +26,10 @@ void main() async {
           initialRoute: '/home',
           routes: {
             "/home": (context) => completed ? Home() : IntroductionScreen(),
-            '/calculator': (context) => CurrencyCalculator(),
             '/news': (context) => NewsPage(),
+            '/calculator': (context) => CurrencyCalculator(),
             '/special_currency': (context) => SpecialCurrency(),
+            '/crypto_currency': (context) => CryptoCurrency(),
             '/profile': (context) => ProfilePage(),
             '/about': (context) => AboutPage(),
           },

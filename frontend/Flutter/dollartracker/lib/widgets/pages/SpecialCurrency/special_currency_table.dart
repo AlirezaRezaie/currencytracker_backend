@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
-class CurrencyTable extends StatelessWidget {
+import '../../../services/get_seprate.dart';
+
+class SpecialCurrencyTable extends StatelessWidget {
   final String time, volatility, imageLink;
   final int price;
   final double persent;
   final Color persentColor, backgroundColor;
 
-  const CurrencyTable({
+  const SpecialCurrencyTable({
     super.key,
     required this.volatility,
     required this.price,
@@ -45,7 +47,7 @@ class CurrencyTable extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    price.toString(),
+                    separateNumberWithCommas(price),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primaryContainer,
                       fontSize: 15,
