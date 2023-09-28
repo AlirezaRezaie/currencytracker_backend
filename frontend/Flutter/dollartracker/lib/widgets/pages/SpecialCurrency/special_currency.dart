@@ -176,23 +176,16 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
           SizedBox(
             height: 30,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                child: CurrencySelector(
-                  listOfCurrency: currencyList,
-                  width: 320,
-                  height: 60,
-                  getCurrency: (currency) {
-                    setState(() {
-                      selectedCurrency = currency;
-                      getCurrencyData();
-                    });
-                  },
-                ),
-              ),
-            ],
+          CurrencySelector(
+            listOfCurrency: currencyList,
+            width: 320,
+            height: 60,
+            getCurrency: (currency) {
+              setState(() {
+                selectedCurrency = currency;
+                getCurrencyData();
+              });
+            },
           ),
           SizedBox(
             height: 20,
@@ -316,7 +309,7 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
                                     return SizedBox();
                                   return SpecialCurrencyTable(
                                     backgroundColor:
-                                        Theme.of(context).colorScheme.secondary,
+                                        Theme.of(context).colorScheme.tertiary,
                                     price: data_list[index]['price'],
                                     persentColor: data_list[index]
                                                 ['rateofchange'] !=

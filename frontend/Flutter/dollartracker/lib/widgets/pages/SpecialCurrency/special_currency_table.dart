@@ -49,7 +49,7 @@ class SpecialCurrencyTable extends StatelessWidget {
                   Text(
                     separateNumberWithCommas(price),
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.primaryContainer,
+                      color: Theme.of(context).colorScheme.onTertiary,
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'IransansBlack',
@@ -80,8 +80,7 @@ class SpecialCurrencyTable extends StatelessWidget {
                         Text(
                           volatility,
                           style: TextStyle(
-                            color:
-                                Theme.of(context).colorScheme.primaryContainer,
+                            color: Theme.of(context).colorScheme.onTertiary,
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
                             fontFamily: 'IransansBlack',
@@ -93,9 +92,7 @@ class SpecialCurrencyTable extends StatelessWidget {
                             time,
                             style: TextStyle(
                               fontSize: 10,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer,
+                              color: Theme.of(context).colorScheme.onTertiary,
                               fontWeight: FontWeight.w600,
                               fontFamily: 'IransansBlack',
                             ),
