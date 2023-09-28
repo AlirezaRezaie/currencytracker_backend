@@ -75,7 +75,7 @@ class CurrencyUpdateTable extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(top: 2),
                           child: Text(
-                            volatility,
+                            time,
                             style: TextStyle(
                               fontSize: 11,
                               color: Theme.of(context).colorScheme.onPrimary,

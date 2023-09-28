@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import '../../../services/get_seprate.dart';
+class CryptoCurrencyTable extends StatelessWidget {
+  final String time, volatility, imageLink, name;
+  final String price;
+  final Color backgroundColor, priceColor;
 
-class SpecialCurrencyTable extends StatelessWidget {
-  final String time, volatility, imageLink;
-  final int price;
-  final double persent;
-  final Color persentColor, backgroundColor;
-
-  const SpecialCurrencyTable({
+  const CryptoCurrencyTable({
     super.key,
     required this.volatility,
     required this.price,
     required this.time,
-    required this.persent,
-    required this.persentColor,
     required this.backgroundColor,
+    required this.priceColor,
     required this.imageLink,
+    required this.name,
   });
 
   @override
@@ -43,31 +41,17 @@ class SpecialCurrencyTable extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    separateNumberWithCommas(price),
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onTertiary,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'IransansBlack',
-                    ),
+              Padding(
+                padding: EdgeInsets.only(top: 7),
+                child: Text(
+                  price,
+                  style: TextStyle(
+                    color: priceColor,
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'IransansBlack',
                   ),
-                  SizedBox(
-                    height: 2,
-                  ),
-                  Text(
-                    "$persent %",
-                    style: TextStyle(
-                      color: persentColor,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'IransansBlack',
-                    ),
-                  ),
-                ],
+                ),
               ),
               Row(
                 children: [
@@ -78,9 +62,9 @@ class SpecialCurrencyTable extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          volatility,
+                          name,
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.onTertiary,
+                            color: Theme.of(context).colorScheme.onPrimary,
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
                             fontFamily: 'IransansBlack',
@@ -91,8 +75,8 @@ class SpecialCurrencyTable extends StatelessWidget {
                           child: Text(
                             time,
                             style: TextStyle(
-                              fontSize: 10,
-                              color: Theme.of(context).colorScheme.onTertiary,
+                              fontSize: 11,
+                              color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.w600,
                               fontFamily: 'IransansBlack',
                             ),
@@ -107,7 +91,7 @@ class SpecialCurrencyTable extends StatelessWidget {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
                         image: DecorationImage(
-                          image: AssetImage(imageLink),
+                          image: NetworkImage(imageLink),
                           fit: BoxFit.cover,
                         )),
                   )

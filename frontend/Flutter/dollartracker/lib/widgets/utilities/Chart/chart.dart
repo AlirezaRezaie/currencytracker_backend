@@ -3,8 +3,15 @@ import 'package:flutter/material.dart';
 
 class Chart extends StatefulWidget {
   final List data;
+  final double minY;
+  final double maxY;
 
-  const Chart({super.key, required this.data});
+  const Chart({
+    super.key,
+    required this.data,
+    required this.maxY,
+    required this.minY,
+  });
 
   @override
   State<Chart> createState() => _ChartState();
@@ -49,8 +56,8 @@ class _ChartState extends State<Chart> {
           drawHorizontalLine: true,
         ),
         maxX: 24, // Max X-axis value (adjust as needed)
-        minY: 20000, // Min Y-axis value (adjust as needed)
-        maxY: 80000, // Max Y-axis value (adjust as needed)
+        minY: widget.minY - 10, // Min Y-axis value (adjust as needed)
+        maxY: widget.maxY + 10, // Max Y-axis value (adjust as needed)
 
         borderData: FlBorderData(
           show: true,
@@ -75,7 +82,7 @@ class _ChartState extends State<Chart> {
             ),
             isCurved: true,
             color: Theme.of(context).colorScheme.primary,
-            barWidth: 3,
+            barWidth: 2,
             belowBarData: BarAreaData(
               show: true,
               color: Theme.of(context).colorScheme.onSecondaryContainer,
