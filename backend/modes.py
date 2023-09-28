@@ -1,4 +1,4 @@
-from network import fetch_price_data_u_preview_page as fetch_function
+from network import *
 from price import extract_prices
 from logs import logger
 from locals import local
@@ -10,10 +10,24 @@ from utils import push_in_board, Arg
 # passed to them its some general configs for the tasks
 
 
+def get_fetch_function():
+    match local.channel_info["type"]:
+        case "api":
+            func = fetch_price_data_u_public_api
+        case "tg":
+            func = fetch_price_data_u_preview_page
+        case "web":
+            func = fetch_price_data_u_web_scrape
+
+    return func
+
+
 def run_live(success_callback, error_callback, stop_event, args: Arg):
     local.channel_id = args.channel_info["channel_name"]
     local.channel_info = args.channel_info
     local.args = args
+
+    fetch_function = get_fetch_function()
 
     local_board = {"latests": [], "code": args.code, "limit": 20}
     server_mode = "live"
@@ -42,6 +56,7 @@ def run_live(success_callback, error_callback, stop_event, args: Arg):
 
         if not prev_fetch:
             prev_fetch = curr_fetch
+
         # determine last message in the current fetch
         for price in curr_fetch:
             if price == prev_fetch[-1]:
@@ -49,7 +64,6 @@ def run_live(success_callback, error_callback, stop_event, args: Arg):
 
         if last_price_in_curr_fetch is not None:
             new_prices = curr_fetch[last_price_in_curr_fetch:]
-
             for price in new_prices:
                 if not price == last_price:
                     price.calculate_and_set_rate_of_change(last_price)
@@ -69,6 +83,8 @@ def run_counter(args: Arg):
     local.channel_id = args.channel_info["channel_name"]
     local.channel_info = args.channel_info
     local.args = args
+
+    fetch_function = get_fetch_function()
 
     local.last_post_number = 0
     server_mode = "count"

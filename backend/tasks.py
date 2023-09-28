@@ -1,5 +1,5 @@
 import threading
-import asyncio
+from locals import local
 import json
 from modes import run_live
 from logs import logger
@@ -7,6 +7,7 @@ from utils import push_in_board, Arg
 
 # this is the global board every currency update gets saved to this board
 global_board = {"latests": [], "limit": 20}
+crypto_board = {"latests": [], "limit": 20}
 # since every task (thread) might change the value of global_board
 # we will create a lock to ensure no conflict
 lock = threading.Lock()
@@ -58,11 +59,6 @@ class Task:
             self.task.start()
 
     def stop(self):
-        """
-        ### Caution! :
-            after calling this method we have to
-            remove the task from the the list of tasks
-        """
         self.stop_event.set()
         try:
             # wait for it to fully close
@@ -108,15 +104,14 @@ def disconnect_websocket(websocket, task=None):
             task.stop()
 
 
-def baked_data(
-    local_board,
-):
-    return json.dumps({"global": global_board, "local": local_board})
+def baked_data(local_board, is_crypto):
+    g_board = crypto_board if is_crypto else global_board
+    return json.dumps({"global": g_board, "local": local_board})
 
 
-async def send_data_to_clients(local_board, clients):
+async def send_data_to_clients(data, clients):
     for client in clients:
-        await client.send_text(baked_data(local_board))
+        await client.send_text(data)
 
 
 async def notify_error_to_all(error_msg, all_clients):
@@ -137,12 +132,17 @@ def success_callback(local_board, channel):
     logger.info(f"request:\n{local_board} from channel {channel}")
     new_price = local_board["latests"][-1]
     task.lastprice = local_board
+
+    is_crypto = local.args.currency_info.get("is_crypto")
+
     with lock:
         push_in_board(new_price, global_board)
     users = task.users
 
     if task.main_loop:
-        task.main_loop.create_task(send_data_to_clients(local_board, users))
+        task.main_loop.create_task(
+            send_data_to_clients(baked_data(local_board, is_crypto), users)
+        )
     else:
         logger.info("new data recieved but there is to give it to ")
     # this was the previous approach use this if the current one conflicts

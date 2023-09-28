@@ -6,6 +6,7 @@ from time import time
 from logs import logger
 from locals import local
 from requests import Session
+import json
 
 session = Session()
 
@@ -74,12 +75,31 @@ def is_connection_stable(server, timeout):
         return False
 
 
-def fetch_price_data_u_tg_api(apikey=""):
+def fetch_price_data_u_web_scrape(apikey=""):
     raise NotImplementedError
 
 
 def fetch_price_data_u_public_api(apikey=""):
-    raise NotImplementedError
+    if "endpoint" in local.channel_info:
+        endpoint = local.channel_info["endpoint"]
+        connected = False
+        while not connected:
+            try:
+                res = requests.get(endpoint).text
+                connected = True
+            except:
+                logger.info("api failed to connect bro")
+
+        obj = json.loads(res)
+
+        return [obj]
+
+    else:
+        # this will be later caught by the run_live function as error as it thinks its not a valid channel
+        logger.error(
+            "you should specify a 'endpoint' key and value in the configs json if you have type 'api' "
+        )
+        return []
 
 
 def fetch_price_data_u_preview_page(
@@ -99,8 +119,8 @@ def fetch_price_data_u_preview_page(
         "Connection": "keep-alive",
         "Content-Length": "0",
     }
-
     postnumber = local.last_post_number
+    endpoint = f"https://t.me/s/{local.channel_id}?before={str(postnumber)}"
 
     if server_mode == "count":
         session = requests
@@ -112,7 +132,7 @@ def fetch_price_data_u_preview_page(
             # logger.info("connecting...")
             t1 = int(time())
             response = session.post(
-                f"https://t.me/s/{local.channel_id}?before={str(postnumber)}",
+                endpoint,
                 headers=headers,
                 timeout=timeout,
             ).text
