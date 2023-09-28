@@ -106,6 +106,7 @@ def disconnect_websocket(websocket, task=None):
 
 def baked_data(local_board, is_crypto):
     g_board = crypto_board if is_crypto else global_board
+    print(g_board)
     return json.dumps({"global": g_board, "local": local_board})
 
 
@@ -134,9 +135,9 @@ def success_callback(local_board, channel):
     task.lastprice = local_board
 
     is_crypto = local.args.currency_info.get("is_crypto")
-
+    g_board = crypto_board if is_crypto else global_board
     with lock:
-        push_in_board(new_price, global_board)
+        push_in_board(new_price, g_board)
     users = task.users
 
     if task.main_loop:
