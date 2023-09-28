@@ -25,6 +25,7 @@ import os
 
 router = APIRouter()
 
+# this is for the pop up login page built-in browser
 security = HTTPBasic()
 
 # Define a Jinja2 template directory
@@ -43,6 +44,7 @@ def authenticate_user(credentials: HTTPBasicCredentials = Depends(security)):
     correct_username = "bachekhoob"  # Replace with your desired username
     correct_password = "kirkhar92"  # Replace with your desired password
 
+    # simple authentication
     if (
         credentials.username != correct_username
         or credentials.password != correct_password
@@ -60,9 +62,7 @@ async def serve_form(
     )
 
 
-# Dependency function for user authentication
-
-
+# upload handler
 @router.post("/upload/")
 async def upload_file(
     request: Request,
@@ -75,22 +75,25 @@ async def upload_file(
 ):
     valid_extensions = (".jpg", ".jpeg", ".png")
 
+    # check the extension of the uploaded file to ensure its picture
     if not photo.file.read() or not photo.filename.lower().endswith(valid_extensions):
         raise HTTPException(status_code=400, detail="please provide a photo")
 
     photo.file.seek(0)  # Set the file pointer to the beginning
-    # Do something with the uploaded image, like saving it
-    # You can access the image data via 'photo.file' and save it to a location
+
+    # set the image save path to the uploads directory
     image_path = os.path.join("static", "uploads", photo.filename)
+
     with open(image_path, "wb") as image_file:
         while True:
+            # read and save to the uplaods 1kb until we have read all of the file
             chunk = await photo.read(1024)
             image_file.write(chunk)
-            # Read a chunk of bytes
             if not chunk:
                 print("ok?")
                 break
 
+    # create a new news entry
     new_entry = News(
         title=title,
         topic=topic,
@@ -99,24 +102,27 @@ async def upload_file(
         created_at=jdatetime.datetime.now().strftime("%a, %d %b %Y %H:%M"),
         time_to_read=time_to_read,
     )
+
+    # save it in th
     db.add(new_entry)
     db.commit()
     db.close()
     # Here, I'm just returning a message with the received data
     return {"status": "ok"}
 
+
 class QueryMode(str, Enum):
-    LATEST = 'latest'
-    ALL = 'all'
+    LATEST = "latest"
+    ALL = "all"
 
 
 @router.get("/get_news/{value}")
-def get_all_people(value:QueryMode,db: Session = Depends(get_db)):
+def get_all_people(value: QueryMode, db: Session = Depends(get_db)):
     db_query = db.query(News)
     if value == QueryMode.LATEST:
-            news = db_query.order_by(News.id.desc()).first()
+        news = db_query.order_by(News.id.desc()).first()
     elif value == QueryMode.ALL:
-            news = db_query.all()
-        
+        news = db_query.all()
+
     db.close()
     return news

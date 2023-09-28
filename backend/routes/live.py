@@ -94,46 +94,72 @@ async def websocket_endpoint(websocket: WebSocket):
 
                 # read the parsed data
                 match parse_command["command"]:
+                    # makes the user recieve updates on the subscried channel
                     case "SUBSCRIBE":
+                        # if the user is not already subscribed and is inside the
+                        # users we will add it to the users
                         if not websocket in task.users:
                             task.users.append(websocket)
                         else:
+                            # we notify to the user you are already subscribed
                             await websocket.send_text(
                                 f"you have already subscribed to {channel_code}"
                             )
+
+                        # we check if we had recieved the last price this will rarely
+                        # be false as we certainly will have a last price for each task
                         if task.lastprice:
+                            # is crypto is nececery boolean for it to know which global
+                            # board should be sent to the user
                             is_crypto = task.args.currency_info.get("is_crypto")
                             await websocket.send_text(
                                 baked_data(task.lastprice, is_crypto)
                             )
-
+                    # makes the user no longer recieve updates on that channel
                     case "UNSUBSCRIBE":
+                        # check if the user havnt already unsubscried from this channel
                         if websocket in task.users:
+                            # call the disconnect function it will also remove the user from the list
+                            # of the active task users
                             disconnect_websocket(websocket, task)
                         else:
+                            # notify the user that already been unsubbed
                             await websocket.send_text(
                                 "your are not subscribed to any channel silly"
                             )
+                    # returns the list of subscried channels to the user
                     case "CHANNELS":
                         channels_subbed_in = []
+                        # for each task we check if the user is in its users list property
                         for task in tasks:
                             if websocket in task.users:
                                 channels_subbed_in.append(task.args.code)
+
+                        # return a list of their codes to the user
                         await websocket.send_text(str(channels_subbed_in))
 
+                    # returns the number of active tasks in the server
                     case "TASKS":
                         await websocket.send_text(str(len(tasks)))
+
+                    # ping pong connection test
                     case "PING":
                         await websocket.send_text("PONG")
             else:
                 # return the parser info on not ok status
                 await websocket.send_text(str(parse_command))
 
+    # Socket Exceptions
+    # dissconnect exception handler
     except WebSocketDisconnect:
         logger.info(
             f"client {websocket.client.host}:{websocket.client.port} disconnected ❌❌"
         )
+        # ensure disconnect and remove the user from the active users
         disconnect_websocket(websocket)
+
+    # general exception handler simply print the error
+    # and return it to the user and close the connection
     except Exception as e:
         logger.error(
             f"Custome Exception Occurred: {e}\nException from client {websocket.client.host}:{websocket.client.port}\ncheck the logs to see who that was"

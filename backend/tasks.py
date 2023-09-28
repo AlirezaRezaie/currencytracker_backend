@@ -89,6 +89,11 @@ def get_all_tasks_subbed_in(user):
 
 
 def disconnect_websocket(websocket, task=None):
+    """
+    removes the user from the specified task if one is mention
+    and removes the user from every task available if no task
+    is mentioned
+    """
     user_tasks = []
     if not task:
         # if not specified which task to unsubscribe from unsub it from every task
@@ -105,6 +110,11 @@ def disconnect_websocket(websocket, task=None):
 
 
 def baked_data(local_board, is_crypto):
+    """
+    creates a nice output data for the user this is the last place we make change to the data
+    its the thing user will see at the front
+    """
+    # indicating which board to use based on the is crypto value
     g_board = crypto_board if is_crypto else global_board
     print(g_board)
     return json.dumps({"global": g_board, "local": local_board})
@@ -130,11 +140,15 @@ def error_callback(code):
 
 def success_callback(local_board, channel):
     task = get_task(channel)
-    logger.info(f"request:\n{local_board} from channel {channel}")
+    is_crypto = local.args.currency_info.get("is_crypto")
+
+    # only log if its not crypto because it updates so much
+    if not is_crypto:
+        logger.info(f"request:\n{local_board} from channel {channel}")
+
     new_price = local_board["latests"][-1]
     task.lastprice = local_board
 
-    is_crypto = local.args.currency_info.get("is_crypto")
     g_board = crypto_board if is_crypto else global_board
     with lock:
         push_in_board(new_price, g_board)
@@ -145,6 +159,6 @@ def success_callback(local_board, channel):
             send_data_to_clients(baked_data(local_board, is_crypto), users)
         )
     else:
-        logger.info("new data recieved but there is to give it to ")
+        logger.debug("new data recieved but there is to give it to ")
     # this was the previous approach use this if the current one conflicts
     # asyncio.run(send_data_to_clients(local_board, users))

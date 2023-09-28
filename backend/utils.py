@@ -54,6 +54,7 @@ def get_defaults():
 def push_in_board(item, board):
     latests = board["latests"]
     limit = board["limit"]
+
     if len(latests) > limit:
         latests.pop(0)
         latests.append(item)

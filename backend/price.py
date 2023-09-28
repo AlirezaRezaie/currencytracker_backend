@@ -92,7 +92,7 @@ class priceInfo:
             prev_prc = last_price.price
             new_prc = self.price
             calculated_rate_of_change = round(
-                ((new_prc - prev_prc) / prev_prc) * 100, 3
+                ((new_prc - prev_prc) / prev_prc) * 100, 7
             )
             self.rate_of_change = calculated_rate_of_change
 
