@@ -21,10 +21,14 @@ known_channels = ["dollar_tehran3bze", "nerkhedollarr"]
 
 class priceInfo:
     def __init__(self, raw_price_obj) -> None:
+        self.postnumber = raw_price_obj["number"]
+
         parsed = self.parse_price_info(raw_price_obj["text"])
+
         # if its a valid price text
         if parsed:
-            action, price, exchtype = parsed
+            exchtype, price, action = parsed
+
         else:
             raise ValueError("Invalid data. Object cannot be created.")
 
@@ -32,16 +36,15 @@ class priceInfo:
             self.price = int(price.replace(",", ""))
             self.persian_name = local.args.currency_info["persian_name"]
         else:
-            #might not be a price
+            # might not be a price
             self.price = price
             self.persian_name = None
-            
+
         self.action = action
         self.exchtype = exchtype
         # TODO: it gives UTC turn it into iran local time
         self.posttime = raw_price_obj["info"]
         self.text = raw_price_obj["text"]
-        self.postnumber = raw_price_obj["number"]
         self.rate_of_change = None
 
     def __eq__(self, other):
@@ -53,25 +56,27 @@ class priceInfo:
         return (self.text, self.posttime, self.postnumber)
 
     def get_json_data(self):
-        return {
-            "code":local.args.code,
+        data = {
+            "code": local.args.code,
             "action": self.action,
-            "price": self.text if self.action == "پایان معاملات" else self.price,
-            "persian_name":self.persian_name,
-            "image_link":f"/static/currency_images/{local.args.code}.png",
+            "price": self.price,
+            "persian_name": self.persian_name,
+            "image_link": f"/static/currency_images/{local.args.code}.png",
             "exchtype": self.exchtype,
             "posttime": self.posttime,
             "rateofchange": self.rate_of_change,
         }
 
+        return data
+
     def calculate_and_set_rate_of_change(self, last_price):
         if last_price and local.args.currency_info:
-                prev_prc = last_price.price
-                new_prc = self.price
-                calculated_rate_of_change = round(
-                    ((new_prc - prev_prc) / prev_prc) * 100, 3
-                )
-                self.rate_of_change = calculated_rate_of_change
+            prev_prc = last_price.price
+            new_prc = self.price
+            calculated_rate_of_change = round(
+                ((new_prc - prev_prc) / prev_prc) * 100, 3
+            )
+            self.rate_of_change = calculated_rate_of_change
 
     def parse_price_info(self, price_text) -> tuple:
         groups = None
@@ -80,20 +85,25 @@ class priceInfo:
         regex = local.channel_info["regex"]
         if regex:
             if local.channel_info.get("findall"):
-                groups = re.findall(regex,price_text)
-                #print(groups)
+                groups = re.findall(regex, price_text)
+                # print(groups)
 
+            elif "پایان" in price_text:
+                # the currency prices has ended we can halt this task for now"
+                groups = None
             else:
                 groups = re.search(regex, price_text)
+
         else:
             # use the default regex
             groups = re.findall(r"(\d{1,3}(?:,\d{3})*)", price_text)
 
-        #exit()
+        # exit()
         if groups:
             try:
                 checked_parsed = groups.groups()
-            except:
+
+            except Exception as e:
                 price = groups[0]
                 checked_parsed = ("none", price, "none")
 
@@ -102,17 +112,16 @@ class priceInfo:
 
 # accepts raw messages and returns price objects
 def extract_prices(messages, count=10, reverse=False):
-    
     if not messages:
         return "id is not valid"
 
     parsed_prices = []
     latest = len(messages) - 1
-    
 
     for price in reversed(messages[: latest + 1]):
         try:
             parsed_price_obj = priceInfo(price)
+
             parsed_prices.append(parsed_price_obj)
             count -= 1
             if count == 0:
@@ -121,6 +130,7 @@ def extract_prices(messages, count=10, reverse=False):
             # keep in mind that this exception is not an actual error
             # its my way of handling data text and non-data text
             logger.debug(e)
+
     if reverse:
         parsed_prices.reverse()
     return parsed_prices

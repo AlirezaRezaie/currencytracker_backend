@@ -18,6 +18,7 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
+# yields the currenct instance of the session
 def get_db():
     db = scoped_session(Session)
     try:

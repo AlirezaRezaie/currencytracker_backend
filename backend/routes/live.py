@@ -9,6 +9,10 @@ router = APIRouter()
 
 
 def command_parser(msg):
+    """
+    a custom made command parser most probably gets updated
+    in later version because of its simplicity
+    """
     supported_commands = {
         "SUBSCRIBE": 1,
         "UNSUBSCRIBE": 1,
@@ -36,28 +40,59 @@ def command_parser(msg):
 
 @router.websocket("/")
 async def websocket_endpoint(websocket: WebSocket):
+    """
+    the main task manager of the live websocket
+    it processes the recieved commands and sends data accordingly
+    """
+    # accepting the connection from user
     await websocket.accept()
+    # send an initial test (it is used to check the websocket connection in the frontend)
     await websocket.send_text("CONNECTED")
     logger.info(f"client {websocket.client.host}:{websocket.client.port} connected 🔌🔌")
+
+    # getting the event loop that router.websocket made because
+    # we want to use it to pass data to multiple users
+    # Note:
+    #   this should be passed either to the newly created Task object or
+    #   ultimetly gets set to an exsisting Task object
+    #   if not no data will be broadcasted to the users
     loop = asyncio.get_event_loop()
+    # the currenct task that is started
     task = None
     try:
         while True:
+            # wait for the user to send a command
             rec_msg = await websocket.receive_text()
             try:
+                # if its a real command
                 parse_command = command_parser(rec_msg)
             except:
+                # if its not send an error message and continue listening
                 await websocket.send_text("parser error bruh")
                 continue
 
             if parse_command["status"] == "ok":
+                # continue if ok
+                # get the channel code from the parser info
                 channel_code = parse_command["channel_name"]
                 if channel_code:
+                    # get the task if exists
                     task = get_task(channel_code)
                     if not task:
+                        # if it doesn't create a brand new one
+                        # note that we have to pass the websocket event loop
+                        # because we will use it to create notification tasks
+                        # please refer to the notes in the tasks.py file in the
+                        # notify
                         task = Task(channel_code, loop)
                     else:
+                        # log that task exist's
+                        # setting it's loop value to the websocket event loop
+                        # as mentioned why in the loop declaration
+                        task.main_loop = loop
                         logger.info(f"task {channel_code} exists")
+
+                # read the parsed data
                 match parse_command["command"]:
                     case "SUBSCRIBE":
                         if not websocket in task.users:
@@ -88,6 +123,7 @@ async def websocket_endpoint(websocket: WebSocket):
                     case "PING":
                         await websocket.send_text("PONG")
             else:
+                # return the parser info on not ok status
                 await websocket.send_text(str(parse_command))
 
     except WebSocketDisconnect:
