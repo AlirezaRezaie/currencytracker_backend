@@ -56,6 +56,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   // store the last price table data in this list to show to the user
   List global = [];
 
+  double lowestPriceChart = 0;
+  double highestPriceChart = 0;
+
   // check the network status and update the status
   Future<void> checkNetworkStatus() async {
     var connectivityResult = await Connectivity().checkConnectivity();
@@ -113,12 +116,29 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   chartData = [];
 
                   // set the chart data
+
+                  double lowestPrice = double
+                      .infinity; // Initialize lowestPrice to positive infinity
+                  double highestPrice = double
+                      .negativeInfinity; // Initialize highestPrice to negative infinity
                   for (final item in local['latests']) {
                     final time = extractHour(getTimeForIran(item['posttime']));
                     final price = item['price'].toDouble();
 
+                    // Update lowestPrice if the current price is lower
+                    if (price < lowestPrice) {
+                      lowestPrice = price;
+                    }
+
+                    // Update highestPrice if the current price is higher
+                    if (price > highestPrice) {
+                      highestPrice = price;
+                    }
+
                     chartData.add([time, price]);
                   }
+                  lowestPriceChart = lowestPrice;
+                  highestPriceChart = highestPrice;
               }
               // set the list of update table data
               global = jsonData['global']['latests'].reversed.toList();
@@ -316,7 +336,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               height: 200,
                               child: Padding(
                                 padding: EdgeInsets.all(5),
-                                child: Chart(data: chartData),
+                                child: Chart(
+                                  data: chartData,
+                                  minY: lowestPriceChart,
+                                  maxY: highestPriceChart,
+                                ),
                               ),
                             )
                           ],

@@ -1,3 +1,4 @@
+import 'package:dollartracker/widgets/pages/CryptoCurrency/crypto_currency_table.dart';
 import 'package:dollartracker/widgets/utilities/currency_update_table.dart';
 import 'package:dollartracker/widgets/utilities/header.dart';
 import 'package:flutter/material.dart';
@@ -165,92 +166,24 @@ class _CryptoCurrencyState extends State<CryptoCurrency> {
                       ),
                     ),
                     Expanded(
-                        child: ListView(
-                      padding: const EdgeInsets.all(25),
-                      physics: BouncingScrollPhysics(),
-                      children: [
-                        CurrencyUpdateTable(
-                          volatility: "volatility",
-                          price: "20",
-                          time: "time",
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                          priceColor: Colors.white,
-                          imageLink: "imageLink",
-                          name: 'name',
-                        ),
-                        CurrencyUpdateTable(
-                          volatility: "volatility",
-                          price: "20",
-                          time: "time",
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                          priceColor: Colors.white,
-                          imageLink: "imageLink",
-                          name: 'name',
-                        ),
-                        CurrencyUpdateTable(
-                          volatility: "volatility",
-                          price: "20",
-                          time: "time",
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                          priceColor: Colors.white,
-                          imageLink: "imageLink",
-                          name: 'name',
-                        ),
-                        CurrencyUpdateTable(
-                          volatility: "volatility",
-                          price: "20",
-                          time: "time",
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                          priceColor: Colors.white,
-                          imageLink: "imageLink",
-                          name: 'name',
-                        ),
-                        CurrencyUpdateTable(
-                          volatility: "volatility",
-                          price: "20",
-                          time: "time",
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                          priceColor: Colors.white,
-                          imageLink: "imageLink",
-                          name: 'name',
-                        ),
-                        CurrencyUpdateTable(
-                          volatility: "volatility",
-                          price: "20",
-                          time: "time",
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                          priceColor: Colors.white,
-                          imageLink: "imageLink",
-                          name: 'name',
-                        ),
-                        CurrencyUpdateTable(
-                          volatility: "volatility",
-                          price: "20",
-                          time: "time",
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                          priceColor: Colors.white,
-                          imageLink: "imageLink",
-                          name: 'name',
-                        ),
-                        CurrencyUpdateTable(
-                          volatility: "volatility",
-                          price: "20",
-                          time: "time",
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                          priceColor: Colors.white,
-                          imageLink: "imageLink",
-                          name: 'name',
-                        ),
-                      ],
-                    )),
+                      child: ListView(
+                        padding: const EdgeInsets.all(25),
+                        physics: BouncingScrollPhysics(),
+                        children: [
+                          CryptoCurrencyTable(
+                            volatility: "volatility",
+                            price: "20",
+                            time: "time",
+                            backgroundColor:
+                                Theme.of(context).colorScheme.secondary,
+                            priceColor: Colors.white,
+                            imageLink:
+                                "https://cryptologos.cc/logos/bitcoin-btc-logo.png",
+                            name: 'name',
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),

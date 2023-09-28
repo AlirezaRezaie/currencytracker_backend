@@ -1,5 +1,5 @@
 import 'package:dollartracker/theme/theme_provider.dart';
-import 'package:dollartracker/widgets/pages/CryptoCurrency/cryptoCurrency.dart';
+import 'package:dollartracker/widgets/pages/CryptoCurrency/crypto_currency.dart';
 import 'package:dollartracker/widgets/pages/about.dart';
 import 'package:dollartracker/widgets/pages/currency_calculator.dart';
 import 'package:dollartracker/widgets/pages/home.dart';

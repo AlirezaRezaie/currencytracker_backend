@@ -14,7 +14,7 @@ double extractHour(String time) {
 
   int floating_minutes = (hour! * 60) + minutes!;
 
-  if (hour! < 0 || hour > 23) {
+  if (hour < 0 || hour > 23) {
     throw FormatException("Invalid hour value.");
   }
 

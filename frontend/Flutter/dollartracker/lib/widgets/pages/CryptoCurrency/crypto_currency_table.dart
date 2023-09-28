@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-class CurrencyUpdateTable extends StatelessWidget {
+class CryptoCurrencyTable extends StatelessWidget {
   final String time, volatility, imageLink, name;
   final String price;
   final Color backgroundColor, priceColor;
 
-  const CurrencyUpdateTable({
+  const CryptoCurrencyTable({
     super.key,
     required this.volatility,
     required this.price,
@@ -19,8 +19,6 @@ class CurrencyUpdateTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? host = dotenv.env['SERVER_HOST'];
-
     return Padding(
       padding: EdgeInsets.only(top: 18),
       child: Container(
@@ -93,7 +91,7 @@ class CurrencyUpdateTable extends StatelessWidget {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
                         image: DecorationImage(
-                          image: NetworkImage('http://$host' + '$imageLink'),
+                          image: NetworkImage(imageLink),
                           fit: BoxFit.cover,
                         )),
                   )
