@@ -102,9 +102,7 @@ def fetch_price_data_u_public_api(apikey=""):
         return []
 
 
-def fetch_price_data_u_preview_page(
-    server_mode,
-):
+def fetch_price_data_u_preview_page():
     global session
 
     timeout = local.args.timeout if local.args.timeout else 10
@@ -122,7 +120,7 @@ def fetch_price_data_u_preview_page(
     postnumber = local.last_post_number
     endpoint = f"https://t.me/s/{local.channel_id}?before={str(postnumber)}"
 
-    if server_mode == "count":
+    if local.server_mode == "count":
         session = requests
 
     while True:

@@ -141,12 +141,12 @@ def error_callback(code):
 def success_callback(local_board, channel):
     task = get_task(channel)
     is_crypto = local.args.currency_info.get("is_crypto")
+    new_price = local_board["latests"][-1]
 
     # only log if its not crypto because it updates so much
     if not is_crypto:
-        logger.info(f"request:\n{local_board} from channel {channel}")
+        logger.info(f"request:\n{new_price} from channel {channel}")
 
-    new_price = local_board["latests"][-1]
     task.lastprice = local_board
 
     g_board = crypto_board if is_crypto else global_board

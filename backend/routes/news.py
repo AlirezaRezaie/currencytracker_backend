@@ -111,16 +111,22 @@ async def upload_file(
     return {"status": "ok"}
 
 
+# query mode enum
 class QueryMode(str, Enum):
     LATEST = "latest"
     ALL = "all"
 
 
+# returns all or latest news from the news table in the db
 @router.get("/get_news/{value}")
 def get_all_people(value: QueryMode, db: Session = Depends(get_db)):
+    # the db query object
     db_query = db.query(News)
+    # its latest mode return the first db object
     if value == QueryMode.LATEST:
         news = db_query.order_by(News.id.desc()).first()
+
+    # its all so return every news to the user
     elif value == QueryMode.ALL:
         news = db_query.all()
 
