@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class CryptoCurrencyTable extends StatelessWidget {
-  final String time, volatility, imageLink, name;
-  final String price;
-  final Color backgroundColor, priceColor;
+  final String time, imageLink, name;
+  final double price, rateOfChange;
+  final Color backgroundColor, priceColor, presentColor;
 
   const CryptoCurrencyTable({
     super.key,
-    required this.volatility,
+    required this.presentColor,
+    required this.rateOfChange,
     required this.price,
     required this.time,
     required this.backgroundColor,
@@ -41,17 +41,31 @@ class CryptoCurrencyTable extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Padding(
-                padding: EdgeInsets.only(top: 7),
-                child: Text(
-                  price,
-                  style: TextStyle(
-                    color: priceColor,
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'IransansBlack',
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 7),
+                    child: Text(
+                      "\$" + price.toString(),
+                      style: TextStyle(
+                        color: priceColor,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'IransansBlack',
+                      ),
+                    ),
                   ),
-                ),
+                  Text(
+                    "%" + rateOfChange.toString(),
+                    style: TextStyle(
+                      color: presentColor,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'IransansBlack',
+                    ),
+                  ),
+                ],
               ),
               Row(
                 children: [

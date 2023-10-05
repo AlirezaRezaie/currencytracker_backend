@@ -311,10 +311,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     ),
                     SizedBox(height: 20),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(15),
                           color: Theme.of(context).colorScheme.secondary,
                         ),
                         child: Column(
@@ -335,7 +335,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             Container(
                               height: 200,
                               child: Padding(
-                                padding: EdgeInsets.all(5),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 8),
                                 child: Chart(
                                   data: chartData,
                                   minY: lowestPriceChart,

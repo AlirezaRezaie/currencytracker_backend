@@ -1,25 +1,82 @@
+import 'dart:convert';
+import 'package:dollartracker/services/second_to_time.dart';
 import 'package:dollartracker/widgets/pages/CryptoCurrency/crypto_currency_table.dart';
-import 'package:dollartracker/widgets/utilities/currency_update_table.dart';
-import 'package:dollartracker/widgets/utilities/header.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 import '../../utilities/Menu/side_menu.dart';
 import '../../utilities/currency_selector.dart';
+import '../../utilities/header.dart';
 
 class CryptoCurrency extends StatefulWidget {
-  const CryptoCurrency({super.key});
+  const CryptoCurrency({Key? key}) : super(key: key);
 
   @override
   State<CryptoCurrency> createState() => _CryptoCurrencyState();
 }
 
 class _CryptoCurrencyState extends State<CryptoCurrency> {
-  List<bool> _selection = [
-    false,
-    false,
-    true,
-  ];
+  List<bool> _selection = [false, false, true];
+  late WebSocketChannel channel;
+
+  // store the server host name
+  String serverHost = "";
+
+  String latestPrice = '';
+
+  List global = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    // get the host name
+    String? host = dotenv.env['SERVER_HOST'];
+
+    // Replace 'ws://your_websocket_url' with your actual WebSocket server URL.
+    serverHost = "ws://$host/api/";
+    _connectToWebSocket(serverHost);
+  }
+
+  void _connectToWebSocket(String host) async {
+    channel = IOWebSocketChannel.connect(host);
+    channel.sink.add('SUBSCRIBE BTC');
+
+    channel.stream.listen(
+      (data) {
+        // Parse the received data as JSON
+        Map<String, dynamic> jsonData = jsonDecode(data);
+        // Check if the 'price' field exists and is a numeric value
+        if (jsonData.containsKey('local')) {
+          final local = jsonData['local'];
+
+          setState(() {
+            latestPrice = local['latests'].last['price'].toString();
+
+            global = jsonData['global']['latests'].reversed.toList();
+          });
+        }
+      },
+      onDone: () {
+        print("Server closed the connection");
+        _reconnectToWebSocket(serverHost);
+      },
+      onError: (error) {
+        print("WebSocket error");
+        _reconnectToWebSocket(serverHost);
+      },
+    );
+  }
+
+  void _reconnectToWebSocket(String host) async {
+    print("reconnecting.....");
+    await Future.delayed(Duration(seconds: 5), () {
+      _connectToWebSocket(host);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +94,7 @@ class _CryptoCurrencyState extends State<CryptoCurrency> {
             height: 25,
           ),
           Text(
-            "\$ 245000",
+            "\$ $latestPrice",
             style: GoogleFonts.monoton(
               fontWeight: FontWeight.bold,
               fontSize: 50,
@@ -166,22 +223,30 @@ class _CryptoCurrencyState extends State<CryptoCurrency> {
                       ),
                     ),
                     Expanded(
-                      child: ListView(
+                      child: ListView.builder(
                         padding: const EdgeInsets.all(25),
                         physics: BouncingScrollPhysics(),
-                        children: [
-                          CryptoCurrencyTable(
-                            volatility: "volatility",
-                            price: "20",
-                            time: "time",
+                        itemCount: global.length,
+                        itemBuilder: (context, index) {
+                          return CryptoCurrencyTable(
+                            presentColor: global[index]['rateofchange'] != null
+                                ? global[index]['rateofchange'] > 0
+                                    ? Colors.greenAccent
+                                    : Colors.redAccent
+                                : Colors.white,
+                            rateOfChange: global[index]['rateofchange'] == null
+                                ? 0
+                                : global[index]['rateofchange'],
+                            price: global[index]['price'],
+                            time: SecondToTime(global[index]['posttime']),
                             backgroundColor:
                                 Theme.of(context).colorScheme.secondary,
                             priceColor: Colors.white,
                             imageLink:
                                 "https://cryptologos.cc/logos/bitcoin-btc-logo.png",
-                            name: 'name',
-                          ),
-                        ],
+                            name: global[index]['code'],
+                          );
+                        },
                       ),
                     ),
                   ],

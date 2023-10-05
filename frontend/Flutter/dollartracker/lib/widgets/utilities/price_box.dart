@@ -32,7 +32,7 @@ class _PriceBoxState extends State<PriceBox> {
           end: Alignment.bottomRight,
           stops: [0.0, 1.0],
         ),
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(20),
       ),
       padding: EdgeInsets.only(top: 20, right: 45, bottom: 20, left: 45),
       child: Column(
