@@ -1,5 +1,5 @@
 import threading
-import asyncio
+from locals import local
 import json
 from modes import run_live
 from logs import logger
@@ -7,6 +7,7 @@ from utils import push_in_board, Arg
 
 # this is the global board every currency update gets saved to this board
 global_board = {"latests": [], "limit": 20}
+crypto_board = {"latests": [], "limit": 20}
 # since every task (thread) might change the value of global_board
 # we will create a lock to ensure no conflict
 lock = threading.Lock()
@@ -58,11 +59,6 @@ class Task:
             self.task.start()
 
     def stop(self):
-        """
-        ### Caution! :
-            after calling this method we have to
-            remove the task from the the list of tasks
-        """
         self.stop_event.set()
         try:
             # wait for it to fully close
@@ -93,6 +89,11 @@ def get_all_tasks_subbed_in(user):
 
 
 def disconnect_websocket(websocket, task=None):
+    """
+    removes the user from the specified task if one is mention
+    and removes the user from every task available if no task
+    is mentioned
+    """
     user_tasks = []
     if not task:
         # if not specified which task to unsubscribe from unsub it from every task
@@ -108,15 +109,20 @@ def disconnect_websocket(websocket, task=None):
             task.stop()
 
 
-def baked_data(
-    local_board,
-):
-    return json.dumps({"global": global_board, "local": local_board})
+def baked_data(local_board, is_crypto):
+    """
+    creates a nice output data for the user this is the last place we make change to the data
+    its the thing user will see at the front
+    """
+    # indicating which board to use based on the is crypto value
+    g_board = crypto_board if is_crypto else global_board
+    print(g_board)
+    return json.dumps({"global": g_board, "local": local_board})
 
 
-async def send_data_to_clients(local_board, clients):
+async def send_data_to_clients(data, clients):
     for client in clients:
-        await client.send_text(baked_data(local_board))
+        await client.send_text(data)
 
 
 async def notify_error_to_all(error_msg, all_clients):
@@ -134,16 +140,25 @@ def error_callback(code):
 
 def success_callback(local_board, channel):
     task = get_task(channel)
-    logger.info(f"request:\n{local_board} from channel {channel}")
+    is_crypto = local.args.currency_info.get("is_crypto")
     new_price = local_board["latests"][-1]
+
+    # only log if its not crypto because it updates so much
+    if not is_crypto:
+        logger.info(f"request:\n{new_price} from channel {channel}")
+
     task.lastprice = local_board
+
+    g_board = crypto_board if is_crypto else global_board
     with lock:
-        push_in_board(new_price, global_board)
+        push_in_board(new_price, g_board)
     users = task.users
 
     if task.main_loop:
-        task.main_loop.create_task(send_data_to_clients(local_board, users))
+        task.main_loop.create_task(
+            send_data_to_clients(baked_data(local_board, is_crypto), users)
+        )
     else:
-        logger.info("new data recieved but there is to give it to ")
+        logger.debug("new data recieved but there is to give it to ")
     # this was the previous approach use this if the current one conflicts
     # asyncio.run(send_data_to_clients(local_board, users))

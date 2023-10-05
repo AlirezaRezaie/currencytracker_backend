@@ -1,6 +1,7 @@
 import re
 from logs import logger
 from locals import local
+import time
 
 known_channels = ["dollar_tehran3bze", "nerkhedollarr"]
 
@@ -21,36 +22,53 @@ known_channels = ["dollar_tehran3bze", "nerkhedollarr"]
 
 class priceInfo:
     def __init__(self, raw_price_obj) -> None:
-        self.postnumber = raw_price_obj["number"]
-
-        parsed = self.parse_price_info(raw_price_obj["text"])
-
-        # if its a valid price text
-        if parsed:
-            exchtype, price, action = parsed
-
-        else:
-            raise ValueError("Invalid data. Object cannot be created.")
-
-        if local.args.currency_info:
-            self.price = int(price.replace(",", ""))
+        # each type should be treated respectivly
+        if local.channel_info["type"] == "api":
+            self.postnumber = None
+            self.action = None
+            self.exchtype = None
+            self.posttime = int(time.time() % 86_400)
+            self.text = raw_price_obj
             self.persian_name = local.args.currency_info["persian_name"]
-        else:
-            # might not be a price
-            self.price = price
-            self.persian_name = None
 
-        self.action = action
-        self.exchtype = exchtype
-        # TODO: it gives UTC turn it into iran local time
-        self.posttime = raw_price_obj["info"]
-        self.text = raw_price_obj["text"]
-        self.rate_of_change = None
+            self.rate_of_change = None
+            self.price = float(raw_price_obj["price"])
+
+        elif local.channel_info["type"] == "tg":
+            self.postnumber = raw_price_obj["number"]
+            self.posttime = raw_price_obj["info"]
+            self.text = raw_price_obj["text"]
+            self.persian_name = local.args.currency_info["persian_name"]
+
+            self.rate_of_change = None
+
+            parsed = self.parse_price_info(raw_price_obj["text"])
+
+            # if its a valid price text
+            if parsed:
+                exchtype, price, action = parsed
+            else:
+                raise ValueError("Invalid data. Object cannot be created.")
+
+            self.action = action
+            self.exchtype = exchtype
+
+            if local.args.currency_info:
+                self.price = int(price.replace(",", ""))
+            else:
+                # might not be a price
+                self.price = price
+                self.persian_name = None
+        else:
+            return None
 
     def __eq__(self, other):
         if isinstance(other, priceInfo):
-            return self.postnumber == other.postnumber
-        return False
+            if local.channel_info["type"] == "tg":
+                return self.postnumber == other.postnumber
+            elif local.channel_info["type"] == "api":
+                return self.price == other.price
+            return False
 
     def get_data(self):
         return (self.text, self.posttime, self.postnumber)
@@ -74,7 +92,7 @@ class priceInfo:
             prev_prc = last_price.price
             new_prc = self.price
             calculated_rate_of_change = round(
-                ((new_prc - prev_prc) / prev_prc) * 100, 3
+                ((new_prc - prev_prc) / prev_prc) * 100, 7
             )
             self.rate_of_change = calculated_rate_of_change
 
@@ -121,7 +139,6 @@ def extract_prices(messages, count=10, reverse=False):
     for price in reversed(messages[: latest + 1]):
         try:
             parsed_price_obj = priceInfo(price)
-
             parsed_prices.append(parsed_price_obj)
             count -= 1
             if count == 0:
