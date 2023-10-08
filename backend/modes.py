@@ -64,7 +64,7 @@ def run_live(success_callback, error_callback, stop_event, args: Arg):
 
         # if its not a list or the list is empty then its not
         # a valid channel and we should report it via error callback
-        if not type(current_batch) == list or not current_batch:
+        if not type(current_batch) == list:
             error_callback(args.channel_id)
             break
 

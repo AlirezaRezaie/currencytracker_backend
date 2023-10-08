@@ -116,7 +116,6 @@ def baked_data(local_board, is_crypto):
     """
     # indicating which board to use based on the is crypto value
     g_board = crypto_board if is_crypto else global_board
-    print(g_board)
     return json.dumps({"global": g_board, "local": local_board})
 
 
