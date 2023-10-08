@@ -5,7 +5,7 @@ import 'package:dollartracker/widgets/pages/currency_calculator.dart';
 import 'package:dollartracker/widgets/pages/home.dart';
 import 'package:dollartracker/widgets/pages/News/news.dart';
 import 'package:dollartracker/widgets/pages/Introduction/introduction_screen.dart';
-import 'package:dollartracker/widgets/pages/profile.dart';
+import 'package:dollartracker/widgets/pages/Profile/profile.dart';
 import 'package:dollartracker/widgets/pages/SpecialCurrency/special_currency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
