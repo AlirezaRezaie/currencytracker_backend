@@ -284,10 +284,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           price: AnimatedDigitWidget(
                             value: dollarPrice,
                             enableSeparator: true,
-                            textStyle: GoogleFonts.aladin(
+                            textStyle: GoogleFonts.dosis(
                               color: Color.fromARGB(255, 255, 255, 255),
-                              fontWeight: FontWeight.w600,
-                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25,
                             ),
                           ),
                           firstColor: Theme.of(context).colorScheme.primary,
@@ -298,10 +298,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           price: AnimatedDigitWidget(
                             value: dollarPrice,
                             enableSeparator: true,
-                            textStyle: GoogleFonts.aladin(
+                            // recommended fonts titilliumWeb -- kanit -- dosis
+                            textStyle: GoogleFonts.dosis(
                               color: Color.fromARGB(255, 255, 255, 255),
-                              fontWeight: FontWeight.w600,
-                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25,
                             ),
                           ),
                           firstColor: Theme.of(context).colorScheme.primary,
