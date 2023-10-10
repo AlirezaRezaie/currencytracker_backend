@@ -106,6 +106,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         SettingItem(
                           title: "تغییر تم",
                           icon: BootstrapIcons.palette_fill,
+                          routName: "profile/edit_theme",
                         ),
                         SizedBox(
                           height: 20,
@@ -113,6 +114,15 @@ class _ProfilePageState extends State<ProfilePage> {
                         SettingItem(
                           title: "تغییر ارز صفحه اصلی",
                           icon: BootstrapIcons.currency_dollar,
+                          routName: "profile/edit_theme",
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        SettingItem(
+                          title: "تغییر ارز صفحه اصلی",
+                          icon: BootstrapIcons.currency_dollar,
+                          routName: "profile/edit_theme",
                         ),
                       ],
                     ),

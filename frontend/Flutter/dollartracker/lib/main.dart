@@ -1,7 +1,9 @@
 import 'package:dollartracker/theme/theme_provider.dart';
 import 'package:dollartracker/widgets/pages/CryptoCurrency/crypto_currency.dart';
+import 'package:dollartracker/widgets/pages/Setting/edit_theme.dart';
 import 'package:dollartracker/widgets/pages/about.dart';
 import 'package:dollartracker/widgets/pages/currency_calculator.dart';
+import 'package:dollartracker/widgets/pages/GoldData/gold_data.dart';
 import 'package:dollartracker/widgets/pages/home.dart';
 import 'package:dollartracker/widgets/pages/News/news.dart';
 import 'package:dollartracker/widgets/pages/Introduction/introduction_screen.dart';
@@ -23,14 +25,16 @@ void main() async {
       builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          initialRoute: '/home',
+          initialRoute: '/profile',
           routes: {
             "/home": (context) => completed ? Home() : IntroductionScreen(),
-            '/news': (context) => NewsPage(),
             '/calculator': (context) => CurrencyCalculator(),
             '/special_currency': (context) => SpecialCurrency(),
             '/crypto_currency': (context) => CryptoCurrency(),
+            '/gold_data': (context) => GoldData(),
+            '/news': (context) => NewsPage(),
             '/profile': (context) => ProfilePage(),
+            '/profile/edit_theme': (context) => EditTheme(),
             '/about': (context) => AboutPage(),
           },
           theme: Provider.of<ThemeProvider>(context)
