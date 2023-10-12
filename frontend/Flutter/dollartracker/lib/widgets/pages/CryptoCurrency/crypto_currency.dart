@@ -4,6 +4,7 @@ import 'package:dollartracker/widgets/pages/CryptoCurrency/crypto_currency_table
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../../utilities/Menu/side_menu.dart';
@@ -24,9 +25,17 @@ class _CryptoCurrencyState extends State<CryptoCurrency> {
   // store the server host name
   String serverHost = "";
 
+  // save the latest price to show to the user
   String latestPrice = '';
 
+  // a list to store the fetched data
   List global = [];
+
+  // save the loading status
+  bool isLoading = false;
+
+  // save the status of data that fetched
+  bool isFetchsuccess = true;
 
   @override
   void initState() {
@@ -41,6 +50,7 @@ class _CryptoCurrencyState extends State<CryptoCurrency> {
   }
 
   void _connectToWebSocket(String host) async {
+    isLoading = true;
     channel = IOWebSocketChannel.connect(host);
     channel.sink.add('SUBSCRIBE BTC');
 
@@ -54,8 +64,9 @@ class _CryptoCurrencyState extends State<CryptoCurrency> {
 
           setState(() {
             latestPrice = local['latests'].last['price'].toString();
-
             global = jsonData['global']['latests'].reversed.toList();
+            isLoading = false;
+            isFetchsuccess = true;
           });
         }
       },
@@ -82,180 +93,281 @@ class _CryptoCurrencyState extends State<CryptoCurrency> {
     return Scaffold(
       endDrawer: SideMenu(),
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: Column(
-        children: [
-          Header(
-            backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-            color: Theme.of(context).colorScheme.onBackground,
-            profileImage:
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
-          ),
-          SizedBox(
-            height: 25,
-          ),
-          Text(
-            "\$ $latestPrice",
-            style: GoogleFonts.monoton(
-              fontWeight: FontWeight.bold,
-              fontSize: 50,
-            ),
-          ),
-          Text(
-            "قیمت بیتکوین در حال حاظر",
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onBackground,
-              fontFamily: "IransansBlack",
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          CurrencySelector(
-            listOfCurrency: [
-              'USD',
-              'btn',
-              'fsdd',
-            ],
-            width: 320,
-            height: 60,
-            getCurrency: (currency) {},
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          ToggleButtons(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  "یورو",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 15,
-                    fontFamily: 'IransansBlack',
-                  ),
+      body: isLoading
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Header(
+                  backgroundColor: const Color.fromARGB(0, 0, 0, 0),
+                  color: Theme.of(context).colorScheme.onBackground,
+                  profileImage:
+                      'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  "دلار",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 15,
-                    fontFamily: 'IransansBlack',
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  "ریال",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 15,
-                    fontFamily: 'IransansBlack',
-                  ),
-                ),
-              ),
-            ],
-            selectedColor: Theme.of(context).colorScheme.onPrimary,
-            fillColor: Theme.of(context).colorScheme.primary,
-            splashColor: Theme.of(context).colorScheme.primary,
-            isSelected: _selection,
-            onPressed: (int newValue) {
-              setState(() {
-                for (int index = 0; index < _selection.length; index++) {
-                  if (index == newValue) {
-                    _selection[index] = true;
-                  } else {
-                    _selection[index] = false;
-                  }
-                }
-              });
-            },
-            color: Theme.of(context).colorScheme.onBackground,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Expanded(
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(50),
-                topRight: Radius.circular(50),
-              ),
-              child: Container(
-                color: Theme.of(context).colorScheme.tertiary,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 2, bottom: 5),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          borderRadius: BorderRadius.circular(50),
+                Padding(
+                  padding: EdgeInsets.only(top: 100),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 500,
+                        height: 400,
+                        child: Lottie.asset("assets/bitcoinLoading.json"),
+                      ),
+                      Text(
+                        "... در حال اتصال به سرور ",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onBackground,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          fontFamily: 'IransansBlack',
                         ),
-                        alignment: Alignment.center,
-                        margin: const EdgeInsets.only(top: 12.0),
-                        height: 4.0,
-                        width: MediaQuery.of(context).size.width * 0.2,
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            )
+          : isFetchsuccess
+              ? Column(
+                  children: [
+                    Header(
+                      backgroundColor: const Color.fromARGB(0, 0, 0, 0),
+                      color: Theme.of(context).colorScheme.onBackground,
+                      profileImage:
+                          'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    Text(
+                      "\$ $latestPrice",
+                      style: GoogleFonts.monoton(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 50,
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 10, top: 12),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "تغییرات قیمت بیتکوین",
+                    Text(
+                      "قیمت بیتکوین در حال حاظر",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onBackground,
+                        fontFamily: "IransansBlack",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    CurrencySelector(
+                      listOfCurrency: [
+                        'USD',
+                        'btn',
+                        'fsdd',
+                      ],
+                      width: 320,
+                      height: 60,
+                      getCurrency: (currency) {},
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    ToggleButtons(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 30),
+                          child: Text(
+                            "یورو",
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
                               fontFamily: 'IransansBlack',
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 30),
+                          child: Text(
+                            "دلار",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                              fontFamily: 'IransansBlack',
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 30),
+                          child: Text(
+                            "ریال",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                              fontFamily: 'IransansBlack',
+                            ),
+                          ),
+                        ),
+                      ],
+                      selectedColor: Theme.of(context).colorScheme.onPrimary,
+                      fillColor: Theme.of(context).colorScheme.primary,
+                      splashColor: Theme.of(context).colorScheme.primary,
+                      isSelected: _selection,
+                      onPressed: (int newValue) {
+                        setState(() {
+                          for (int index = 0;
+                              index < _selection.length;
+                              index++) {
+                            if (index == newValue) {
+                              _selection[index] = true;
+                            } else {
+                              _selection[index] = false;
+                            }
+                          }
+                        });
+                      },
+                      color: Theme.of(context).colorScheme.onBackground,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    SizedBox(
+                      height: 20,
                     ),
                     Expanded(
-                      child: ListView.builder(
-                        padding: const EdgeInsets.all(25),
-                        physics: BouncingScrollPhysics(),
-                        itemCount: global.length,
-                        itemBuilder: (context, index) {
-                          return CryptoCurrencyTable(
-                            presentColor: global[index]['rateofchange'] != null
-                                ? global[index]['rateofchange'] > 0
-                                    ? Colors.greenAccent
-                                    : Colors.redAccent
-                                : Colors.white,
-                            rateOfChange: global[index]['rateofchange'] == null
-                                ? 0
-                                : global[index]['rateofchange'],
-                            price: global[index]['price'],
-                            time: SecondToTime(global[index]['posttime']),
-                            backgroundColor:
-                                Theme.of(context).colorScheme.secondary,
-                            priceColor: Colors.white,
-                            imageLink:
-                                "https://cryptologos.cc/logos/bitcoin-btc-logo.png",
-                            name: global[index]['code'],
-                          );
-                        },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(50),
+                          topRight: Radius.circular(50),
+                        ),
+                        child: Container(
+                          color: Theme.of(context).colorScheme.tertiary,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(top: 2, bottom: 5),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  alignment: Alignment.center,
+                                  margin: const EdgeInsets.only(top: 12.0),
+                                  height: 4.0,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.2,
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 10, top: 12),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "تغییرات قیمت بیتکوین",
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        fontFamily: 'IransansBlack',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: ListView.builder(
+                                  padding: const EdgeInsets.all(25),
+                                  physics: BouncingScrollPhysics(),
+                                  itemCount: global.length,
+                                  itemBuilder: (context, index) {
+                                    return CryptoCurrencyTable(
+                                      presentColor: global[index]
+                                                  ['rateofchange'] !=
+                                              null
+                                          ? global[index]['rateofchange'] > 0
+                                              ? Colors.greenAccent
+                                              : Colors.redAccent
+                                          : Colors.white,
+                                      rateOfChange:
+                                          global[index]['rateofchange'] == null
+                                              ? 0
+                                              : global[index]['rateofchange'],
+                                      price: global[index]['price'],
+                                      time: SecondToTime(
+                                          global[index]['posttime']),
+                                      backgroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      priceColor: Colors.white,
+                                      imageLink:
+                                          "https://cryptologos.cc/logos/bitcoin-btc-logo.png",
+                                      name: global[index]['code'],
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ],
+                )
+              : Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 350,
+                        height: 300,
+                        child: Lottie.asset("assets/Error2.json"),
+                      ),
+                      Text(
+                        "خطا در برقرای ارتباط با سرور",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onBackground,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          fontFamily: 'IransansBlack',
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 30),
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.all(
+                              EdgeInsets.only(
+                                right: 20,
+                                left: 20,
+                                top: 10,
+                                bottom: 10,
+                              ),
+                            ),
+                            backgroundColor: MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.primary,
+                            ),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(8), // Border radius
+                              ),
+                            ),
+                          ),
+                          child: Text(
+                            "تلاش مجدد",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                              fontFamily: 'IransansBlack',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

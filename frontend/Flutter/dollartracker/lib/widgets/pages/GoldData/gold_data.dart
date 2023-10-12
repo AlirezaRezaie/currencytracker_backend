@@ -14,7 +14,7 @@ class GoldData extends StatefulWidget {
 }
 
 class _GoldDataState extends State<GoldData> {
-  bool isLoading = false;
+  bool isLoading = true;
   bool isFetchsuccess = true;
 
   @override
@@ -25,22 +25,34 @@ class _GoldDataState extends State<GoldData> {
       body: isLoading
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  width: 500,
-                  height: 600,
-                  child: Lottie.asset("assets/CoinLoading.json"),
+                Header(
+                  backgroundColor: const Color.fromARGB(0, 0, 0, 0),
+                  color: Theme.of(context).colorScheme.onBackground,
+                  profileImage:
+                      'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
                 ),
-                Text(
-                  "... در حال بارگیری اطلاعات",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onBackground,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    fontFamily: 'IransansBlack',
+                Padding(
+                  padding: EdgeInsets.only(top: 100),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 500,
+                        height: 400,
+                        child: Lottie.asset("assets/CoinLoading.json"),
+                      ),
+                      Text(
+                        "... در حال بارگیری اطلاعات",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onBackground,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          fontFamily: 'IransansBlack',
+                        ),
+                      ),
+                    ],
                   ),
-                ),
+                )
               ],
             )
           : isFetchsuccess
@@ -175,59 +187,61 @@ class _GoldDataState extends State<GoldData> {
                     ),
                   ],
                 )
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 500,
-                      height: 400,
-                      child: Lottie.asset("assets/Error.json"),
-                    ),
-                    Text(
-                      "خطا در برقرای ارتباط با سرور",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onBackground,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        fontFamily: 'IransansBlack',
+              : Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 450,
+                        height: 350,
+                        child: Lottie.asset("assets/Error.json"),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 15),
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all(
-                            EdgeInsets.only(
-                              right: 20,
-                              left: 20,
-                              top: 10,
-                              bottom: 10,
+                      Text(
+                        "خطا در برقرای ارتباط با سرور",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onBackground,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          fontFamily: 'IransansBlack',
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 30),
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.all(
+                              EdgeInsets.only(
+                                right: 20,
+                                left: 20,
+                                top: 10,
+                                bottom: 10,
+                              ),
+                            ),
+                            backgroundColor: MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.primary,
+                            ),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(8), // Border radius
+                              ),
                             ),
                           ),
-                          backgroundColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.primary,
-                          ),
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(8), // Border radius
+                          child: Text(
+                            "تلاش مجدد",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                              fontFamily: 'IransansBlack',
                             ),
                           ),
                         ),
-                        child: Text(
-                          "تلاش مجدد",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                            fontFamily: 'IransansBlack',
-                          ),
-                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
     );
   }
