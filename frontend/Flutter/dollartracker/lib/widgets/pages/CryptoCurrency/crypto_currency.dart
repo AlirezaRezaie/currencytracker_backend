@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import '../../../services/get_time_for_iran.dart';
 import '../../utilities/Menu/side_menu.dart';
 import '../../utilities/currency_selector.dart';
 import '../../utilities/header.dart';
@@ -292,8 +293,8 @@ class _CryptoCurrencyState extends State<CryptoCurrency> {
                                               ? 0
                                               : global[index]['rateofchange'],
                                       price: global[index]['price'],
-                                      time: SecondToTime(
-                                          global[index]['posttime']),
+                                      time: getTimeForIran(SecondToTime(
+                                          global[index]['posttime'])),
                                       backgroundColor: Theme.of(context)
                                           .colorScheme
                                           .secondary,
