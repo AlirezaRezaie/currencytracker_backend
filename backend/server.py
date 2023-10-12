@@ -44,6 +44,7 @@ async def startup_event():
         channel_list = currency_obj["list_of_channels"]
         for channel in channel_list:
             if channel["nonstop"]:
+                print(currency_code)
                 # only start the ones which have specified nonstop in their config
                 Task(currency_code, channel_index=channel_list.index(channel))
 

@@ -13,17 +13,21 @@ class Arg:
     def __init__(
         self,
         code,
+        websocket_currency_type=None,
         channel_index=0,
+        loop=None,
         count=None,
         timeout=None,
         retry=None,
         fetchrate=None,
     ):
         self.code = code
+        self.loop = loop
         self.timeout = timeout
         self.retry = retry
         self.fetchrate = fetchrate
         self.count = count
+        self.websocket_currency_type = None
 
         if hasattr(local, "default_channels"):
             default_channels = local.default_channels

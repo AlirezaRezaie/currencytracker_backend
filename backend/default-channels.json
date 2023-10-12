@@ -86,6 +86,44 @@
     ],
     "currency_info": { "persian_name": "بیتکوین", "is_crypto": true }
   },
+  "TGJU": {
+    "list_of_channels": [
+      {
+        "type": "wbsock",
+        "endpoint": "wss://stream.tgju.org/connection/websocket",
+        "channel_name": "dollar_tehran3bze",
+        "nonstop": true,
+        "currency_list": {
+          "GOLD": [
+            {
+              "code": "gold_740k",
+              "name": "طلای 72"
+            },
+            {
+              "code": "sekee_real",
+              "name": "سکه واقعی"
+            },
+            {
+              "code": "geram24",
+              "name": "گرم 24"
+            },
+            {
+              "code": "gold_mini_size",
+              "name": "طلای نی نی سایت"
+            }
+          ],
+          "CURRENCY": [],
+          "CRYPTO": [
+            {
+              "code": "crypto-bitcoin",
+              "name": "باتی کوین"
+            }
+          ]
+        }
+      }
+    ],
+    "currency_info": { "persian_name": "وب سوکت" }
+  },
   "VPN": {
     "list_of_channels": [
       {
