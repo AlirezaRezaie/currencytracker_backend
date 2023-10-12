@@ -1,7 +1,10 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
+import 'package:dollartracker/widgets/pages/Profile/setting_item.dart';
 import 'package:dollartracker/widgets/utilities/header.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-import '../utilities/Menu/side_menu.dart';
+import '../../utilities/Menu/side_menu.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -56,9 +59,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                   Text(
                                     "علیرضا رضایی",
                                     style: TextStyle(
-                                      color: Theme.of(context).colorScheme.onPrimary,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 20,
                                       fontFamily: "IransansBlack",
                                     ),
                                   )
@@ -66,7 +71,59 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ],
                           ),
-                        )
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 30,
+                            vertical: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.tertiary,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Theme.of(context).colorScheme.shadow,
+                                spreadRadius: 1,
+                                blurRadius: 12,
+                                offset: Offset(0, 6),
+                              )
+                            ],
+                          ),
+                          child: Text(
+                            "m.r.adibi125@gmail.com",
+                            style: GoogleFonts.lato(
+                                fontSize: 25,
+                                color:
+                                    Theme.of(context).colorScheme.onTertiary),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        SettingItem(
+                          title: "تغییر تم",
+                          icon: BootstrapIcons.palette_fill,
+                          routName: "profile/edit_theme",
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        SettingItem(
+                          title: "تغییر ارز صفحه اصلی",
+                          icon: BootstrapIcons.currency_dollar,
+                          routName: "profile/edit_theme",
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        SettingItem(
+                          title: "تغییر ارز صفحه اصلی",
+                          icon: BootstrapIcons.currency_dollar,
+                          routName: "profile/edit_theme",
+                        ),
                       ],
                     ),
                   ),

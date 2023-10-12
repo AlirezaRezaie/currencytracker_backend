@@ -284,6 +284,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           price: AnimatedDigitWidget(
                             value: dollarPrice,
                             enableSeparator: true,
+                            // recommended fonts titilliumWeb -- kanit -- dosis
                             textStyle: GoogleFonts.dosis(
                               color: Color.fromARGB(255, 255, 255, 255),
                               fontWeight: FontWeight.bold,
@@ -337,7 +338,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               height: 200,
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 8),
+                                  horizontal: 15,
+                                  vertical: 8,
+                                ),
                                 child: Chart(
                                   data: chartData,
                                   minY: lowestPriceChart,

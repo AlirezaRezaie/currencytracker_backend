@@ -1,92 +1,21 @@
-import 'dart:convert';
-import 'package:dollartracker/services/second_to_time.dart';
-import 'package:dollartracker/widgets/pages/CryptoCurrency/crypto_currency_table.dart';
+import 'package:dollartracker/widgets/pages/GoldData/gold_data_table.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:web_socket_channel/io.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 import '../../utilities/Menu/side_menu.dart';
 import '../../utilities/currency_selector.dart';
 import '../../utilities/header.dart';
 
-class CryptoCurrency extends StatefulWidget {
-  const CryptoCurrency({Key? key}) : super(key: key);
+class GoldData extends StatefulWidget {
+  const GoldData({super.key});
 
   @override
-  State<CryptoCurrency> createState() => _CryptoCurrencyState();
+  State<GoldData> createState() => _GoldDataState();
 }
 
-class _CryptoCurrencyState extends State<CryptoCurrency> {
-  List<bool> _selection = [false, false, true];
-  late WebSocketChannel channel;
-
-  // store the server host name
-  String serverHost = "";
-
-  // save the latest price to show to the user
-  String latestPrice = '';
-
-  // a list to store the fetched data
-  List global = [];
-
-  // save the loading status
-  bool isLoading = false;
-
-  // save the status of data that fetched
+class _GoldDataState extends State<GoldData> {
+  bool isLoading = true;
   bool isFetchsuccess = true;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // get the host name
-    String? host = dotenv.env['SERVER_HOST'];
-
-    // Replace 'ws://your_websocket_url' with your actual WebSocket server URL.
-    serverHost = "ws://$host/api/";
-    _connectToWebSocket(serverHost);
-  }
-
-  void _connectToWebSocket(String host) async {
-    isLoading = true;
-    channel = IOWebSocketChannel.connect(host);
-    channel.sink.add('SUBSCRIBE BTC');
-
-    channel.stream.listen(
-      (data) {
-        // Parse the received data as JSON
-        Map<String, dynamic> jsonData = jsonDecode(data);
-        // Check if the 'price' field exists and is a numeric value
-        if (jsonData.containsKey('local')) {
-          final local = jsonData['local'];
-
-          setState(() {
-            latestPrice = local['latests'].last['price'].toString();
-            global = jsonData['global']['latests'].reversed.toList();
-            isLoading = false;
-            isFetchsuccess = true;
-          });
-        }
-      },
-      onDone: () {
-        print("Server closed the connection");
-        _reconnectToWebSocket(serverHost);
-      },
-      onError: (error) {
-        print("WebSocket error");
-        _reconnectToWebSocket(serverHost);
-      },
-    );
-  }
-
-  void _reconnectToWebSocket(String host) async {
-    print("reconnecting.....");
-    await Future.delayed(Duration(seconds: 5), () {
-      _connectToWebSocket(host);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,10 +39,10 @@ class _CryptoCurrencyState extends State<CryptoCurrency> {
                       Container(
                         width: 500,
                         height: 400,
-                        child: Lottie.asset("assets/bitcoinLoading.json"),
+                        child: Lottie.asset("assets/CoinLoading.json"),
                       ),
                       Text(
-                        "... در حال اتصال به سرور ",
+                        "... در حال بارگیری اطلاعات",
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onBackground,
                           fontWeight: FontWeight.bold,
@@ -139,14 +68,14 @@ class _CryptoCurrencyState extends State<CryptoCurrency> {
                       height: 25,
                     ),
                     Text(
-                      "\$ $latestPrice",
+                      "56,450",
                       style: GoogleFonts.monoton(
                         fontWeight: FontWeight.bold,
                         fontSize: 50,
                       ),
                     ),
                     Text(
-                      "قیمت بیتکوین در حال حاظر",
+                      "قیمت طلا در حال حاظر",
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onBackground,
                         fontFamily: "IransansBlack",
@@ -170,61 +99,18 @@ class _CryptoCurrencyState extends State<CryptoCurrency> {
                     SizedBox(
                       height: 15,
                     ),
-                    ToggleButtons(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 30),
-                          child: Text(
-                            "یورو",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 15,
-                              fontFamily: 'IransansBlack',
-                            ),
-                          ),
+                    Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: Text(
+                        "انتخواب مورد دلخواه برای دریافت قیمت آن به تومان",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primaryContainer,
+                          fontFamily: "IransansBlack",
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 30),
-                          child: Text(
-                            "دلار",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 15,
-                              fontFamily: 'IransansBlack',
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 30),
-                          child: Text(
-                            "ریال",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 15,
-                              fontFamily: 'IransansBlack',
-                            ),
-                          ),
-                        ),
-                      ],
-                      selectedColor: Theme.of(context).colorScheme.onPrimary,
-                      fillColor: Theme.of(context).colorScheme.primary,
-                      splashColor: Theme.of(context).colorScheme.primary,
-                      isSelected: _selection,
-                      onPressed: (int newValue) {
-                        setState(() {
-                          for (int index = 0;
-                              index < _selection.length;
-                              index++) {
-                            if (index == newValue) {
-                              _selection[index] = true;
-                            } else {
-                              _selection[index] = false;
-                            }
-                          }
-                        });
-                      },
-                      color: Theme.of(context).colorScheme.onBackground,
-                      borderRadius: BorderRadius.circular(30),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                     SizedBox(
                       height: 20,
@@ -260,7 +146,7 @@ class _CryptoCurrencyState extends State<CryptoCurrency> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "تغییرات قیمت بیتکوین",
+                                      "تغییرات قیمت طلا",
                                       style: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
@@ -277,30 +163,19 @@ class _CryptoCurrencyState extends State<CryptoCurrency> {
                                 child: ListView.builder(
                                   padding: const EdgeInsets.all(25),
                                   physics: BouncingScrollPhysics(),
-                                  itemCount: global.length,
+                                  itemCount: 6,
                                   itemBuilder: (context, index) {
-                                    return CryptoCurrencyTable(
-                                      presentColor: global[index]
-                                                  ['rateofchange'] !=
-                                              null
-                                          ? global[index]['rateofchange'] > 0
-                                              ? Colors.greenAccent
-                                              : Colors.redAccent
-                                          : Colors.white,
-                                      rateOfChange:
-                                          global[index]['rateofchange'] == null
-                                              ? 0
-                                              : global[index]['rateofchange'],
-                                      price: global[index]['price'],
-                                      time: SecondToTime(
-                                          global[index]['posttime']),
-                                      backgroundColor: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                      priceColor: Colors.white,
+                                    return GoldDataTable(
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.primary,
                                       imageLink:
-                                          "https://cryptologos.cc/logos/bitcoin-btc-logo.png",
-                                      name: global[index]['code'],
+                                          "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg",
+                                      name: "alireza",
+                                      presentColor: Colors.green,
+                                      price: 45000,
+                                      priceColor: Colors.white,
+                                      time: "22:23",
+                                      rateOfChange: 45,
                                     );
                                   },
                                 ),
@@ -318,9 +193,9 @@ class _CryptoCurrencyState extends State<CryptoCurrency> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        width: 350,
-                        height: 300,
-                        child: Lottie.asset("assets/Error2.json"),
+                        width: 450,
+                        height: 350,
+                        child: Lottie.asset("assets/Error.json"),
                       ),
                       Text(
                         "خطا در برقرای ارتباط با سرور",

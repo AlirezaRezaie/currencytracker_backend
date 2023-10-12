@@ -137,6 +137,17 @@ class _SideMenuState extends State<SideMenu> {
               routName: "crypto_currency",
             ),
             MenuItem(
+              title: "طلا",
+              icon: BootstrapIcons.coin,
+              background_color: currentRoute == "/gold_data"
+                  ? Theme.of(context).colorScheme.primary
+                  : Color.fromARGB(0, 27, 28, 34),
+              color: currentRoute == "/gold_data"
+                  ? Theme.of(context).colorScheme.onPrimary
+                  : Theme.of(context).colorScheme.onSecondary,
+              routName: "gold_data",
+            ),
+            MenuItem(
               title: "اخبار",
               icon: BootstrapIcons.newspaper,
               background_color: currentRoute == "/news"
