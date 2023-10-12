@@ -1,7 +1,7 @@
 import threading
 from locals import local
 import json
-from modes import run_live
+from modes import run_live, run_websocket
 from logs import logger
 from utils import push_in_board, Arg
 
@@ -23,13 +23,21 @@ class Task:
     it also has a `users` list to have more control on it
     """
 
-    def __init__(self, code, loop=None, channel_index=0):
+    def __init__(self, code, currency_type=None, loop=None, channel_index=0):
         """
         TODO : this might return error or None as memory limit reaches
         """
         self.main_loop = loop
-        self.args = Arg(code, channel_index=channel_index)
+        self.args = Arg(
+            code,
+            websocket_currency_type=currency_type,
+            loop=loop,
+            channel_index=channel_index,
+        )
+
+        self.ws_users = {"GOLD": [], "CURRENCY": [], "CRYPTO": []}
         self.users = []
+
         self.stop_event = threading.Event()
         self.lastprice = None
 
@@ -46,9 +54,15 @@ class Task:
         self.start_task()
 
     def create_task(self):
+        if self.args.channel_info["type"] == "wbsock":
+            mode = run_websocket
+            call_back = ws_call_back
+        else:
+            mode = run_live
+            call_back = success_callback
         return threading.Thread(
-            target=run_live,
-            args=(success_callback, error_callback, self.stop_event, self.args),
+            target=mode,
+            args=(call_back, error_callback, self.stop_event, self.args),
         )
 
     def start_task(self):
@@ -59,14 +73,19 @@ class Task:
             self.task.start()
 
     def stop(self):
-        self.stop_event.set()
-        try:
-            # wait for it to fully close
-            self.task.join()
-        except:
-            print("cant stop current thread")
-        logger.info(f"removing {self.task.name} because no one is using it")
-        tasks.remove(self)
+        if self in tasks:
+            self.stop_event.set()
+            try:
+                # wait for it to fully close
+                self.task.join()
+            except Exception as e:
+                print(e)
+                print("cant stop current thread")
+            logger.info(f"removing {self.task.name} because no one is using it")
+
+            tasks.remove(self)
+        else:
+            print("already closed or doesnt even exist")
 
 
 def get_task(code) -> Task:
@@ -88,7 +107,7 @@ def get_all_tasks_subbed_in(user):
     return all_tasks
 
 
-def disconnect_websocket(websocket, task=None):
+def disconnect_websocket(websocket, user_type=None, task=None):
     """
     removes the user from the specified task if one is mention
     and removes the user from every task available if no task
@@ -102,9 +121,15 @@ def disconnect_websocket(websocket, task=None):
         user_tasks.append(task)
 
     for task in user_tasks:
-        logger.info(f"removing the user from {task.args.code}")
-        task.users.remove(websocket)
-
+        if not task.users:
+            for obj in task.ws_users:
+                for key, users in obj.items():
+                    if websocket in users:
+                        task.ws_users[key].remove(websocket)
+                        logger.info(f"removing {websocket} from TGJU {key}")
+        else:
+            task.users.remove(websocket)
+            logger.info(f"removing {websocket} from {task.args.code}")
         if len(task.users) < 1 and not task.args.channel_info["nonstop"]:
             task.stop()
 
@@ -135,6 +160,12 @@ def error_callback(code):
 
     if task.main_loop:
         task.main_loop.create_task(notify_error_to_all("wrong id bruh", task.users))
+
+
+def ws_call_back(data, type):
+    task = get_task("TGJU")
+    if task.main_loop:
+        task.main_loop.create_task(send_data_to_clients(str(data), task.ws_users[type]))
 
 
 def success_callback(local_board, channel):

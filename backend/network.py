@@ -7,6 +7,7 @@ from logs import logger
 from locals import local
 from requests import Session
 import json
+import websocket
 
 session = Session()
 
@@ -73,6 +74,41 @@ def is_connection_stable(server, timeout):
         return True
     except:
         return False
+
+
+def fetch_price_data_u_websocket():
+    endpoint = local.channel_info["endpoint"]
+    messages = []
+
+    def on_message(ws, message):
+        if local.stop_event.is_set():
+            ws.close()
+        json_data = json.loads(message)
+        data = json_data["result"]["data"]["data"]
+        messages.append("")
+        for i in data:
+            print(i)
+        print("----------------------------------")
+
+    def on_error(ws, error):
+        print(f"Error: {error}")
+
+    def on_close(ws, close_status_code, close_msg):
+        print("Closed")
+
+    def on_open(ws):
+        print("Connected to WebSocket")
+        # You can send a message here if needed
+        ws.send('{"params":{"name":"js"},"id":1}')
+        ws.send('{"method":1,"params":{"channel":"tgju:stream"},"id":2}')
+
+    # Create a WebSocket instance
+    ws = websocket.WebSocketApp(
+        endpoint, on_message=on_message, on_error=on_error, on_close=on_close
+    )
+
+    ws.on_open = on_open
+    ws.run_forever()
 
 
 def fetch_price_data_u_web_scrape(apikey=""):

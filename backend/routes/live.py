@@ -16,6 +16,7 @@ def command_parser(msg):
     supported_commands = {
         "SUBSCRIBE": 1,
         "UNSUBSCRIBE": 1,
+        "CONNECT": 1,
         "CHANNELS": 0,
         "PING": 0,
         "TASKS": 0,
@@ -29,7 +30,7 @@ def command_parser(msg):
         out["status"] = "ok"
 
         if index_of_arguments > 0:
-            out["channel_name"] = "".join(raw[index_of_arguments:])
+            out["channel_name"] = raw[index_of_arguments:]
         else:
             out["channel_name"] = None
     else:
@@ -74,7 +75,8 @@ async def websocket_endpoint(websocket: WebSocket):
             if parse_command["status"] == "ok":
                 # continue if ok
                 # get the channel code from the parser info
-                channel_code = parse_command["channel_name"]
+                full_commands = parse_command["channel_name"]
+                channel_code = full_commands[0]
                 if channel_code:
                     # get the task if exists
                     task = get_task(channel_code)
@@ -92,23 +94,32 @@ async def websocket_endpoint(websocket: WebSocket):
                         task.main_loop = loop
                         logger.info(f"task {channel_code} exists")
 
+                if channel_code == "TGJU":
+                    user_type = full_commands[1]
+                    select_user_list = task.ws_users[user_type]
+
+                else:
+                    select_user_list = task.users
                 # read the parsed data
                 match parse_command["command"]:
                     # makes the user recieve updates on the subscried channel
                     case "SUBSCRIBE":
                         # if the user is not already subscribed and is inside the
                         # users we will add it to the users
-                        if not websocket in task.users:
-                            task.users.append(websocket)
+                        # Get the user type based on the channel code
+
+                        # Check if the WebSocket is already in the list
+                        if websocket not in select_user_list:
+                            select_user_list.append(websocket)
                         else:
-                            # we notify to the user you are already subscribed
+                            # Notify the user that they are already subscribed
                             await websocket.send_text(
                                 f"you have already subscribed to {channel_code}"
                             )
 
                         # we check if we had recieved the last price this will rarely
                         # be false as we certainly will have a last price for each task
-                        if task.lastprice:
+                        if task.lastprice and not channel_code == "TGJU":
                             # is crypto is nececery boolean for it to know which global
                             # board should be sent to the user
                             is_crypto = task.args.currency_info.get("is_crypto")
@@ -118,10 +129,10 @@ async def websocket_endpoint(websocket: WebSocket):
                     # makes the user no longer recieve updates on that channel
                     case "UNSUBSCRIBE":
                         # check if the user havnt already unsubscried from this channel
-                        if websocket in task.users:
+                        if websocket in select_user_list:
                             # call the disconnect function it will also remove the user from the list
                             # of the active task users
-                            disconnect_websocket(websocket, task)
+                            disconnect_websocket(websocket, user_type, task)
                         else:
                             # notify the user that already been unsubbed
                             await websocket.send_text(

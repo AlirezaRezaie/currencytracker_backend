@@ -3,6 +3,7 @@ from price import extract_prices
 from logs import logger
 from locals import local
 from utils import push_in_board, Arg
+import threading
 
 # How To Use:
 
@@ -22,8 +23,88 @@ def get_fetch_function():
             func = fetch_price_data_u_preview_page
         case "web":
             func = fetch_price_data_u_web_scrape
-
     return func
+
+
+# the type websocket needs a whole another task for itself
+def run_websocket(success_callback, error_callback, stop_event, args: Arg):
+    endpoint = args.channel_info["endpoint"]
+    currency_list = args.channel_info["currency_list"]
+
+    boards = {"GOLD": [], "CURRENCY": [], "CRYPTO": []}
+
+    def websocket_terminator_sub_task(event, ws):
+        while True:
+            if event.is_set():
+                ws.close()
+                break
+            elif ws.has_done_teardown:
+                break
+
+    def on_message(ws, message):
+        json_data = json.loads(message)
+        data = json_data["result"]["data"]["data"]
+
+        for item in data:
+            name, price = item.split("|||")
+            _, id, channel = name.split("|")
+            for key, values in currency_list.items():
+                for value in values:
+                    if value["code"] == channel:
+                        select_board = boards.get(key, [])
+                        board_type = None
+                        for ent in select_board:
+                            if ent["name"] == channel:
+                                board_type = ent
+
+                        if board_type:
+                            latests = board_type["price"]
+                            if len(latests) > 20:
+                                latests.pop(0)
+                                latests.append(price)
+                            else:
+                                latests.append(price)
+
+                        else:
+                            new_board_type = {"name": channel, "price": [price]}
+                            board_type = new_board_type
+                            select_board.append(new_board_type)
+
+                        success_callback(board_type, key)
+
+    def on_error(ws, error):
+        # print(f"Error: {error}")
+        # print(error)
+        # error_callback(args.code)
+        print(error)
+
+    def on_close(ws, close_status_code, close_msg):
+        # print("Closed")
+        pass
+
+    def on_open(ws):
+        print("Connected to WebSocket")
+        # You can send a message here if needed
+        ws.send('{"params":{"name":"js"},"id":1}')
+        ws.send('{"method":1,"params":{"channel":"tgju:stream"},"id":2}')
+
+    while not stop_event.is_set():
+        try:
+            # Create a WebSocket instance
+            ws = websocket.WebSocketApp(
+                endpoint,
+                on_message=on_message,
+                on_close=on_close,
+                on_open=on_open,
+            )
+            terminator = threading.Thread(
+                target=websocket_terminator_sub_task, args=(stop_event, ws)
+            )
+            terminator.start()
+            ws.run_forever()
+            terminator.join()
+        except:
+            print("error accoured in webscoket task")
 
 
 # run live task the main inner workings of the app is in here
@@ -37,6 +118,7 @@ def run_live(success_callback, error_callback, stop_event, args: Arg):
     local.channel_info = args.channel_info
     local.args = args
     local.server_mode = "live"
+    local.stop_event = stop_event
 
     fetch_function = get_fetch_function()
 
@@ -65,7 +147,7 @@ def run_live(success_callback, error_callback, stop_event, args: Arg):
         # if its not a list or the list is empty then its not
         # a valid channel and we should report it via error callback
         if not type(current_batch) == list:
-            error_callback(args.channel_id)
+            error_callback(args.code)
             break
 
         # if there is no previous batch assign it to the current batch
@@ -109,7 +191,7 @@ def run_live(success_callback, error_callback, stop_event, args: Arg):
         # and also set the prev batch for next iteration
         prev_batch = current_batch
 
-    print("FINISH LOOP")
+    # print("FINISH LOOP")
 
 
 def run_counter(args: Arg):

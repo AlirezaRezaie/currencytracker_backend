@@ -21,8 +21,8 @@ def get_live_counter(code: str, channel: int, count: int) -> list[dict]:
     return run_counter(arg)
 
 
-@router.get("/get_supported")
-def get_supported() -> dict:
+@router.get("/get_supported/{}")
+def get_supported(type: str) -> dict:
     # formats the json data by checking their currency_info and regex
     # and returns a json of information about each channel supportivity
 
@@ -35,6 +35,10 @@ def get_supported() -> dict:
             # no currency_info property means its not supported
             formatted[currency_code] = "not-supported"
             continue
+        if currency_code == "TGJU":
+            formatted[currency_code] = currency_obj["list_of_channels"][0][
+                "currency_list"
+            ][type]
 
         channel_list = currency_obj["list_of_channels"]
         # it should have at least one channel to be considered as a supported currency
