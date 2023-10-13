@@ -122,11 +122,15 @@ def disconnect_websocket(websocket, user_type=None, task=None):
 
     for task in user_tasks:
         if not task.users:
-            for obj in task.ws_users:
-                for key, users in obj.items():
-                    if websocket in users:
-                        task.ws_users[key].remove(websocket)
-                        logger.info(f"removing {websocket} from TGJU {key}")
+            if user_type:
+                task.ws_users[user_type].remove(websocket)
+                logger.info(f"removing {websocket} from TGJU {user_type}")
+            else:
+                for obj in task.ws_users:
+                    for key, users in obj.items():
+                        if websocket in users:
+                            task.ws_users[key].remove(websocket)
+                            logger.info(f"removing {websocket} from TGJU {key}")
         else:
             task.users.remove(websocket)
             logger.info(f"removing {websocket} from {task.args.code}")
@@ -156,7 +160,9 @@ async def notify_error_to_all(error_msg, all_clients):
 
 def error_callback(code):
     task = get_task(code)
-    task.stop()
+
+    # disconnect_websocket(,task=task)
+    # task.stop()
 
     if task.main_loop:
         task.main_loop.create_task(notify_error_to_all("wrong id bruh", task.users))

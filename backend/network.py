@@ -76,41 +76,6 @@ def is_connection_stable(server, timeout):
         return False
 
 
-def fetch_price_data_u_websocket():
-    endpoint = local.channel_info["endpoint"]
-    messages = []
-
-    def on_message(ws, message):
-        if local.stop_event.is_set():
-            ws.close()
-        json_data = json.loads(message)
-        data = json_data["result"]["data"]["data"]
-        messages.append("")
-        for i in data:
-            print(i)
-        print("----------------------------------")
-
-    def on_error(ws, error):
-        print(f"Error: {error}")
-
-    def on_close(ws, close_status_code, close_msg):
-        print("Closed")
-
-    def on_open(ws):
-        print("Connected to WebSocket")
-        # You can send a message here if needed
-        ws.send('{"params":{"name":"js"},"id":1}')
-        ws.send('{"method":1,"params":{"channel":"tgju:stream"},"id":2}')
-
-    # Create a WebSocket instance
-    ws = websocket.WebSocketApp(
-        endpoint, on_message=on_message, on_error=on_error, on_close=on_close
-    )
-
-    ws.on_open = on_open
-    ws.run_forever()
-
-
 def fetch_price_data_u_web_scrape(apikey=""):
     raise NotImplementedError
 
@@ -133,7 +98,7 @@ def fetch_price_data_u_public_api(apikey=""):
     else:
         # this will be later caught by the run_live function as error as it thinks its not a valid channel
         logger.error(
-            "you should specify a 'endpoint' key and value in the configs json if you have type 'api' "
+            "you should specify an 'endpoint' key and value in the configs json if you have type 'api' "
         )
         return []
 
@@ -182,6 +147,8 @@ def fetch_price_data_u_preview_page():
             # Continuously check the connection stability
             if not is_connection_stable("t.me", timeout=timeout):
                 logger.critical("Connection is not stable. Retrying in 5 seconds...")
+            else:
+                logger.info("connection is ok")
 
     # Decompress the compressed data (gzip encoding)
     # doesnt actually decodes gzip to html but it works for now
