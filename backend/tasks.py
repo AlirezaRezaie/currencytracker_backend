@@ -121,21 +121,22 @@ def disconnect_websocket(websocket, user_type=None, task=None):
         user_tasks.append(task)
 
     for task in user_tasks:
-        if not task.users:
-            if user_type:
-                task.ws_users[user_type].remove(websocket)
-                logger.info(f"removing {websocket} from TGJU {user_type}")
-            else:
-                for obj in task.ws_users:
-                    for key, users in obj.items():
-                        if websocket in users:
-                            task.ws_users[key].remove(websocket)
-                            logger.info(f"removing {websocket} from TGJU {key}")
-        else:
-            task.users.remove(websocket)
-            logger.info(f"removing {websocket} from {task.args.code}")
+        task.users.remove(websocket)
+        logger.info(f"removing {websocket} from {task.args.code}")
         if len(task.users) < 1 and not task.args.channel_info["nonstop"]:
             task.stop()
+
+    websocket_task = get_task("TGJU")
+
+    if user_type:
+        task.ws_users[user_type].remove(websocket)
+        logger.info(f"removing {websocket} from TGJU {user_type}")
+
+    else:
+        for key, users in websocket_task.ws_users.items():
+            if websocket in users:
+                websocket_task.ws_users[key].remove(websocket)
+                logger.info(f"removing {websocket} from TGJU {key}")
 
 
 def baked_data(local_board, is_crypto):

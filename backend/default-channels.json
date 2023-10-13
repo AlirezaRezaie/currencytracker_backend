@@ -112,7 +112,12 @@
               "name": "طلای نی نی سایت"
             }
           ],
-          "CURRENCY": [],
+          "CURRENCY": [
+            {
+              "code": "price_dollar_pw",
+              "name": "دلار پی دبلیو"
+            }
+          ],
           "CRYPTO": [
             {
               "code": "crypto-bitcoin",

@@ -71,6 +71,9 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
                             select_board.append(new_board_type)
 
                         success_callback(board_type, key)
+                    else:
+                        # print(f"{channel} not supported ")
+                        pass
 
     def on_error(ws, error):
         # print(f"Error: {error}")
