@@ -112,7 +112,9 @@ async def websocket_endpoint(websocket: WebSocket):
 
                         # Check if the WebSocket is already in the list
                         if websocket not in select_user_list:
-                            logger.info(f"add user {websocket} to {channel_code}")
+                            logger.info(
+                                f"add user {websocket.client.host}:{websocket.client.port} to {channel_code}"
+                            )
                             select_user_list.append(websocket)
                         else:
                             # Notify the user that they are already subscribed

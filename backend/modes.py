@@ -68,11 +68,10 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
         print(error)
 
     def on_close(ws, close_status_code, close_msg):
-        # print("Closed")
-        pass
+        logger.info("Websocket Connection Closed")
 
     def on_open(ws):
-        print("Connected to WebSocket")
+        logger.info("Connected to WebSocket")
         # You can send a message here if needed
         ws.send('{"params":{"name":"js"},"id":1}')
         ws.send('{"method":1,"params":{"channel":"tgju:stream"},"id":2}')
