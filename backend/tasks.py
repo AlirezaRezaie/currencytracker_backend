@@ -35,7 +35,7 @@ class Task:
             channel_index=channel_index,
         )
 
-        self.ws_users = {"GOLD": [], "CURRENCY": [], "CRYPTO": []}
+        self.ws_users = {}
         self.users = []
 
         self.stop_event = threading.Event()
@@ -127,6 +127,8 @@ def disconnect_websocket(websocket, user_type=None, task=None):
             task.stop()
 
     websocket_task = get_task("TGJU")
+    if not websocket_task.ws_users.get(user_type):
+        return
 
     if user_type:
         task.ws_users[user_type].remove(websocket)
@@ -171,6 +173,7 @@ def error_callback(code):
 
 def ws_call_back(data, type):
     task = get_task("TGJU")
+    # task.ws_users.setdefault(type,[])
     if task.main_loop:
         task.main_loop.create_task(send_data_to_clients(str(data), task.ws_users[type]))
 

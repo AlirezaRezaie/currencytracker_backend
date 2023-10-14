@@ -31,7 +31,7 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
     endpoint = args.channel_info["endpoint"]
     currency_list = args.channel_info["currency_list"]
 
-    boards = {"GOLD": [], "CURRENCY": [], "CRYPTO": []}
+    boards = {}
 
     def websocket_terminator_sub_task(event, ws):
         while True:
@@ -49,31 +49,17 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
             name, price = item.split("|||")
             _, id, channel = name.split("|")
             for key, values in currency_list.items():
-                for value in values:
-                    if value["code"] == channel:
-                        select_board = boards.get(key, [])
-                        board_type = None
-                        for ent in select_board:
-                            if ent["name"] == channel:
-                                board_type = ent
+                if any(item["code"] == channel for item in values):
+                    boards.setdefault(channel, [])
+                    select_board = boards.get(channel)
 
-                        if board_type:
-                            latests = board_type["price"]
-                            if len(latests) > 20:
-                                latests.pop(0)
-                                latests.append(price)
-                            else:
-                                latests.append(price)
-
-                        else:
-                            new_board_type = {"name": channel, "price": [price]}
-                            board_type = new_board_type
-                            select_board.append(new_board_type)
-
-                        success_callback(board_type, key)
+                    if len(select_board) > 20:
+                        select_board.pop(0)
+                        select_board.append(price)
                     else:
-                        # print(f"{channel} not supported ")
-                        pass
+                        select_board.append(price)
+
+                    success_callback(select_board, channel)
 
     def on_error(ws, error):
         # print(f"Error: {error}")

@@ -96,6 +96,8 @@ async def websocket_endpoint(websocket: WebSocket):
 
                 if channel_code == "TGJU":
                     user_type = full_commands[1]
+                    task.ws_users.setdefault(user_type, [])
+                    logger.info(f"selected {task.ws_users}")
                     select_user_list = task.ws_users[user_type]
 
                 else:
@@ -110,6 +112,7 @@ async def websocket_endpoint(websocket: WebSocket):
 
                         # Check if the WebSocket is already in the list
                         if websocket not in select_user_list:
+                            logger.info(f"add user {websocket} to {channel_code}")
                             select_user_list.append(websocket)
                         else:
                             # Notify the user that they are already subscribed
