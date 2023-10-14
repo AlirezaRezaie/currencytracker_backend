@@ -192,11 +192,11 @@ def ws_call_back(price, type):
     else:
         select_board.append(price)
 
-    data = {type: select_board}
+    data = json.dumps({type: select_board})
 
     # task.ws_users.setdefault(type,[])
     if task.main_loop:
-        task.main_loop.create_task(send_data_to_clients(str(data), task.ws_users[type]))
+        task.main_loop.create_task(send_data_to_clients(data, task.ws_users[type]))
 
 
 def success_callback(local_board, channel):
