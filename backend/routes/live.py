@@ -131,6 +131,9 @@ async def websocket_endpoint(websocket: WebSocket):
                             await websocket.send_text(
                                 baked_data(task.lastprice, is_crypto)
                             )
+                        elif channel_code == "TGJU":
+                            data = {channel_code: boards.get(user_type)}
+                            await websocket.send_text(str(data))
                     # makes the user no longer recieve updates on that channel
                     case "UNSUBSCRIBE":
                         # check if the user havnt already unsubscried from this channel

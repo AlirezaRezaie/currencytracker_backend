@@ -8,6 +8,8 @@ from utils import push_in_board, Arg
 # this is the global board every currency update gets saved to this board
 global_board = {"latests": [], "limit": 20}
 crypto_board = {"latests": [], "limit": 20}
+boards = {}
+
 # since every task (thread) might change the value of global_board
 # we will create a lock to ensure no conflict
 lock = threading.Lock()
@@ -178,8 +180,20 @@ def error_callback(code):
         task.main_loop.create_task(notify_error_to_all("wrong id bruh", task.users))
 
 
-def ws_call_back(data, type):
+def ws_call_back(price, type):
     task = get_task("TGJU")
+
+    boards.setdefault(type, [])
+    select_board = boards.get(type)
+
+    if len(select_board) > 20:
+        select_board.pop(0)
+        select_board.append(price)
+    else:
+        select_board.append(price)
+
+    data = {type: select_board}
+
     # task.ws_users.setdefault(type,[])
     if task.main_loop:
         task.main_loop.create_task(send_data_to_clients(str(data), task.ws_users[type]))
