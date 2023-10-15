@@ -4,6 +4,8 @@ import json
 from modes import run_live, run_websocket
 from logs import logger
 from utils import push_in_board, Arg
+import asyncio
+import pickle
 
 # this is the global board every currency update gets saved to this board
 global_board = {"latests": [], "limit": 20}
@@ -160,14 +162,9 @@ def baked_data(local_board, is_crypto):
     return json.dumps({"global": g_board, "local": local_board})
 
 
-async def send_data_to_clients(data, clients):
-    for client in clients:
-        await client.send_text(data)
-
-
-async def notify_error_to_all(error_msg, all_clients):
-    for client in all_clients:
-        await client.send_text(error_msg)
+async def send_to_all(error_msg, all_clients):
+    tasks = [client.send_text(error_msg) for client in all_clients]
+    await asyncio.gather(*tasks)
 
 
 def error_callback(code):
@@ -177,7 +174,7 @@ def error_callback(code):
     # task.stop()
 
     if task.main_loop:
-        task.main_loop.create_task(notify_error_to_all("wrong id bruh", task.users))
+        task.main_loop.create_task(send_to_all("wrong id bruh", task.users))
 
 
 def ws_call_back(price, type):
@@ -192,11 +189,21 @@ def ws_call_back(price, type):
     else:
         select_board.append(price)
 
-    data = json.dumps({type: select_board})
+    # Load the existing data from the file
+    # with open("my_objects.pkl", "rb") as file:
+    #    existing_data = pickle.load(file)
+    json_data = {type: select_board}
+
+    # Save the updated data back to the file
+    with open("my_objects.pkl", "wb") as file:
+        pickle.dump(boards, file)
+
+    # we should also create a task that saves the entry inside the sqlite for later usage
+    data = json.dumps(json_data)
 
     # task.ws_users.setdefault(type,[])
     if task.main_loop:
-        task.main_loop.create_task(send_data_to_clients(data, task.ws_users[type]))
+        task.main_loop.create_task(send_to_all(data, task.ws_users[type]))
 
 
 def success_callback(local_board, channel):
@@ -217,7 +224,7 @@ def success_callback(local_board, channel):
 
     if task.main_loop:
         task.main_loop.create_task(
-            send_data_to_clients(baked_data(local_board, is_crypto), users)
+            send_to_all(baked_data(local_board, is_crypto), users)
         )
     else:
         logger.debug("new data recieved but there is to give it to ")

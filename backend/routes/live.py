@@ -132,7 +132,9 @@ async def websocket_endpoint(websocket: WebSocket):
                                 baked_data(task.lastprice, is_crypto)
                             )
                         elif channel_code == "TGJU":
-                            data = {user_type: boards.get(user_type)}
+                            with open("my_objects.pkl", "rb") as file:
+                                existing_board = pickle.load(file)
+                            data = {user_type: existing_board.get(user_type)}
                             text_data = json.dumps(data)
                             await websocket.send_text(text_data)
                     # makes the user no longer recieve updates on that channel
