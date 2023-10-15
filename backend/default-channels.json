@@ -139,15 +139,47 @@
             },
             {
               "code": "price_dollar_rl",
-              "name": "قیمت دلار"
+              "name": "دلار"
             },
             {
-              "code": "price_dollar_realtime",
-              "name": "قیمت دلار لحظه ای"
+              "code": "price_eur",
+              "name": "یورو"
             },
             {
-              "code": "price_dollar_dt",
-              "name": "قیمت دلار دیتی "
+              "code": "price_aed",
+              "name": "درهم امارات"
+            },
+            {
+              "code": "price_gbp",
+              "name": "پوند انگلیس"
+            },
+            {
+              "code": "price_try",
+              "name": "لیر ترکیه"
+            },
+            {
+              "code": "price_chf",
+              "name": "فرانک سوئیس"
+            },
+            {
+              "code": "price_cny",
+              "name": "یوان چین"
+            },
+            {
+              "code": "price_jpy",
+              "name": "ین ژاپن"
+            },
+            {
+              "code": "price_krw",
+              "name": "وون کره جنوبی"
+            },
+            {
+              "code": "price_cad",
+              "name": "دلار کانادا"
+            },
+            {
+              "code": "price_aud",
+              "name": "دلار استرالیا"
             }
           ],
           "CRYPTO": [
