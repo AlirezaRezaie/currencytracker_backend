@@ -97,15 +97,19 @@
           "GOLD": [
             {
               "code": "gold_740k",
-              "name": "طلای 72"
+              "name": "طلای 18 عیار / 750"
+            },
+            {
+              "code": "gold_17",
+              "name": "مثقال / بدون حباب"
             },
             {
               "code": "gold_world_futures",
-              "name": "طلای جهانی آتی"
+              "name": "آبشده کمتر از کیلو"
             },
             {
               "code": "gold_melted_wholesale",
-              "name": "طلای آبشده عمده"
+              "name": "آبشده بنکداری"
             },
             {
               "code": "sekee_real",
@@ -113,19 +117,19 @@
             },
             {
               "code": "geram24",
-              "name": "گرم 24"
+              "name": "طلای 24 عیار"
             },
             {
               "code": "gold_mini_size",
-              "name": "طلای نی نی سایت"
+              "name": "طلای دست دوم"
             },
             {
               "code": "gold_17_transfer",
-              "name": "طلای 17 عیار"
+              "name": "حباب آبشده"
             },
             {
               "code": "gold_futures",
-              "name": "طلای آینده"
+              "name": "آبشده نقدی"
             }
           ],
           "CURRENCY": [
