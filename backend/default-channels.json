@@ -100,6 +100,14 @@
               "name": "طلای 72"
             },
             {
+              "code": "gold_world_futures",
+              "name": "طلای جهانی آتی"
+            },
+            {
+              "code": "gold_melted_wholesale",
+              "name": "طلای آبشده عمده"
+            },
+            {
               "code": "sekee_real",
               "name": "سکه واقعی"
             },
@@ -110,9 +118,34 @@
             {
               "code": "gold_mini_size",
               "name": "طلای نی نی سایت"
+            },
+            {
+              "code": "gold_17_transfer",
+              "name": "طلای 17 عیار"
+            },
+            {
+              "code": "gold_futures",
+              "name": "طلای آینده"
             }
           ],
-          "CURRENCY": [],
+          "CURRENCY": [
+            {
+              "code": "price_dollar_pw",
+              "name": "دلار پی دبلیو"
+            },
+            {
+              "code": "price_dollar_rl",
+              "name": "قیمت دلار"
+            },
+            {
+              "code": "price_dollar_realtime",
+              "name": "قیمت دلار لحظه ای"
+            },
+            {
+              "code": "price_dollar_dt",
+              "name": "قیمت دلار دیتی "
+            }
+          ],
           "CRYPTO": [
             {
               "code": "crypto-bitcoin",

@@ -31,8 +31,6 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
     endpoint = args.channel_info["endpoint"]
     currency_list = args.channel_info["currency_list"]
 
-    boards = {"GOLD": [], "CURRENCY": [], "CRYPTO": []}
-
     def websocket_terminator_sub_task(event, ws):
         while True:
             if event.is_set():
@@ -49,28 +47,8 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
             name, price = item.split("|||")
             _, id, channel = name.split("|")
             for key, values in currency_list.items():
-                for value in values:
-                    if value["code"] == channel:
-                        select_board = boards.get(key, [])
-                        board_type = None
-                        for ent in select_board:
-                            if ent["name"] == channel:
-                                board_type = ent
-
-                        if board_type:
-                            latests = board_type["price"]
-                            if len(latests) > 20:
-                                latests.pop(0)
-                                latests.append(price)
-                            else:
-                                latests.append(price)
-
-                        else:
-                            new_board_type = {"name": channel, "price": [price]}
-                            board_type = new_board_type
-                            select_board.append(new_board_type)
-
-                        success_callback(board_type, key)
+                if any(item["code"] == channel for item in values):
+                    success_callback(price, channel)
 
     def on_error(ws, error):
         # print(f"Error: {error}")
@@ -79,11 +57,10 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
         print(error)
 
     def on_close(ws, close_status_code, close_msg):
-        # print("Closed")
-        pass
+        logger.info("Websocket Connection Closed")
 
     def on_open(ws):
-        print("Connected to WebSocket")
+        logger.info("Connected to WebSocket")
         # You can send a message here if needed
         ws.send('{"params":{"name":"js"},"id":1}')
         ws.send('{"method":1,"params":{"channel":"tgju:stream"},"id":2}')

@@ -8,6 +8,8 @@ from utils import push_in_board, Arg
 # this is the global board every currency update gets saved to this board
 global_board = {"latests": [], "limit": 20}
 crypto_board = {"latests": [], "limit": 20}
+boards = {}
+
 # since every task (thread) might change the value of global_board
 # we will create a lock to ensure no conflict
 lock = threading.Lock()
@@ -35,7 +37,7 @@ class Task:
             channel_index=channel_index,
         )
 
-        self.ws_users = {"GOLD": [], "CURRENCY": [], "CRYPTO": []}
+        self.ws_users = {}
         self.users = []
 
         self.stop_event = threading.Event()
@@ -121,17 +123,31 @@ def disconnect_websocket(websocket, user_type=None, task=None):
         user_tasks.append(task)
 
     for task in user_tasks:
-        if not task.users:
-            for obj in task.ws_users:
-                for key, users in obj.items():
-                    if websocket in users:
-                        task.ws_users[key].remove(websocket)
-                        logger.info(f"removing {websocket} from TGJU {key}")
-        else:
-            task.users.remove(websocket)
-            logger.info(f"removing {websocket} from {task.args.code}")
+        task.users.remove(websocket)
+        logger.info(
+            f"removing {websocket.client.host}:{websocket.client.port} from {task.args.code}"
+        )
         if len(task.users) < 1 and not task.args.channel_info["nonstop"]:
             task.stop()
+
+    websocket_task = get_task("TGJU")
+
+    # if not websocket_task.ws_users.get(user_type):
+    #    return
+
+    if user_type:
+        task.ws_users[user_type].remove(websocket)
+        logger.info(
+            f"removing {websocket.client.host}:{websocket.client.port} from TGJU {user_type}"
+        )
+
+    else:
+        for key, users in websocket_task.ws_users.items():
+            if websocket in users:
+                websocket_task.ws_users[key].remove(websocket)
+                logger.info(
+                    f"removing {websocket.client.host}:{websocket.client.port} from TGJU {key}"
+                )
 
 
 def baked_data(local_board, is_crypto):
@@ -156,16 +172,31 @@ async def notify_error_to_all(error_msg, all_clients):
 
 def error_callback(code):
     task = get_task(code)
-    task.stop()
+
+    # disconnect_websocket(,task=task)
+    # task.stop()
 
     if task.main_loop:
         task.main_loop.create_task(notify_error_to_all("wrong id bruh", task.users))
 
 
-def ws_call_back(data, type):
+def ws_call_back(price, type):
     task = get_task("TGJU")
+
+    boards.setdefault(type, [])
+    select_board = boards.get(type)
+
+    if len(select_board) > 20:
+        select_board.pop(0)
+        select_board.append(price)
+    else:
+        select_board.append(price)
+
+    data = json.dumps({type: select_board})
+
+    # task.ws_users.setdefault(type,[])
     if task.main_loop:
-        task.main_loop.create_task(send_data_to_clients(str(data), task.ws_users[type]))
+        task.main_loop.create_task(send_data_to_clients(data, task.ws_users[type]))
 
 
 def success_callback(local_board, channel):

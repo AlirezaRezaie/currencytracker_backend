@@ -96,6 +96,8 @@ async def websocket_endpoint(websocket: WebSocket):
 
                 if channel_code == "TGJU":
                     user_type = full_commands[1]
+                    task.ws_users.setdefault(user_type, [])
+                    logger.info(f"selected {task.ws_users}")
                     select_user_list = task.ws_users[user_type]
 
                 else:
@@ -110,6 +112,9 @@ async def websocket_endpoint(websocket: WebSocket):
 
                         # Check if the WebSocket is already in the list
                         if websocket not in select_user_list:
+                            logger.info(
+                                f"add user {websocket.client.host}:{websocket.client.port} to {channel_code}"
+                            )
                             select_user_list.append(websocket)
                         else:
                             # Notify the user that they are already subscribed
@@ -126,6 +131,10 @@ async def websocket_endpoint(websocket: WebSocket):
                             await websocket.send_text(
                                 baked_data(task.lastprice, is_crypto)
                             )
+                        elif channel_code == "TGJU":
+                            data = {user_type: boards.get(user_type)}
+                            text_data = json.dumps(data)
+                            await websocket.send_text(text_data)
                     # makes the user no longer recieve updates on that channel
                     case "UNSUBSCRIBE":
                         # check if the user havnt already unsubscried from this channel
