@@ -9,3 +9,4 @@ uploads
 nohup.out
 restart-server.sh
 currency_images
+my_objects.pkl
