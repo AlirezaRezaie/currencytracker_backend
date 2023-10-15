@@ -18,7 +18,15 @@ class CurrencySelector extends StatefulWidget {
 }
 
 class _CurrencySelectorState extends State<CurrencySelector> {
-  String current_currency = "USD";
+  String current_currency = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    current_currency = widget.listOfCurrency[0];
+  }
 
   @override
   Widget build(BuildContext context) {
