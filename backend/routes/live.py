@@ -132,7 +132,7 @@ async def websocket_endpoint(websocket: WebSocket):
                                 baked_data(task.lastprice, is_crypto)
                             )
                         elif channel_code == "TGJU":
-                            with open("my_objects.pkl", "rb") as file:
+                            with open("static/my_objects.pkl", "rb") as file:
                                 existing_board = pickle.load(file)
                             data = {user_type: existing_board.get(user_type)}
                             text_data = json.dumps(data)
