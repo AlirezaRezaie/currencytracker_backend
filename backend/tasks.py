@@ -195,7 +195,7 @@ def ws_call_back(price, type):
     json_data = {type: select_board}
 
     # Save the updated data back to the file
-    with open("my_objects.pkl", "wb") as file:
+    with open("static/my_objects.pkl", "wb") as file:
         pickle.dump(boards, file)
 
     # we should also create a task that saves the entry inside the sqlite for later usage
