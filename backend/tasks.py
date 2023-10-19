@@ -4,6 +4,8 @@ import json
 from modes import run_live, run_websocket
 from logs import logger
 from utils import push_in_board, Arg
+import asyncio
+import pickle
 
 # this is the global board every currency update gets saved to this board
 global_board = {"latests": [], "limit": 20}
@@ -90,6 +92,33 @@ class Task:
             print("already closed or doesnt even exist")
 
 
+def get_all_user_list():
+    all_user_lists = []
+    for task in tasks:
+        if task.users:
+            all_user_lists.append({"type": "TGCURRENCY", "users": task.users})
+        elif task.ws_users:
+            for channel_name, channel_list in task.ws_users.items():
+                all_user_lists.append(
+                    {
+                        "type": f"{task.args.code}:{channel_name}",
+                        "users": channel_list,
+                    }
+                )
+        # else:
+        #    logger.info(f"task {task.args.code} doesnt have any users")
+    return all_user_lists
+
+
+def get_lists_user_joined(websocket):
+    user_lists = []
+    all_lists = get_all_user_list()
+    for users_obj in all_lists:
+        if websocket in users_obj.get("users"):
+            user_lists.append(users_obj)
+    return user_lists
+
+
 def get_task(code) -> Task:
     """
     Returns:
@@ -101,53 +130,35 @@ def get_task(code) -> Task:
     return None
 
 
-def get_all_tasks_subbed_in(user):
-    all_tasks = []
-    for task in tasks:
-        if user in task.users:
-            all_tasks.append(task)
-    return all_tasks
+# def get_all_tasks_subbed_in(user):
+#    all_user_lists = []
+#    for task in tasks:
+#        if user in task.users:
+#            all_tasks.append(task)
+#    return all_tasks
 
 
-def disconnect_websocket(websocket, user_type=None, task=None):
+def disconnect_websocket(websocket, user_type=None, user_list=None):
     """
     removes the user from the specified task if one is mention
     and removes the user from every task available if no task
     is mentioned
     """
-    user_tasks = []
-    if not task:
+    if not user_list:
         # if not specified which task to unsubscribe from unsub it from every task
-        user_tasks = get_all_tasks_subbed_in(websocket)
+        all_lists = get_lists_user_joined(websocket)
+        for list_of_users in all_lists:
+            users = list_of_users.get("users")
+            task_name = list_of_users.get("type")
+            users.remove(websocket)
+            logger.info(
+                f"removing {websocket.client.host}:{websocket.client.port} from {task_name}"
+            )
     else:
-        user_tasks.append(task)
-
-    for task in user_tasks:
-        task.users.remove(websocket)
+        user_list.remove(websocket)
         logger.info(
-            f"removing {websocket.client.host}:{websocket.client.port} from {task.args.code}"
+            f"removing {websocket.client.host}:{websocket.client.port} from {user_type}"
         )
-        if len(task.users) < 1 and not task.args.channel_info["nonstop"]:
-            task.stop()
-
-    websocket_task = get_task("TGJU")
-
-    # if not websocket_task.ws_users.get(user_type):
-    #    return
-
-    if user_type:
-        task.ws_users[user_type].remove(websocket)
-        logger.info(
-            f"removing {websocket.client.host}:{websocket.client.port} from TGJU {user_type}"
-        )
-
-    else:
-        for key, users in websocket_task.ws_users.items():
-            if websocket in users:
-                websocket_task.ws_users[key].remove(websocket)
-                logger.info(
-                    f"removing {websocket.client.host}:{websocket.client.port} from TGJU {key}"
-                )
 
 
 def baked_data(local_board, is_crypto):
@@ -160,14 +171,9 @@ def baked_data(local_board, is_crypto):
     return json.dumps({"global": g_board, "local": local_board})
 
 
-async def send_data_to_clients(data, clients):
-    for client in clients:
-        await client.send_text(data)
-
-
-async def notify_error_to_all(error_msg, all_clients):
-    for client in all_clients:
-        await client.send_text(error_msg)
+async def send_to_all(error_msg, all_clients):
+    tasks = [client.send_text(error_msg) for client in all_clients]
+    await asyncio.gather(*tasks)
 
 
 def error_callback(code):
@@ -177,7 +183,7 @@ def error_callback(code):
     # task.stop()
 
     if task.main_loop:
-        task.main_loop.create_task(notify_error_to_all("wrong id bruh", task.users))
+        task.main_loop.create_task(send_to_all("wrong id bruh", task.users))
 
 
 def ws_call_back(price, type):
@@ -192,11 +198,21 @@ def ws_call_back(price, type):
     else:
         select_board.append(price)
 
-    data = json.dumps({type: select_board})
+    # Load the existing data from the file
+    # with open("my_objects.pkl", "rb") as file:
+    #    existing_data = pickle.load(file)
+    json_data = {type: select_board}
+
+    # Save the updated data back to the file
+    with open("TGJU.pkl", "wb") as file:
+        pickle.dump(boards, file)
+
+    # we should also create a task that saves the entry inside the sqlite for later usage
+    data = json.dumps(json_data)
 
     # task.ws_users.setdefault(type,[])
     if task.main_loop:
-        task.main_loop.create_task(send_data_to_clients(data, task.ws_users[type]))
+        task.main_loop.create_task(send_to_all(data, task.ws_users[type]))
 
 
 def success_callback(local_board, channel):
@@ -217,7 +233,7 @@ def success_callback(local_board, channel):
 
     if task.main_loop:
         task.main_loop.create_task(
-            send_data_to_clients(baked_data(local_board, is_crypto), users)
+            send_to_all(baked_data(local_board, is_crypto), users)
         )
     else:
         logger.debug("new data recieved but there is to give it to ")

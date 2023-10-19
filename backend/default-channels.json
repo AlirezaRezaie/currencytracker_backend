@@ -74,7 +74,7 @@
     "list_of_channels": [],
     "currency_info": { "persian_name": "دینار عراق" }
   },
-  "BTC": {
+  "CRYPTO": {
     "list_of_channels": [
       {
         "type": "api",
@@ -97,15 +97,19 @@
           "GOLD": [
             {
               "code": "gold_740k",
-              "name": "طلای 72"
+              "name": "طلای 18 عیار / 750"
+            },
+            {
+              "code": "gold_17",
+              "name": "مثقال / بدون حباب"
             },
             {
               "code": "gold_world_futures",
-              "name": "طلای جهانی آتی"
+              "name": "آبشده کمتر از کیلو"
             },
             {
               "code": "gold_melted_wholesale",
-              "name": "طلای آبشده عمده"
+              "name": "آبشده بنکداری"
             },
             {
               "code": "sekee_real",
@@ -113,19 +117,19 @@
             },
             {
               "code": "geram24",
-              "name": "گرم 24"
+              "name": "طلای 24 عیار"
             },
             {
               "code": "gold_mini_size",
-              "name": "طلای نی نی سایت"
+              "name": "طلای دست دوم"
             },
             {
               "code": "gold_17_transfer",
-              "name": "طلای 17 عیار"
+              "name": "حباب آبشده"
             },
             {
               "code": "gold_futures",
-              "name": "طلای آینده"
+              "name": "آبشده نقدی"
             }
           ],
           "CURRENCY": [
@@ -135,15 +139,47 @@
             },
             {
               "code": "price_dollar_rl",
-              "name": "قیمت دلار"
+              "name": "دلار"
             },
             {
-              "code": "price_dollar_realtime",
-              "name": "قیمت دلار لحظه ای"
+              "code": "price_eur",
+              "name": "یورو"
             },
             {
-              "code": "price_dollar_dt",
-              "name": "قیمت دلار دیتی "
+              "code": "price_aed",
+              "name": "درهم امارات"
+            },
+            {
+              "code": "price_gbp",
+              "name": "پوند انگلیس"
+            },
+            {
+              "code": "price_try",
+              "name": "لیر ترکیه"
+            },
+            {
+              "code": "price_chf",
+              "name": "فرانک سوئیس"
+            },
+            {
+              "code": "price_cny",
+              "name": "یوان چین"
+            },
+            {
+              "code": "price_jpy",
+              "name": "ین ژاپن"
+            },
+            {
+              "code": "price_krw",
+              "name": "وون کره جنوبی"
+            },
+            {
+              "code": "price_cad",
+              "name": "دلار کانادا"
+            },
+            {
+              "code": "price_aud",
+              "name": "دلار استرالیا"
             }
           ],
           "CRYPTO": [

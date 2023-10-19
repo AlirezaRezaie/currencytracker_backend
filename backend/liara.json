@@ -1,0 +1,10 @@
+{
+  "app": "hopeful-hamilton-4zrngrymi",
+  "port": 8000,
+  "disks": [
+    {
+      "name": "currency-disk",
+      "mountTo": "/app/static"
+    }
+  ]
+}
