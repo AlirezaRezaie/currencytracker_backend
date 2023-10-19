@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class GoldDataTable extends StatelessWidget {
-  final String time, imageLink, name;
-  final double price, rateOfChange;
+  final String time, imageLink, name, price;
+  final double rateOfChange;
   final Color backgroundColor, priceColor, presentColor;
 
   const GoldDataTable({

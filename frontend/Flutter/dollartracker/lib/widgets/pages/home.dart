@@ -88,6 +88,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
       channel = IOWebSocketChannel.connect(host);
       channel.sink.add('SUBSCRIBE USD');
+      channel.sink.add('SUBSCRIBE TGJU price_eur');
       channel.sink.add('SUBSCRIBE DHS');
 
       channel.stream.listen(
@@ -99,7 +100,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               isHomeConnected = true;
             });
           }
-          print(data);
+          print("pooooooooooooooooooooooooooooooooo $data");
           // Parse the received data as JSON
           Map<String, dynamic> jsonData = jsonDecode(data);
           // Check if the 'price' field exists and is a numeric value
@@ -143,7 +144,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               // set the list of update table data
               global = jsonData['global']['latests'].reversed.toList();
             });
-            print(global);
+            print("hoooooooooooooooooooooooooooooooo $global");
           }
         },
         onDone: () {

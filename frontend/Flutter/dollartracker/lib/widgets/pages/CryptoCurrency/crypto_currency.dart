@@ -11,6 +11,7 @@ import '../../../services/get_time_for_iran.dart';
 import '../../utilities/Menu/side_menu.dart';
 import '../../utilities/currency_selector.dart';
 import '../../utilities/header.dart';
+import 'package:http/http.dart' as http;
 
 class CryptoCurrency extends StatefulWidget {
   const CryptoCurrency({Key? key}) : super(key: key);
@@ -38,6 +39,12 @@ class _CryptoCurrencyState extends State<CryptoCurrency> {
   // save the status of data that fetched
   bool isFetchsuccess = true;
 
+  List currencyList = [];
+
+  String currentCurrency = '';
+
+  List<String> currencyNameList = [];
+
   @override
   void initState() {
     super.initState();
@@ -45,9 +52,40 @@ class _CryptoCurrencyState extends State<CryptoCurrency> {
     // get the host name
     String? host = dotenv.env['SERVER_HOST'];
 
-    // Replace 'ws://your_websocket_url' with your actual WebSocket server URL.
-    serverHost = "ws://$host/api/";
-    _connectToWebSocket(serverHost);
+    getGoldList(host);
+  }
+
+  Future<void> getGoldList(String? host) async {
+    isLoading = true;
+    final response = await http.get(
+      Uri.parse(
+        'http://$host/counter/get_supported?q=CRYPTO',
+      ),
+      headers: {'Content-Type': 'application/json; charset=UTF-8'},
+    );
+    // if the fetch is successful
+    if (response.statusCode == 200) {
+      // If the server returns a 200 OK response, parse the JSON data
+      String responseBody = utf8.decode(response.bodyBytes);
+      final data = json.decode(responseBody);
+      print(data);
+      currencyList = data;
+
+      for (int i = 0; i < currencyList.length; i++) {
+        currencyNameList.add(currencyList[i]["name"]);
+      }
+      setState(() {
+        currentCurrency = data[0]["code"];
+      });
+      print(currencyNameList);
+      // Replace 'ws://your_websocket_url' with your actual WebSocket server URL.
+      serverHost = "ws://$host/api/";
+      _connectToWebSocket(serverHost);
+      // You can now work with the data
+    } else {
+      // If the server did not return a 200 OK response
+      print("Error");
+    }
   }
 
   void _connectToWebSocket(String host) async {
@@ -159,11 +197,7 @@ class _CryptoCurrencyState extends State<CryptoCurrency> {
                       height: 20,
                     ),
                     CurrencySelector(
-                      listOfCurrency: [
-                        'USD',
-                        'btn',
-                        'fsdd',
-                      ],
+                      listOfCurrency: currencyNameList,
                       width: 320,
                       height: 60,
                       getCurrency: (currency) {},
