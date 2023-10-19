@@ -74,7 +74,7 @@
     "list_of_channels": [],
     "currency_info": { "persian_name": "دینار عراق" }
   },
-  "BTC": {
+  "CRYPTO": {
     "list_of_channels": [
       {
         "type": "api",
