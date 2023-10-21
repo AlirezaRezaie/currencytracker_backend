@@ -167,23 +167,35 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
       backgroundColor: Theme.of(context).colorScheme.background,
       body: isLoadingCurrencyList
           ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  width: 400,
-                  height: 400,
-                  child: Lottie.asset("assets/Loading3.json"),
+                Header(
+                  backgroundColor: const Color.fromARGB(0, 0, 0, 0),
+                  color: Theme.of(context).colorScheme.onBackground,
+                  profileImage:
+                      'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
                 ),
-                Text(
-                  "... در حال بارگیری لیست ارز ها",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onBackground,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    fontFamily: 'IransansBlack',
+                Padding(
+                  padding: EdgeInsets.only(top: 180),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 400,
+                        height: 300,
+                        child: Lottie.asset("assets/Loading3.json"),
+                      ),
+                      Text(
+                        "... در حال بارگیری لیست ارز ها",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onBackground,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          fontFamily: 'IransansBlack',
+                        ),
+                      ),
+                    ],
                   ),
-                ),
+                )
               ],
             )
           : Column(

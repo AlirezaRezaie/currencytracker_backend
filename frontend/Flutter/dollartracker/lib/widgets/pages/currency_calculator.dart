@@ -568,27 +568,39 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                 )
               ],
             )
-          : Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
-                      width: 300,
-                      height: 300,
-                      child: Lottie.asset("assets/Loading4.json"),
+                    Header(
+                      backgroundColor: const Color.fromARGB(0, 0, 0, 0),
+                      color: Theme.of(context).colorScheme.onBackground,
+                      profileImage:
+                          'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
                     ),
-                    Text(
-                      "... در حال بارگیری لیست ارز ها",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSecondary,
-                        fontFamily: "IransansBlack",
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
+                    Padding(
+                      padding: EdgeInsets.only(top: 180),
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 300,
+                            height: 300,
+                            child: Lottie.asset("assets/Loading4.json"),
+                          ),
+                          Text(
+                            "... در حال بارگیری لیست ارز ها",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSecondary,
+                              fontFamily: "IransansBlack",
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
+                    )
                   ],
                 )
               ],
