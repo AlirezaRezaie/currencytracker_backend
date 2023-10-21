@@ -254,7 +254,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                         children: [
                           CurrencySelector(
                             listOfCurrency: currencyList,
-                            width: 100,
+                            width: 130,
                             height: 60,
                             getCurrency: (currency) => setState(() {
                               firstCurrency = currency;
@@ -286,7 +286,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                         children: [
                           CurrencySelector(
                             listOfCurrency: currencyList,
-                            width: 100,
+                            width: 130,
                             height: 60,
                             getCurrency: (currency) => setState(() {
                               secondCurrency = currency;
@@ -314,7 +314,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      width: 110,
+                      width: 140,
                       height: 60,
                       padding: EdgeInsets.only(left: 8),
                       child: TextField(
