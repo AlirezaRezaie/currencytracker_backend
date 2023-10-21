@@ -165,196 +165,198 @@ class _SpecialCurrencyState extends State<SpecialCurrency> {
     return Scaffold(
       endDrawer: SideMenu(),
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: Column(
-        children: [
-          Header(
-            backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-            color: Theme.of(context).colorScheme.onBackground,
-            profileImage:
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          CurrencySelector(
-            listOfCurrency: currencyList,
-            width: 320,
-            height: 60,
-            getCurrency: (currency) {
-              setState(() {
-                selectedCurrency = currency;
-                getCurrencyData();
-              });
-            },
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          isNetworkConnected
-              ? isLoadingCurrencyList
-                  ? Column(
-                      children: [
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Container(
-                          width: 400,
-                          height: 400,
-                          child: Lottie.asset("assets/Loading3.json"),
-                        ),
-                        Text(
-                          "... در حال بارگیری لیست ارز ها",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onBackground,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                            fontFamily: 'IransansBlack',
-                          ),
-                        ),
-                      ],
-                    )
-                  : isLoading
-                      ? Column(
-                          children: [
-                            SizedBox(
-                              height: 30,
-                            ),
-                            Container(
-                              width: 400,
-                              height: 400,
-                              child: Lottie.asset("assets/Searching.json"),
-                            ),
-                            Text(
-                              "... در حال بارگیری اطلاعات",
-                              style: TextStyle(
-                                color:
-                                    Theme.of(context).colorScheme.onBackground,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                                fontFamily: 'IransansBlack',
+      body: isLoadingCurrencyList
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 400,
+                  height: 400,
+                  child: Lottie.asset("assets/Loading3.json"),
+                ),
+                Text(
+                  "... در حال بارگیری لیست ارز ها",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onBackground,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    fontFamily: 'IransansBlack',
+                  ),
+                ),
+              ],
+            )
+          : Column(
+              children: [
+                Header(
+                  backgroundColor: const Color.fromARGB(0, 0, 0, 0),
+                  color: Theme.of(context).colorScheme.onBackground,
+                  profileImage:
+                      'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                CurrencySelector(
+                  listOfCurrency: currencyList,
+                  width: 320,
+                  height: 60,
+                  getCurrency: (currency) {
+                    setState(() {
+                      selectedCurrency = currency;
+                      getCurrencyData();
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                isNetworkConnected
+                    ? isLoading
+                        ? Column(
+                            children: [
+                              SizedBox(
+                                height: 30,
                               ),
-                            ),
-                          ],
-                        )
-                      : isFetchWrong
-                          ? Column(
-                              children: [
-                                Container(
-                                  width: 400,
-                                  height: 350,
-                                  child: Lottie.asset("assets/Error.json"),
+                              Container(
+                                width: 400,
+                                height: 400,
+                                child: Lottie.asset("assets/Searching.json"),
+                              ),
+                              Text(
+                                "... در حال بارگیری اطلاعات",
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  fontFamily: 'IransansBlack',
                                 ),
-                                Text(
-                                  "عملیات ناموفق بود لطفا دوباره تلاش کنید",
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSecondary,
-                                    fontFamily: "IransansBlack",
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
+                              ),
+                            ],
+                          )
+                        : isFetchWrong
+                            ? Column(
+                                children: [
+                                  Container(
+                                    width: 400,
+                                    height: 350,
+                                    child: Lottie.asset("assets/Error.json"),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 10),
-                                  child: ElevatedButton(
-                                    onPressed: () => getCurrencyData(),
-                                    style: ButtonStyle(
-                                      padding: MaterialStateProperty.all(
-                                        EdgeInsets.only(
-                                          right: 20,
-                                          left: 20,
-                                          top: 10,
-                                          bottom: 10,
+                                  Text(
+                                    "عملیات ناموفق بود لطفا دوباره تلاش کنید",
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSecondary,
+                                      fontFamily: "IransansBlack",
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 10),
+                                    child: ElevatedButton(
+                                      onPressed: () => getCurrencyData(),
+                                      style: ButtonStyle(
+                                        padding: MaterialStateProperty.all(
+                                          EdgeInsets.only(
+                                            right: 20,
+                                            left: 20,
+                                            top: 10,
+                                            bottom: 10,
+                                          ),
+                                        ),
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                          Theme.of(context).colorScheme.primary,
+                                        ),
+                                        shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                8), // Border radius
+                                          ),
                                         ),
                                       ),
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                        Theme.of(context).colorScheme.primary,
-                                      ),
-                                      shape: MaterialStateProperty.all(
-                                        RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              8), // Border radius
+                                      child: Text(
+                                        "تلاش مجدد",
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 13,
+                                          fontFamily: 'IransansBlack',
                                         ),
                                       ),
                                     ),
-                                    child: Text(
-                                      "تلاش مجدد",
-                                      style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 13,
-                                        fontFamily: 'IransansBlack',
-                                      ),
-                                    ),
                                   ),
+                                ],
+                              )
+                            : Expanded(
+                                child: ListView.builder(
+                                  physics: BouncingScrollPhysics(),
+                                  itemCount: data_list.length,
+                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  itemBuilder: (context, index) {
+                                    if (data_list[index]['rateofchange'] ==
+                                            null ||
+                                        data_list[index]['rateofchange'] == 0)
+                                      return SizedBox();
+                                    return SpecialCurrencyTable(
+                                      backgroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                      price: data_list[index]['price'],
+                                      persentColor: data_list[index]
+                                                  ['rateofchange'] !=
+                                              null
+                                          ? data_list[index]['rateofchange'] > 0
+                                              ? Colors.greenAccent
+                                              : Colors.redAccent
+                                          : Colors.white,
+                                      time: getTimeForIran(
+                                          data_list[index]['posttime']),
+                                      imageLink: data_list[index]
+                                                  ['rateofchange'] !=
+                                              null
+                                          ? data_list[index]['rateofchange'] > 0
+                                              ? 'assets/upArrow.png'
+                                              : 'assets/downArrrow.png'
+                                          : 'assets/line.png',
+                                      persent: data_list[index]
+                                                  ['rateofchange'] ==
+                                              null
+                                          ? 0
+                                          : data_list[index]['rateofchange'],
+                                      volatility: data_list[index]
+                                                  ['rateofchange'] !=
+                                              null
+                                          ? data_list[index]['rateofchange'] > 0
+                                              ? 'صعودی'
+                                              : 'نزولی'
+                                          : 'نامشخص',
+                                    );
+                                  },
                                 ),
-                              ],
-                            )
-                          : Expanded(
-                              child: ListView.builder(
-                                physics: BouncingScrollPhysics(),
-                                itemCount: data_list.length,
-                                padding: EdgeInsets.symmetric(horizontal: 20),
-                                itemBuilder: (context, index) {
-                                  if (data_list[index]['rateofchange'] ==
-                                          null ||
-                                      data_list[index]['rateofchange'] == 0)
-                                    return SizedBox();
-                                  return SpecialCurrencyTable(
-                                    backgroundColor:
-                                        Theme.of(context).colorScheme.tertiary,
-                                    price: data_list[index]['price'],
-                                    persentColor: data_list[index]
-                                                ['rateofchange'] !=
-                                            null
-                                        ? data_list[index]['rateofchange'] > 0
-                                            ? Colors.greenAccent
-                                            : Colors.redAccent
-                                        : Colors.white,
-                                    time: getTimeForIran(
-                                        data_list[index]['posttime']),
-                                    imageLink: data_list[index]
-                                                ['rateofchange'] !=
-                                            null
-                                        ? data_list[index]['rateofchange'] > 0
-                                            ? 'assets/upArrow.png'
-                                            : 'assets/downArrrow.png'
-                                        : 'assets/line.png',
-                                    persent:
-                                        data_list[index]['rateofchange'] == null
-                                            ? 0
-                                            : data_list[index]['rateofchange'],
-                                    volatility: data_list[index]
-                                                ['rateofchange'] !=
-                                            null
-                                        ? data_list[index]['rateofchange'] > 0
-                                            ? 'صعودی'
-                                            : 'نزولی'
-                                        : 'نامشخص',
-                                  );
-                                },
-                              ),
-                            )
-              : !isNetworkConnected
-                  ? Padding(
-                      padding: EdgeInsets.only(top: 90),
-                      child: NetworkError(
-                        onPress: () {
-                          // recheck the internet connection
-                          checkNetworkStatus();
-                        },
-                      ),
-                    )
-                  : SizedBox.shrink()
-        ],
-      ),
+                              )
+                    : !isNetworkConnected
+                        ? Padding(
+                            padding: EdgeInsets.only(top: 90),
+                            child: NetworkError(
+                              onPress: () {
+                                // recheck the internet connection
+                                checkNetworkStatus();
+                              },
+                            ),
+                          )
+                        : SizedBox.shrink()
+              ],
+            ),
     );
   }
 }
