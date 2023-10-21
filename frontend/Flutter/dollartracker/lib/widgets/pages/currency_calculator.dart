@@ -217,153 +217,156 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
     return Scaffold(
       endDrawer: SideMenu(),
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Header(
-            backgroundColor: Color.fromARGB(0, 255, 255, 255),
-            color: Theme.of(context).colorScheme.onBackground,
-            profileImage:
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
-          ),
-          SizedBox(
-            height: 25,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
+      body: !isTheCurrensyListFetching
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(
-                  "تبدیل لحظه ای ارز",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onBackground,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    fontFamily: 'IransansBlack',
-                  ),
+                Header(
+                  backgroundColor: Color.fromARGB(0, 255, 255, 255),
+                  color: Theme.of(context).colorScheme.onBackground,
+                  profileImage:
+                      'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cillian_Murphy-2014.jpg/220px-Cillian_Murphy-2014.jpg',
                 ),
                 SizedBox(
-                  height: 30,
+                  height: 25,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 8),
-                      child: Row(
-                        children: [
-                          CurrencySelector(
-                            listOfCurrency: currencyList,
-                            width: 130,
-                            height: 60,
-                            getCurrency: (currency) => setState(() {
-                              firstCurrency = currency;
-                            }),
-                          )
-                        ],
-                      ),
-                    ),
-                    Text(
-                      " : ارز مورد نظر را انتخواب کنید",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onBackground,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                        fontFamily: 'IransansBlack',
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 8),
-                      child: Row(
-                        children: [
-                          CurrencySelector(
-                            listOfCurrency: currencyList,
-                            width: 130,
-                            height: 60,
-                            getCurrency: (currency) => setState(() {
-                              secondCurrency = currency;
-                            }),
-                          )
-                        ],
-                      ),
-                    ),
-                    Text(
-                      " : ارز دوم را انتخواب کنید",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onBackground,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                        fontFamily: 'IransansBlack',
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 140,
-                      height: 60,
-                      padding: EdgeInsets.only(left: 8),
-                      child: TextField(
-                        controller: _textEditingController,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter
-                              .digitsOnly, // Allow only digits (0-9)
-                        ],
-                        textAlign: TextAlign.center,
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    children: [
+                      Text(
+                        "تبدیل لحظه ای ارز",
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onBackground,
-                        ),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Theme.of(context).colorScheme.secondary,
-                          hintTextDirection: TextDirection.rtl,
-                          hintText: "مثال: 12",
-                          hintStyle: TextStyle(
-                            color:
-                                Theme.of(context).colorScheme.primaryContainer,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          fontFamily: 'IransansBlack',
                         ),
                       ),
-                    ),
-                    Text(
-                      " : مقدار ارز مورد نظر",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onBackground,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                        fontFamily: 'IransansBlack',
+                      SizedBox(
+                        height: 30,
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      // check if the list of currency fetched or not
-                      onPressed: !isTheCurrensyListFetching
-                          ? () {
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 8),
+                            child: Row(
+                              children: [
+                                CurrencySelector(
+                                  listOfCurrency: currencyList,
+                                  width: 130,
+                                  height: 60,
+                                  getCurrency: (currency) => setState(() {
+                                    firstCurrency = currency;
+                                  }),
+                                )
+                              ],
+                            ),
+                          ),
+                          Text(
+                            " : ارز مورد نظر را انتخواب کنید",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onBackground,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              fontFamily: 'IransansBlack',
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 8),
+                            child: Row(
+                              children: [
+                                CurrencySelector(
+                                  listOfCurrency: currencyList,
+                                  width: 130,
+                                  height: 60,
+                                  getCurrency: (currency) => setState(() {
+                                    secondCurrency = currency;
+                                  }),
+                                )
+                              ],
+                            ),
+                          ),
+                          Text(
+                            " : ارز دوم را انتخواب کنید",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onBackground,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              fontFamily: 'IransansBlack',
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 140,
+                            height: 60,
+                            padding: EdgeInsets.only(left: 8),
+                            child: TextField(
+                              controller: _textEditingController,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                FilteringTextInputFormatter
+                                    .digitsOnly, // Allow only digits (0-9)
+                              ],
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
+                              ),
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor:
+                                    Theme.of(context).colorScheme.secondary,
+                                hintTextDirection: TextDirection.rtl,
+                                hintText: "مثال: 12",
+                                hintStyle: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Text(
+                            " : مقدار ارز مورد نظر",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onBackground,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              fontFamily: 'IransansBlack',
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            // check if the list of currency fetched or not
+                            onPressed: () {
                               if (isConnected) {
                                 // get the coverted currency and show to the user
                                 number_of_currency = _textEditingController
@@ -377,210 +380,219 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
                                 showFlash();
                                 checkNetworkStatus();
                               }
-                            }
-                          : null,
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all(
-                          EdgeInsets.only(
-                            right: 140,
-                            left: 140,
-                            top: 15,
-                            bottom: 15,
-                          ),
-                        ),
-                        backgroundColor: MaterialStateProperty.all(
-                          Theme.of(context).colorScheme.primary,
-                        ),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(12), // Border radius
-                          ),
-                        ),
-                      ),
-                      child: Text(
-                        "تبدیل ارز",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          fontFamily: 'IransansBlack',
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                isTheCurrensyListFetching
-                    ? Column(
-                        children: [
-                          Container(
-                            width: 300,
-                            height: 300,
-                            child: Lottie.asset("assets/Loading4.json"),
-                          ),
-                          Text(
-                            "... در حال بارگیری لیست ارز ها",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSecondary,
-                              fontFamily: "IransansBlack",
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
+                            },
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all(
+                                EdgeInsets.only(
+                                  right: 140,
+                                  left: 140,
+                                  top: 15,
+                                  bottom: 15,
+                                ),
+                              ),
+                              backgroundColor: MaterialStateProperty.all(
+                                Theme.of(context).colorScheme.primary,
+                              ),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      12), // Border radius
+                                ),
+                              ),
+                            ),
+                            child: Text(
+                              "تبدیل ارز",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                fontFamily: 'IransansBlack',
+                              ),
                             ),
                           ),
                         ],
-                      )
-                    : isFetchingData
-                        ? Column(
-                            children: [
-                              Container(
-                                width: 300,
-                                height: 300,
-                                child: Lottie.asset("assets/Loading3.json"),
-                              ),
-                              Text(
-                                "... در حال بارگیری اطلاعات",
-                                style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onSecondary,
-                                  fontFamily: "IransansBlack",
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
+                      ),
+                      isFetchingData
+                          ? Column(
+                              children: [
+                                Container(
+                                  width: 300,
+                                  height: 300,
+                                  child: Lottie.asset("assets/Loading3.json"),
                                 ),
-                              ),
-                            ],
-                          )
-                        : isFetchWrong
-                            ? Column(
-                                children: [
-                                  Container(
-                                    width: 300,
-                                    height: 300,
-                                    child: Lottie.asset("assets/Error.json"),
+                                Text(
+                                  "... در حال بارگیری اطلاعات",
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSecondary,
+                                    fontFamily: "IransansBlack",
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
                                   ),
-                                  Text(
-                                    "عملیات ناموفق بود لطفا دوباره تلاش کنید",
-                                    style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSecondary,
-                                      fontFamily: "IransansBlack",
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
+                                ),
+                              ],
+                            )
+                          : isFetchWrong
+                              ? Column(
+                                  children: [
+                                    Container(
+                                      width: 300,
+                                      height: 300,
+                                      child: Lottie.asset("assets/Error.json"),
                                     ),
-                                  ),
-                                ],
-                              )
-                            : AnimatedPadding(
-                                duration: answerDuration,
-                                padding: answerPadding,
-                                child: AnimatedOpacity(
-                                  opacity: _answerOpacity,
-                                  duration: answerDuration,
-                                  child: AnimatedContainer(
-                                      padding: EdgeInsets.only(
-                                          top: 25, right: 20, left: 20),
-                                      duration: answerDuration,
-                                      width: 350,
-                                      height: 180,
-                                      decoration: BoxDecoration(
+                                    Text(
+                                      "عملیات ناموفق بود لطفا دوباره تلاش کنید",
+                                      style: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .secondary,
-                                        borderRadius: answerBorderRadius,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .secondary,
-                                            spreadRadius: 1,
-                                            blurRadius: 35,
-                                            offset: Offset(0, 20),
-                                          )
-                                        ],
+                                            .onSecondary,
+                                        fontFamily: "IransansBlack",
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
                                       ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Transform.rotate(
-                                                  angle:
-                                                      -30 * 3.14159265359 / 180,
-                                                  child: Container(
-                                                    padding: EdgeInsets.only(
-                                                      top: 3,
-                                                      right: 3,
-                                                      left: 3,
-                                                      bottom: 6,
-                                                    ),
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      border: Border.all(
+                                    ),
+                                  ],
+                                )
+                              : AnimatedPadding(
+                                  duration: answerDuration,
+                                  padding: answerPadding,
+                                  child: AnimatedOpacity(
+                                    opacity: _answerOpacity,
+                                    duration: answerDuration,
+                                    child: AnimatedContainer(
+                                        padding: EdgeInsets.only(
+                                            top: 25, right: 20, left: 20),
+                                        duration: answerDuration,
+                                        width: 350,
+                                        height: 180,
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                          borderRadius: answerBorderRadius,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              spreadRadius: 1,
+                                              blurRadius: 35,
+                                              offset: Offset(0, 20),
+                                            )
+                                          ],
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Transform.rotate(
+                                                    angle: -30 *
+                                                        3.14159265359 /
+                                                        180,
+                                                    child: Container(
+                                                      padding: EdgeInsets.only(
+                                                        top: 3,
+                                                        right: 3,
+                                                        left: 3,
+                                                        bottom: 6,
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        border: Border.all(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .onBackground,
+                                                          width: 3,
+                                                        ),
+                                                      ),
+                                                      child: Icon(
+                                                        BootstrapIcons
+                                                            .currency_dollar,
                                                         color: Theme.of(context)
                                                             .colorScheme
                                                             .onBackground,
-                                                        width: 3,
+                                                        size: 35,
                                                       ),
-                                                    ),
-                                                    child: Icon(
-                                                      BootstrapIcons
-                                                          .currency_dollar,
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .onBackground,
-                                                      size: 35,
-                                                    ),
-                                                  )),
-                                              Text(
-                                                " : مقدار ارز تبدیل شده",
-                                                style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .onBackground,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 15,
-                                                  fontFamily: 'IransansBlack',
+                                                    )),
+                                                Text(
+                                                  " : مقدار ارز تبدیل شده",
+                                                  style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onBackground,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15,
+                                                    fontFamily: 'IransansBlack',
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                          Text(
-                                            calculatedData.toStringAsFixed(6),
-                                            style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 25,
-                                              fontFamily: 'IransansBlack',
+                                              ],
                                             ),
-                                          ),
-                                          Directionality(
-                                            textDirection: TextDirection.rtl,
-                                            child: Text(
-                                              "تبدیل ارز شما بر اساس جدید ترین قیمت ارز ها بوده، همچنین میتوانید این ارز ها رو درون اپلیکیشن بصورت جداگانه مشاهده کنید",
+                                            Text(
+                                              calculatedData.toStringAsFixed(6),
                                               style: TextStyle(
                                                 color: Theme.of(context)
                                                     .colorScheme
-                                                    .primaryContainer,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 10,
+                                                    .primary,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 25,
                                                 fontFamily: 'IransansBlack',
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      )),
+                                            Directionality(
+                                              textDirection: TextDirection.rtl,
+                                              child: Text(
+                                                "تبدیل ارز شما بر اساس جدید ترین قیمت ارز ها بوده، همچنین میتوانید این ارز ها رو درون اپلیکیشن بصورت جداگانه مشاهده کنید",
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primaryContainer,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 10,
+                                                  fontFamily: 'IransansBlack',
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        )),
+                                  ),
                                 ),
-                              ),
+                    ],
+                  ),
+                )
+              ],
+            )
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 300,
+                      height: 300,
+                      child: Lottie.asset("assets/Loading4.json"),
+                    ),
+                    Text(
+                      "... در حال بارگیری لیست ارز ها",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSecondary,
+                        fontFamily: "IransansBlack",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
-          )
-        ],
-      ),
     );
   }
 }

@@ -25,7 +25,7 @@ void main() async {
       builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          initialRoute: '/calculator',
+          initialRoute: '/gold_data',
           routes: {
             "/home": (context) => completed ? Home() : IntroductionScreen(),
             '/calculator': (context) => CurrencyCalculator(),
