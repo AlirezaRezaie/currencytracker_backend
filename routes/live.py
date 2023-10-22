@@ -209,5 +209,12 @@ async def websocket_endpoint(websocket: WebSocket):
         else:
             logger.info(log_message)
 
+    except Exception as e:
+        logger.error(
+            f"Custome Exception Occurred: {e}\nException from client {websocket.client.host}:{websocket.client.port}\ncheck the logs to see who that was"
+        )
+        await websocket.send_text(str(e))
+        await websocket.close(1012)
+
     # general exception handler simply print the error
     # and return it to the user and close the connection

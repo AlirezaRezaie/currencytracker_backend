@@ -79,7 +79,7 @@ if __name__ == "__main__":
 
     try:
         # a simple net check test for unstable networks
-        # network_stability_check()
+        network_stability_check()
         logger.info(f"env port is set to: {get_port()}")
         uvicorn.run(
             "server:app",
