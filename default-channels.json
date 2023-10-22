@@ -1,0 +1,212 @@
+{
+  "USD": {
+    "list_of_channels": [
+      {
+        "type": "tg",
+        "channel_name": "nerkhedollarr",
+        "regex": "(فردایی|نقدی|نـــقـدی|نـــقـدۍ|پایان معاملات).*?(\\d{1,3}(?:,\\d{3})*).(\\w*)",
+        "nonstop": false
+      },
+      {
+        "type": "tg",
+        "channel_name": "dollar_tehran3bze",
+        "regex": "(فردایی|نقدی|نـــقـدی|نـــقـدۍ).*?(\\d{1,3}(?:,\\d{3})*).*?(خـرید|فروش)",
+        "nonstop": true
+      },
+      {
+        "type": "tg",
+        "channel_name": "sarafha_rate",
+        "regex": "",
+        "nonstop": false
+      }
+    ],
+    "currency_info": { "persian_name": "دلار آمریکا" }
+  },
+  "EUR": {
+    "list_of_channels": [
+      {
+        "type": "tg",
+        "channel_name": "sarafha_rate",
+        "regex": "",
+        "nonstop": false
+      }
+    ],
+    "currency_info": { "persian_name": "یورو" }
+  },
+  "DHS": {
+    "list_of_channels": [
+      {
+        "type": "tg",
+        "channel_name": "DHS_Dirham",
+        "regex": "",
+        "nonstop": false
+      },
+      {
+        "type": "tg",
+        "channel_name": "testderham",
+        "regex": "",
+        "nonstop": true
+      }
+    ],
+    "currency_info": { "persian_name": "درهم" }
+  },
+  "CNY": {
+    "list_of_channels": [],
+    "currency_info": { "persian_name": "یوآن چین" }
+  },
+  "GBP": {
+    "list_of_channels": [],
+    "currency_info": { "persian_name": "پوند" }
+  },
+  "AED": {
+    "list_of_channels": [],
+    "currency_info": { "persian_name": "درهم امارات" }
+  },
+  "TRY": {
+    "list_of_channels": [],
+    "currency_info": { "persian_name": "لیر ترکیه" }
+  },
+  "RUB": {
+    "list_of_channels": [],
+    "currency_info": { "persian_name": "روبل روسیه" }
+  },
+  "IQD": {
+    "list_of_channels": [],
+    "currency_info": { "persian_name": "دینار عراق" }
+  },
+  "CRYPTO": {
+    "list_of_channels": [
+      {
+        "type": "api",
+        "endpoint": "https://api.binance.com/api/v3/ticker/price?symbol={code}USDT",
+        "channel_name": "dollar_tehran3bze",
+        "regex": "(فردایی|نقدی|نـــقـدی|نـــقـدۍ).*?(\\d{1,3}(?:,\\d{3})*).*?(خـرید|فروش)",
+        "nonstop": true,
+        "currency_list": {
+          "BTC": "باتی کوین",
+          "NIKA": " 😊 دیگه تمومه ",
+          "ETH": "آتاریوم (فشار خوردی محمدرضا :))"
+        }
+      }
+    ],
+    "currency_info": { "persian_name": "رمز ارز", "is_crypto": true }
+  },
+  "TGJU": {
+    "list_of_channels": [
+      {
+        "type": "wbsock",
+        "endpoint": "wss://stream.tgju.org/connection/websocket",
+        "channel_name": "dollar_tehran3bze",
+        "nonstop": true,
+        "currency_list": {
+          "GOLD": [
+            {
+              "code": "gold_740k",
+              "name": "طلای 18 عیار / 750"
+            },
+            {
+              "code": "gold_17",
+              "name": "مثقال / بدون حباب"
+            },
+            {
+              "code": "gold_world_futures",
+              "name": "آبشده کمتر از کیلو"
+            },
+            {
+              "code": "gold_melted_wholesale",
+              "name": "آبشده بنکداری"
+            },
+            {
+              "code": "sekee_real",
+              "name": "سکه واقعی"
+            },
+            {
+              "code": "geram24",
+              "name": "طلای 24 عیار"
+            },
+            {
+              "code": "gold_mini_size",
+              "name": "طلای دست دوم"
+            },
+            {
+              "code": "gold_17_transfer",
+              "name": "حباب آبشده"
+            },
+            {
+              "code": "gold_futures",
+              "name": "آبشده نقدی"
+            }
+          ],
+          "CURRENCY": [
+            {
+              "code": "price_dollar_pw",
+              "name": "دلار پی دبلیو"
+            },
+            {
+              "code": "price_dollar_rl",
+              "name": "دلار"
+            },
+            {
+              "code": "price_eur",
+              "name": "یورو"
+            },
+            {
+              "code": "price_aed",
+              "name": "درهم امارات"
+            },
+            {
+              "code": "price_gbp",
+              "name": "پوند انگلیس"
+            },
+            {
+              "code": "price_try",
+              "name": "لیر ترکیه"
+            },
+            {
+              "code": "price_chf",
+              "name": "فرانک سوئیس"
+            },
+            {
+              "code": "price_cny",
+              "name": "یوان چین"
+            },
+            {
+              "code": "price_jpy",
+              "name": "ین ژاپن"
+            },
+            {
+              "code": "price_krw",
+              "name": "وون کره جنوبی"
+            },
+            {
+              "code": "price_cad",
+              "name": "دلار کانادا"
+            },
+            {
+              "code": "price_aud",
+              "name": "دلار استرالیا"
+            }
+          ],
+          "CRYPTO": [
+            {
+              "code": "crypto-bitcoin",
+              "name": "باتی کوین"
+            }
+          ]
+        }
+      }
+    ],
+    "currency_info": { "persian_name": "وب سوکت" }
+  },
+  "VPN": {
+    "list_of_channels": [
+      {
+        "type": "tg",
+        "channel_name": "melov2ray",
+        "regex": "vless://[^\n]+",
+        "findall": true,
+        "nonstop": false
+      }
+    ]
+  }
+}
