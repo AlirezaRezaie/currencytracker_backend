@@ -50,6 +50,7 @@ def get_port():
 
 
 def get_defaults():
+    print(get_port())
     print("reading the default configs!!!!")
     # read the json file
     with open("default-channels.json", "r") as f:
