@@ -3,6 +3,7 @@ from fastapi import APIRouter, Query
 from utils import get_defaults
 from tasks import Arg
 from typing import Optional
+from utils import get_port
 
 default_currencies = get_defaults()
 router = APIRouter()
@@ -17,6 +18,8 @@ def get_live_counter(code: str, channel: int, count: int) -> list[dict]:
         the last `count` of the specified channel `code`
 
     """
+    print(get_port())
+
     arg = Arg(code, channel_index=channel, count=count)
     return run_counter(arg)
 
