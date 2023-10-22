@@ -48,8 +48,6 @@ async def websocket_endpoint(websocket: WebSocket):
     """
     # accepting the connection from user
     await websocket.accept()
-    print("HOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
-    print(get_port())
     # send an initial test (it is used to check the websocket connection in the frontend)
     await websocket.send_text("CONNECTED")
     logger.info(f"client {websocket.client.host}:{websocket.client.port} connected 🔌🔌")

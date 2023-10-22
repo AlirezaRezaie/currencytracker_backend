@@ -29,9 +29,6 @@ app.include_router(calculator.router, prefix="/calculator", tags=["calculator"])
 
 @app.on_event("startup")
 async def startup_event():
-    print("HELLLLLOOOOOOOOOOOOOOOOO")
-    with open("file", "w") as f:
-        f.write(" i am alive !!!!")
     # network_stability_check()
     # start the default channels on startup
     local.default_channels = get_defaults()

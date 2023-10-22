@@ -12,3 +12,5 @@ currency_images
 *.pkl
 TGJU.pkl
 tmp
+*.lock
+*.log
