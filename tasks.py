@@ -213,6 +213,7 @@ def crypto_call_back(price, type):
     json_data = {type: select_board}
     data = json.dumps(json_data)
     if task.main_loop:
+        print("G")
         task.main_loop.create_task(send_to_all(data, task.users))
 
 

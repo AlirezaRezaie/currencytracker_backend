@@ -38,8 +38,14 @@ def get_supported(q: str = None) -> dict | list[dict]:
                 formatted = currency_obj["list_of_channels"][0]["currency_list"][q]
                 return formatted
             except:
-                return {"error": f"no such ket '{q}'"}
-        elif currency_code == "VPN":
+                return {"error": f"no such key '{q}'"}
+        elif currency_code == "CRYPTO" and currency_code == q:
+            try:
+                formatted = currency_obj["list_of_channels"][0]["currency_list"]
+                return formatted
+            except:
+                return {"error": f"no such key '{q}'"}
+        elif currency_code == "VPN" and currency_code == q:
             continue
 
         if not currency_obj or not type(currency_obj) == dict:

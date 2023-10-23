@@ -119,7 +119,7 @@ async def websocket_endpoint(websocket: WebSocket):
                     elif channel_code == "CRYPTO":
                         task.ws_users.setdefault(currency_type, [])
                         # logger.info(f"selected {task.ws_users}")
-                        select_user_list = task.ws_users[currency_type]
+                        select_user_list = task.users
                         # means its the type selector command (either TGJU or CRYPTO)
                         with open(f"{channel_code}.pkl", "rb") as file:
                             existing_board = pickle.load(file)
