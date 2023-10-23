@@ -129,10 +129,10 @@ async def websocket_endpoint(websocket: WebSocket):
 
                     else:
                         select_user_list = task.users
-                        is_crypto = task.args.currency_info.get("is_crypto")
+                        # is_crypto = task.args.currency_info.get("is_crypto")
                         text_data = None
                         if task.lastprice:
-                            text_data = baked_data(task.lastprice, is_crypto)
+                            text_data = baked_data(task.lastprice)
 
                 # read the parsed data
                 match parse_command["command"]:
