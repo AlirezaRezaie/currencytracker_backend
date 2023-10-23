@@ -89,7 +89,7 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
 # respectivly.
 # the stop event could be turned on everywhere in the code
 # therefore stop the task immedietly
-def run_live(success_callback, error_callback, stop_event, args: Arg):
+def run_live(success_callback, error_callback, stop_event, only_price, args: Arg):
     # storing important data about the channel in the thread local
     local.channel_id = args.channel_info["channel_name"]
     local.channel_info = args.channel_info
@@ -120,6 +120,8 @@ def run_live(success_callback, error_callback, stop_event, args: Arg):
             current_batch = extract_prices(fetch_function(), reverse=True)
             if current_batch:
                 break
+        if args.code == "NIKA":
+            print("debug")
 
         # if its not a list or the list is empty then its not
         # a valid channel and we should report it via error callback
@@ -153,10 +155,14 @@ def run_live(success_callback, error_callback, stop_event, args: Arg):
                     price.calculate_and_set_rate_of_change(last_price)
                     # create json data
                     to_user = price.get_json_data()
-                    # push the json data in the local board
-                    push_in_board(to_user, local_board)
+                    if only_price:
+                        data = to_user
+                    else:
+                        data = local_board
+                        # push the json data in the local board
+                        push_in_board(to_user, local_board)
                     # send off the local board
-                    success_callback(local_board, args.code)
+                    success_callback(data, args.code)
                     # and now this will be the last price for the next iteration
                     last_price = price
 
@@ -168,7 +174,7 @@ def run_live(success_callback, error_callback, stop_event, args: Arg):
         # and also set the prev batch for next iteration
         prev_batch = current_batch
 
-    # print("FINISH LOOP")
+    logger.info(f"{args.code} task exited the loop")
 
 
 def run_counter(args: Arg):

@@ -95,6 +95,7 @@ def fetch_price_data_u_public_api(apikey=""):
 
         obj = json.loads(res)
         if obj.get("code") == -1121:
+            local.stop_event.set()
             ret = "INVALID"
         else:
             ret.append(obj)

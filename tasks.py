@@ -64,18 +64,35 @@ class Task:
         match self.args.channel_code:
             case "TGJU":
                 mode = run_websocket
-                call_back = ws_call_back
+                args = (
+                    ws_call_back,
+                    error_callback,
+                    self.stop_event,
+                    self.args,
+                )
             case "CRYPTO":
                 mode = run_live
-                call_back = crypto_call_back
+                args = (
+                    crypto_call_back,
+                    error_callback,
+                    self.stop_event,
+                    True,
+                    self.args,
+                )
 
             case _:
                 mode = run_live
-                call_back = success_callback
+                args = (
+                    success_callback,
+                    error_callback,
+                    self.stop_event,
+                    False,
+                    self.args,
+                )
 
         return threading.Thread(
             target=mode,
-            args=(call_back, error_callback, self.stop_event, self.args),
+            args=args,
         )
 
     def start_task(self):
@@ -94,7 +111,7 @@ class Task:
             except Exception as e:
                 print(e)
                 print("cant stop current thread")
-            logger.info(f"removing {self.task.name} because no one is using it")
+            logger.info(f"removing {self.args.code} because no one is using it")
 
             tasks.remove(self)
         else:
@@ -200,7 +217,7 @@ def crypto_call_back(price, type):
     select_board = crypto_board.get(type)
 
     # print(len(select_board))
-    if len(select_board) > 20:
+    if len(select_board) > 2:
         select_board.pop(0)
         select_board.append(price)
     else:
