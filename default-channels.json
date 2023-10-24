@@ -186,12 +186,6 @@
               "code": "price_aud",
               "name": "دلار استرالیا"
             }
-          ],
-          "CRYPTO": [
-            {
-              "code": "crypto-bitcoin",
-              "name": "باتی کوین"
-            }
           ]
         }
       }
