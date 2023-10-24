@@ -91,7 +91,7 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
 # therefore stop the task immedietly
 def run_live(success_callback, error_callback, stop_event, only_price, args: Arg):
     # storing important data about the channel in the thread local
-    local.channel_id = args.channel_info["channel_name"]
+    local.channel_id = args.channel_id
     local.channel_info = args.channel_info
     local.args = args
     local.server_mode = "live"
@@ -120,8 +120,6 @@ def run_live(success_callback, error_callback, stop_event, only_price, args: Arg
             current_batch = extract_prices(fetch_function(), reverse=True)
             if current_batch:
                 break
-        if args.code == "NIKA":
-            print("debug")
 
         # if its not a list or the list is empty then its not
         # a valid channel and we should report it via error callback
