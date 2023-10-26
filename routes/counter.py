@@ -1,16 +1,15 @@
 from modes import run_counter
-from fastapi import APIRouter, Query
-from utils import get_defaults
+from fastapi import APIRouter
+from utils import get_defaults, get_tgju_data, get_running_tg_obj
 from tasks import Arg
-from typing import Optional
-from utils import get_port
+import pickle
 
 default_currencies = get_defaults()
 router = APIRouter()
 
 
 @router.get("/get_last/{code}/{channel}/{count}")
-def get_live_counter(code: str, channel: int, count: int) -> list[dict]:
+def get_live_counter(code: str, channel: int, count: int) -> list[dict] | list[str]:
     """
     run the counter with the user specified arguments
 
@@ -18,57 +17,47 @@ def get_live_counter(code: str, channel: int, count: int) -> list[dict]:
         the last `count` of the specified channel `code`
 
     """
-    print(get_port())
 
-    arg = Arg(code, channel_index=channel, count=count)
-    return run_counter(arg)
+    # only for tgju related ones
+    pickle_name = get_tgju_data("CURRENCY", code, default_currencies)
+
+    # only for telegram ones
+    currency_obj = default_currencies.get(code)
+
+    # if tgju we use its pickle file to return the data
+    if pickle_name:
+        try:
+            with open(f"pickles/{pickle_name}.pkl", "rb") as file:
+                read_pickle = pickle.load(file)
+                return read_pickle[pickle_name]
+        except:
+            return ["error pickle data not found"]
+    # and if telegram we run the counter function that fetches from telegram
+    elif currency_obj:
+        arg = Arg(code, currency_obj, channel_index=channel, count=count)
+        return run_counter(arg)
+
+    else:
+        return ["error code not found anywhere"]
 
 
 @router.get("/get_supported")
 def get_supported(q: str = None) -> dict | list[dict]:
     # formats the json data by checking their currency_info and regex
     # and returns a json of information about each channel supportivity
-
+    not_cur = ("TGJU", "CRYPTO", "VPN")
     formatted = {}
-    for currency_code, currency_obj in default_currencies.items():
-        if currency_code == "TGJU":
-            if not q:
-                continue
-            try:
-                formatted = currency_obj["list_of_channels"][0]["currency_list"][q]
-                return formatted
-            except:
-                return {"error": f"no such key '{q}'"}
-        elif currency_code == "CRYPTO" and currency_code == q:
-            try:
-                formatted = currency_obj["list_of_channels"][0]["currency_list"]
-                return formatted
-            except:
-                return {"error": f"no such key '{q}'"}
-        elif currency_code == "VPN" and currency_code == q:
-            continue
+    for code, obj in default_currencies.items():
+        if (not code in not_cur) and (
+            not get_tgju_data("CURRENCY", code, default_currencies)
+        ):
+            formatted[code] = obj["currency_info"]
 
-        if not currency_obj or not type(currency_obj) == dict:
-            # not a dictionary means its not even a price
-            continue
-        if not currency_obj.get("currency_info"):
-            # no currency_info property means its not supported
-            formatted[currency_code] = "not-supported"
-            continue
+    tgju_obj = default_currencies.get("TGJU")["list_of_channels"][0]["currency_list"][
+        "CURRENCY"
+    ]
 
-        channel_list = currency_obj["list_of_channels"]
-        # it should have at least one channel to be considered as a supported currency
-        if len(channel_list) >= 1:
-            for channel in channel_list:
-                if channel["regex"]:
-                    # regex means its supported-default
-                    formatted[currency_code] = "supported-default"
-                    break
-                else:
-                    # and not regex means supported-not-default
-                    formatted[currency_code] = "not-default"
-        else:
-            # no channel means its not supported currency
-            formatted[currency_code] = "not-supported"
+    for currency in tgju_obj:
+        formatted[currency["currency_symbol"]] = currency
 
     return formatted
