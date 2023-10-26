@@ -2,7 +2,7 @@ from network import *
 from price import extract_prices
 from logs import logger
 from locals import local
-from utils import push_in_board, Arg
+from utils import push_in_board, convert_tgju_data, Arg
 import threading
 
 # How To Use:
@@ -27,7 +27,7 @@ def get_fetch_function():
 
 
 # the type websocket needs a whole another task for itself
-def run_websocket(success_callback, error_callback, stop_event, args: Arg):
+def run_websocket(success_callback, error_callback, stop_event, args: Arg, sym_map):
     endpoint = args.channel_info["endpoint"]
     currency_list = args.channel_info["currency_list"]
 
@@ -48,6 +48,8 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
             _, id, channel = name.split("|")
             for key, values in currency_list.items():
                 if any(item["code"] == channel for item in values):
+                    get_symbol = sym_map[item["code"]]
+                    data = convert_tgju_data(get_symbol, item["name"], None, price)
                     success_callback(price, channel)
 
     def on_error(ws, error):

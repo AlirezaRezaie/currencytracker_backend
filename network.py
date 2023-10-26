@@ -89,16 +89,13 @@ def fetch_price_data_u_public_api(apikey=""):
         while not connected:
             try:
                 res = requests.get(endpoint).text
-                connected = True
+                obj = json.loads(res)
+                if obj.get("price"):
+                    connected = True
             except:
                 logger.info("api failed to connect bro")
 
-        obj = json.loads(res)
-        if obj.get("code") == -1121:
-            local.stop_event.set()
-            ret = "INVALID"
-        else:
-            ret.append(obj)
+        ret.append(obj)
         return ret
 
     else:

@@ -9,6 +9,31 @@ ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "admin_password"
 
 
+def create_json_data(
+    code,
+    price,
+    persian_name,
+    image_link,
+    posttime,
+    rateofchange,
+    action=None,
+    exchtype=None,
+    change=None,
+):
+    data = {
+        "code": code,
+        "action": action,
+        "price": price,
+        "persian_name": persian_name,
+        "image_link": image_link,
+        "exchtype": exchtype,
+        "posttime": posttime,
+        "rateofchange": rateofchange,
+        "change": change,
+    }
+    return data
+
+
 # args object for task configs
 class Arg:
     def __init__(
@@ -63,7 +88,7 @@ def get_defaults():
         return json.load(f)
 
 
-def add_price_to_pickle(pickle_name, price, code=None, scope_type=None):
+def add_price_to_pickle(pickle_name, price, code=None):
     """
     adds a price to the specified pickle file
     returns the latest changed pickle object
@@ -76,16 +101,10 @@ def add_price_to_pickle(pickle_name, price, code=None, scope_type=None):
         with open(f"pickles/{pickle_name}.pkl", "rb") as file:
             board = pickle.load(file)
     except:
-        if scope_type:
-            board = {"local": [], "global": [], "code": code}
-        else:
-            board = {}
+        board = {"code": code}
 
-    if scope_type:
-        select_board = board[scope_type]
-    else:
-        board.setdefault(code, [])
-        select_board = board.get(code)
+    board.setdefault(code, [])
+    select_board = board.get(code)
 
     # print(len(select_board))
     if len(select_board) > 20:
@@ -140,6 +159,21 @@ def get_running_tg_obj(currency_data):
         if obj["nonstop"] and obj["type"] == "tg":
             return obj
     return None
+
+
+def convert_tgju_data(code, persian_name, image_link, data):
+    parsed_data = data.split("|")
+
+    price = float(parsed_data[1].replace(",", ""))
+    rate_of_change = parsed_data[6]
+    change = parsed_data[7]
+    time = parsed_data[8]
+
+    json_data = create_json_data(
+        code, price, persian_name, image_link, time, rate_of_change, change=change
+    )
+
+    return json_data
 
 
 def push_in_board(item, board):

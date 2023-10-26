@@ -2,6 +2,7 @@ import re
 from logs import logger
 from locals import local
 import time
+from utils import create_json_data
 
 known_channels = ["dollar_tehran3bze", "nerkhedollarr"]
 
@@ -82,6 +83,17 @@ class priceInfo:
             "rateofchange": self.rate_of_change,
         }
 
+        data = create_json_data(
+            local.args.code,
+            self.price,
+            self.persian_name,
+            f"/static/currency_images/{local.args.code}.png",
+            self.posttime,
+            self.rate_of_change,
+            self.action,
+            self.exchtype,
+        )
+
         return data
 
     def calculate_and_set_rate_of_change(self, last_price):
@@ -130,6 +142,7 @@ def extract_prices(messages, count=10, reverse=False):
     if not messages or messages == "INVALID":
         return "id is not valid"
 
+    # print(messages)
     parsed_prices = []
     latest = len(messages) - 1
 

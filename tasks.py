@@ -3,9 +3,12 @@ from locals import local
 import json
 from modes import run_live, run_websocket
 from logs import logger
-from utils import push_in_board, add_price_to_pickle, Arg
+from utils import (
+    push_in_board,
+    add_price_to_pickle,
+    Arg,
+)
 import asyncio
-import pickle
 from queue import Queue
 
 # this is the global board every currency update gets saved to this board
@@ -72,6 +75,7 @@ class Task:
                     error_callback,
                     self.stop_event,
                     self.args,
+                    tjgu_symbol_map,
                 )
             case "CRYPTO":
                 mode = run_live
@@ -190,15 +194,6 @@ def disconnect_websocket(websocket, user_type=None, user_list=None):
         )
 
 
-def baked_data(local_board):
-    """
-    creates a nice output data for the user this is the last place we make change to the data
-    its the thing user will see at the front
-    """
-    # indicating which board to use based on the is crypto value
-    return json.dumps({"global": global_board, "local": local_board})
-
-
 async def send_to_all(error_msg, all_clients):
     tasks = [client.send_text(error_msg) for client in all_clients]
     await asyncio.gather(*tasks)
@@ -250,8 +245,10 @@ def success_callback(local_board, channel):
     users = task.users
 
     # data = json.dumps({"global": global_board, "local": local_board})
-    data = add_price_to_pickle(channel, new_price, scope_type="local")
-
+    select_board = add_price_to_pickle(channel, new_price)
+    # global_board = add_price_to_pickle("GLOBAL", new_price, code="global")
+    json_data = {channel: select_board}
+    data = json.dumps(json_data)
     if task.main_loop:
         task.main_loop.create_task(send_to_all(data, users))
     else:
