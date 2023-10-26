@@ -23,14 +23,7 @@
     "currency_info": { "persian_name": "دلار آمریکا" }
   },
   "EUR": {
-    "list_of_channels": [
-      {
-        "type": "tg",
-        "channel_name": "sarafha_rate",
-        "regex": "",
-        "nonstop": false
-      }
-    ],
+    "list_of_channels": [],
     "currency_info": { "persian_name": "یورو" }
   },
   "DHS": {
@@ -83,9 +76,9 @@
         "regex": "(فردایی|نقدی|نـــقـدی|نـــقـدۍ).*?(\\d{1,3}(?:,\\d{3})*).*?(خـرید|فروش)",
         "nonstop": true,
         "currency_list": {
-          "BTC": "باتی کوین",
-          "NIKA": " 😊 دیگه تمومه ",
-          "ETH": "آتاریوم (فشار خوردی محمدرضا :))"
+          "BTC": "بیتکوین",
+          "DOGE": "دوج کوین",
+          "ETH": "اتریوم"
         }
       }
     ],
@@ -139,50 +132,62 @@
           ],
           "CURRENCY": [
             {
+              "currency_symbol": "USD",
               "code": "price_dollar_pw",
               "name": "دلار پی دبلیو"
             },
             {
+              "currency_symbol": "USD",
               "code": "price_dollar_rl",
               "name": "دلار"
             },
             {
+              "currency_symbol": "EUR",
               "code": "price_eur",
               "name": "یورو"
             },
             {
+              "currency_symbol": "AED",
               "code": "price_aed",
               "name": "درهم امارات"
             },
             {
+              "currency_symbol": "GBP",
               "code": "price_gbp",
               "name": "پوند انگلیس"
             },
             {
+              "currency_symbol": "TRY",
               "code": "price_try",
               "name": "لیر ترکیه"
             },
             {
+              "currency_symbol": "CHF",
               "code": "price_chf",
               "name": "فرانک سوئیس"
             },
             {
+              "currency_symbol": "CNY",
               "code": "price_cny",
               "name": "یوان چین"
             },
             {
+              "currency_symbol": "JPY",
               "code": "price_jpy",
               "name": "ین ژاپن"
             },
             {
+              "currency_symbol": "krw",
               "code": "price_krw",
               "name": "وون کره جنوبی"
             },
             {
+              "currency_symbol": "CAD",
               "code": "price_cad",
               "name": "دلار کانادا"
             },
             {
+              "currency_symbol": "AUD",
               "code": "price_aud",
               "name": "دلار استرالیا"
             }
