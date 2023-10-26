@@ -15,6 +15,7 @@ class Arg:
         self,
         code,
         currency_obj,
+        symbol,
         channel_code=None,
         channel_index=0,
         loop=None,
@@ -25,6 +26,7 @@ class Arg:
     ):
         self.code = code
         self.channel_code = channel_code
+        self.symbol = symbol
         self.loop = loop
         self.timeout = timeout
         self.retry = retry
@@ -63,26 +65,29 @@ def get_defaults():
         return json.load(f)
 
 
-def add_price_to_pickle(pickle_name, price, scope_type=None):
+def add_price_to_pickle(pickle_name, price, code=None, scope_type=None):
     """
     adds a price to the specified pickle file
     returns the latest changed pickle object
     """
+
+    if not code:
+        code = pickle_name
 
     try:
         with open(f"pickles/{pickle_name}.pkl", "rb") as file:
             board = pickle.load(file)
     except:
         if scope_type:
-            board = {"local": [], "global": []}
+            board = {"local": [], "global": [], "code": code}
         else:
             board = {}
 
     if scope_type:
         select_board = board[scope_type]
     else:
-        board.setdefault(pickle_name, [])
-        select_board = board.get(pickle_name)
+        board.setdefault(code, [])
+        select_board = board.get(code)
 
     # print(len(select_board))
     if len(select_board) > 20:

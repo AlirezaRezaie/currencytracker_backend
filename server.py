@@ -50,9 +50,13 @@ async def startup_event():
                 task_codes.append(currency_code)
             if channel["nonstop"]:
                 for code in task_codes:
+                    symbol = get_tgju_data("CURRENCY", code)
+                    if not symbol:
+                        symbol = code
                     # only start the ones which have specified nonstop in their config
                     Task(
                         code,
+                        symbol,
                         currency_obj,
                         channel_index=channel_list.index(channel),
                         channel_code=currency_code,

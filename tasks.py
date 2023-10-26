@@ -29,7 +29,7 @@ class Task:
     """
 
     def __init__(
-        self, code, currency_obj, channel_code=None, loop=None, channel_index=0
+        self, code, symbol, currency_obj, channel_code=None, loop=None, channel_index=0
     ):
         """
         TODO : this might return error or None as memory limit reaches
@@ -38,6 +38,7 @@ class Task:
         self.args = Arg(
             code,
             currency_obj,
+            symbol,
             channel_code=channel_code,
             loop=loop,
             channel_index=channel_index,
@@ -225,11 +226,7 @@ def crypto_call_back(price, type):
 
 def ws_call_back(price, type):
     task = get_task("TGJU")
-
-    if type == "price_chf":
-        print(price)
-
-    select_board = add_price_to_pickle(type, price)
+    select_board = add_price_to_pickle(type, price, code=task.args.code)
 
     # we should also create a task that saves the entry inside the sqlite for later usage
     json_data = {type: select_board}
