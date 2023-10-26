@@ -20,11 +20,11 @@
         "nonstop": false
       }
     ],
-    "currency_info": { "persian_name": "دلار آمریکا" }
+    "currency_info": { "name": "دلار آمریکا" }
   },
   "EUR": {
     "list_of_channels": [],
-    "currency_info": { "persian_name": "یورو" }
+    "currency_info": { "name": "یورو" }
   },
   "DHS": {
     "list_of_channels": [
@@ -41,31 +41,31 @@
         "nonstop": true
       }
     ],
-    "currency_info": { "persian_name": "درهم" }
+    "currency_info": { "name": "درهم" }
   },
   "CNY": {
     "list_of_channels": [],
-    "currency_info": { "persian_name": "یوآن چین" }
+    "currency_info": { "name": "یوآن چین" }
   },
   "GBP": {
     "list_of_channels": [],
-    "currency_info": { "persian_name": "پوند" }
+    "currency_info": { "name": "پوند" }
   },
   "AED": {
     "list_of_channels": [],
-    "currency_info": { "persian_name": "درهم امارات" }
+    "currency_info": { "name": "درهم امارات" }
   },
   "TRY": {
     "list_of_channels": [],
-    "currency_info": { "persian_name": "لیر ترکیه" }
+    "currency_info": { "name": "لیر ترکیه" }
   },
   "RUB": {
     "list_of_channels": [],
-    "currency_info": { "persian_name": "روبل روسیه" }
+    "currency_info": { "name": "روبل روسیه" }
   },
   "IQD": {
     "list_of_channels": [],
-    "currency_info": { "persian_name": "دینار عراق" }
+    "currency_info": { "name": "دینار عراق" }
   },
   "CRYPTO": {
     "list_of_channels": [
@@ -82,7 +82,7 @@
         }
       }
     ],
-    "currency_info": { "persian_name": "رمز ارز", "is_crypto": true }
+    "currency_info": { "name": "رمز ارز", "is_crypto": true }
   },
   "TGJU": {
     "list_of_channels": [
@@ -195,7 +195,7 @@
         }
       }
     ],
-    "currency_info": { "persian_name": "وب سوکت" }
+    "currency_info": { "name": "وب سوکت" }
   },
   "VPN": {
     "list_of_channels": [

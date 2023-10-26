@@ -30,7 +30,7 @@ class priceInfo:
             self.exchtype = None
             self.posttime = int(time.time() % 86_400)
             self.text = raw_price_obj
-            self.persian_name = local.args.currency_info["persian_name"]
+            self.persian_name = local.args.currency_info["name"]
             self.rate_of_change = None
             self.price = float(raw_price_obj["price"])
 
@@ -38,7 +38,7 @@ class priceInfo:
             self.postnumber = raw_price_obj["number"]
             self.posttime = raw_price_obj["info"]
             self.text = raw_price_obj["text"]
-            self.persian_name = local.args.currency_info["persian_name"]
+            self.persian_name = local.args.currency_info["name"]
             self.rate_of_change = None
             parsed = self.parse_price_info(raw_price_obj["text"])
 
