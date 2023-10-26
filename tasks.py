@@ -3,9 +3,10 @@ from locals import local
 import json
 from modes import run_live, run_websocket
 from logs import logger
-from utils import push_in_board, Arg
+from utils import push_in_board, add_price_to_pickle, Arg
 import asyncio
 import pickle
+from queue import Queue
 
 # this is the global board every currency update gets saved to this board
 global_board = {"latests": [], "limit": 20}
@@ -44,7 +45,7 @@ class Task:
 
         self.ws_users = {}
         self.users = []
-
+        self.queue = Queue()
         self.stop_event = threading.Event()
         self.lastprice = None
 
@@ -122,7 +123,7 @@ def get_all_user_list():
     all_user_lists = []
     for task in tasks:
         if task.users:
-            all_user_lists.append({"type": "TGCURRENCY", "users": task.users})
+            all_user_lists.append({"type": f"{task.args.code}", "users": task.users})
         elif task.ws_users:
             for channel_name, channel_list in task.ws_users.items():
                 all_user_lists.append(
@@ -213,19 +214,8 @@ def error_callback(code):
 
 def crypto_call_back(price, type):
     task = get_task(type)
-    crypto_board.setdefault(type, [])
-    select_board = crypto_board.get(type)
 
-    # print(len(select_board))
-    if len(select_board) > 2:
-        select_board.pop(0)
-        select_board.append(price)
-    else:
-        select_board.append(price)
-
-    # Save the updated data back to the file
-    with open("CRYPTO.pkl", "wb") as file:
-        pickle.dump(crypto_board, file)
+    select_board = add_price_to_pickle(type, price)
 
     json_data = {type: select_board}
     data = json.dumps(json_data)
@@ -236,22 +226,10 @@ def crypto_call_back(price, type):
 def ws_call_back(price, type):
     task = get_task("TGJU")
 
-    ws_boards.setdefault(type, [])
-    select_board = ws_boards.get(type)
+    if type == "price_chf":
+        print(price)
 
-    if len(select_board) > 20:
-        select_board.pop(0)
-        select_board.append(price)
-    else:
-        select_board.append(price)
-
-    # Load the existing data from the file
-    # with open("my_objects.pkl", "rb") as file:
-    #    existing_data = pickle.load(file)
-
-    # Save the updated data back to the file
-    with open("TGJU.pkl", "wb") as file:
-        pickle.dump(ws_boards, file)
+    select_board = add_price_to_pickle(type, price)
 
     # we should also create a task that saves the entry inside the sqlite for later usage
     json_data = {type: select_board}
@@ -272,10 +250,11 @@ def success_callback(local_board, channel):
         push_in_board(new_price, global_board)
     users = task.users
 
-    data = json.dumps({"global": global_board, "local": local_board})
+    # data = json.dumps({"global": global_board, "local": local_board})
+    data = add_price_to_pickle(channel, new_price, scope_type="local")
 
     if task.main_loop:
-        task.main_loop.create_task(send_to_all(baked_data(local_board), users))
+        task.main_loop.create_task(send_to_all(data, users))
     else:
         logger.debug("new data recieved but there is to give it to ")
     # this was the previous approach use this if the current one conflicts
