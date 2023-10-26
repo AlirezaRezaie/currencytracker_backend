@@ -15,7 +15,6 @@ class Arg:
         self,
         code,
         currency_obj,
-        symbol,
         channel_code=None,
         channel_index=0,
         loop=None,
@@ -26,7 +25,6 @@ class Arg:
     ):
         self.code = code
         self.channel_code = channel_code
-        self.symbol = symbol
         self.loop = loop
         self.timeout = timeout
         self.retry = retry

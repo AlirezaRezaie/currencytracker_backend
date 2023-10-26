@@ -12,6 +12,8 @@ from queue import Queue
 global_board = {"latests": [], "limit": 20}
 crypto_board = {}
 ws_boards = {}
+symbol_tgju_map = {}
+tjgu_symbol_map = {}
 
 # since every task (thread) might change the value of global_board
 # we will create a lock to ensure no conflict
@@ -29,7 +31,7 @@ class Task:
     """
 
     def __init__(
-        self, code, symbol, currency_obj, channel_code=None, loop=None, channel_index=0
+        self, code, currency_obj, channel_code=None, loop=None, channel_index=0
     ):
         """
         TODO : this might return error or None as memory limit reaches
@@ -38,7 +40,6 @@ class Task:
         self.args = Arg(
             code,
             currency_obj,
-            symbol,
             channel_code=channel_code,
             loop=loop,
             channel_index=channel_index,
@@ -226,10 +227,11 @@ def crypto_call_back(price, type):
 
 def ws_call_back(price, type):
     task = get_task("TGJU")
-    select_board = add_price_to_pickle(type, price, code=task.args.code)
+    currency_code = tjgu_symbol_map[type]
+    select_board = add_price_to_pickle(type, price, code=currency_code)
 
     # we should also create a task that saves the entry inside the sqlite for later usage
-    json_data = {type: select_board}
+    json_data = {currency_code: select_board}
     data = json.dumps(json_data)
 
     # task.ws_users.setdefault(type,[])

@@ -129,9 +129,8 @@ async def websocket_endpoint(websocket: WebSocket):
                         # logger.info(f"selected {task.ws_users}")
                         select_user_list = task.ws_users[currency_type]
                         # means its the type selector command (either TGJU or CRYPTO)
-                        existing_board = get_pickle_data(currency_type)
+                        data = get_pickle_data(currency_type)
 
-                        data = {currency_type: existing_board}
                         text_data = json.dumps(data)
                     elif channel_code == "CRYPTO":
                         task.ws_users.setdefault(currency_type, [])

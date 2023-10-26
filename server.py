@@ -3,7 +3,7 @@ from fastapi.staticfiles import StaticFiles
 
 from network import network_stability_check
 from logs import logger
-from tasks import Task, tasks
+from tasks import Task, tasks, symbol_tgju_map, tjgu_symbol_map
 from utils import *
 import locale
 
@@ -29,10 +29,17 @@ app.include_router(calculator.router, prefix="/calculator", tags=["calculator"])
 
 @app.on_event("startup")
 async def startup_event():
-    # network_stability_check()
+    network_stability_check()
     # start the default channels on startup
     local.default_channels = get_defaults()
     currencies = local.default_channels
+    tgju_currencies = currencies["TGJU"]["list_of_channels"][0]["currency_list"][
+        "CURRENCY"
+    ]
+    for currency in tgju_currencies:
+        symbol_tgju_map[currency["currency_symbol"]] = currency["code"]
+        tjgu_symbol_map[currency["code"]] = currency["currency_symbol"]
+
     for currency_code, currency_obj in currencies.items():
         if not currency_obj or not type(currency_obj) == dict:
             # dont start empty currency channels
@@ -51,12 +58,10 @@ async def startup_event():
             if channel["nonstop"]:
                 for code in task_codes:
                     symbol = get_tgju_data("CURRENCY", code)
-                    if not symbol:
-                        symbol = code
+                    symbol_tgju_map[symbol] = code
                     # only start the ones which have specified nonstop in their config
                     Task(
                         code,
-                        symbol,
                         currency_obj,
                         channel_index=channel_list.index(channel),
                         channel_code=currency_code,
