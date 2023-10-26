@@ -2,6 +2,7 @@ import os
 import socket
 import json
 from locals import local
+import pickle
 
 # Define a hardcoded admin username and password (for demonstration purposes)
 ADMIN_USERNAME = "admin"
@@ -36,9 +37,14 @@ class Arg:
         else:
             default_channels = get_defaults()
 
-        self.currency_info = currency_obj.get("currency_info")
-        self.channel_info = currency_obj.get("list_of_channels")[channel_index]
-        self.channel_id = self.channel_info.get("channel_name")
+        try:
+            self.currency_info = currency_obj.get("currency_info")
+            self.channel_info = currency_obj.get("list_of_channels", [])[channel_index]
+            self.channel_id = self.channel_info.get("channel_name")
+
+        except IndexError:
+            self.channel_info = ""
+            self.channel_id = ""
 
 
 def get_host():
@@ -55,6 +61,73 @@ def get_defaults():
     # read the json file
     with open("default-channels.json", "r") as f:
         return json.load(f)
+
+
+def add_price_to_pickle(pickle_name, price, scope_type=None):
+    """
+    adds a price to the specified pickle file
+    returns the latest changed pickle object
+    """
+
+    try:
+        with open(f"pickles/{pickle_name}.pkl", "rb") as file:
+            board = pickle.load(file)
+    except:
+        if scope_type:
+            board = {"local": [], "global": []}
+        else:
+            board = {}
+
+    if scope_type:
+        select_board = board[scope_type]
+    else:
+        board.setdefault(pickle_name, [])
+        select_board = board.get(pickle_name)
+
+    # print(len(select_board))
+    if len(select_board) > 20:
+        select_board.pop(0)
+    select_board.append(price)
+
+    # Save the updated data back to the file
+    with open(f"pickles/{pickle_name}.pkl", "wb") as file:
+        pickle.dump(board, file)
+
+    return select_board
+
+
+def get_tgju_data(asset_type, currency_symbol, data=None):
+    defaults_data = None
+    if hasattr(local, "default_channels"):
+        defaults_data = local.default_channels
+    elif data:
+        defaults_data = data
+    else:
+        raise ValueError(
+            "please specify the default data since there is no data in local"
+        )
+
+    tgju_currency_list = defaults_data["TGJU"]["list_of_channels"][0]["currency_list"][
+        asset_type
+    ]
+
+    currency_data = defaults_data.get(currency_symbol)
+    if (currency_data and not currency_data["list_of_channels"]) or (not currency_data):
+        for currency in tgju_currency_list:
+            if currency.get("currency_symbol") == currency_symbol:
+                return currency.get("code")
+
+    return None
+
+
+def get_running_tg_obj(currency_data):
+    if not currency_data:
+        return None
+    channel_list = currency_data.get("list_of_channels", [])
+    for obj in channel_list:
+        if obj["nonstop"] and obj["type"] == "tg":
+            return obj
+    return None
 
 
 def push_in_board(item, board):
