@@ -4,7 +4,7 @@ from starlette.websockets import WebSocketDisconnect
 import asyncio
 from logs import logger
 from tasks import *
-from utils import get_port
+from utils import get_port, get_tgju_data
 
 router = APIRouter()
 
@@ -83,25 +83,44 @@ async def websocket_endpoint(websocket: WebSocket):
                     channel_code = full_commands[0]
                     if channel_code == "CRYPTO":
                         currency_type = full_commands[1]
+                        task_code = currency_type
+                    elif channel_code == "TGJU":
+                        currency_type = full_commands[1]
+                        task_code = channel_code
                     else:
                         currency_type = full_commands[0]
+                        task_code = channel_code
+                        # currency_obj = local.default_channels[]
+
+                    # converting a normal telegram command to a tgju command (its brilliant i know :))
+                    tgju_eq_code = get_tgju_data("CURRENCY", currency_type)
+                    if tgju_eq_code:
+                        channel_code = "TGJU"
+                        task_code = "TGJU"
+                        currency_type = tgju_eq_code
+
 
                 if channel_code:
                     # get the task if exists
-                    task = get_task(currency_type)
+                    task = get_task(task_code)
                     if not task:
                         # if it doesn't create a brand new one
                         # note that we have to pass the websocket event loop
                         # because we will use it to create notification tasks
                         # please refer to the notes in the tasks.py file in the
                         # notify
-                        task = Task(currency_type, loop, channel_code=channel_code)
+                        task = Task(
+                            task_code,
+                            currency_obj=dict(),
+                            loop=loop,
+                            channel_code=channel_code,
+                        )
                     else:
                         # log that task exist's
                         # setting it's loop value to the websocket event loop
                         # as mentioned why in the loop declaration
                         task.main_loop = loop
-                        logger.info(f"task {currency_type} exists")
+                        logger.info(f"task {task_code} exists")
 
                 # this chain of if statement sets the channel list of the user type
                 # and also sets the text_data (last price of the price type)
@@ -111,28 +130,30 @@ async def websocket_endpoint(websocket: WebSocket):
                         # logger.info(f"selected {task.ws_users}")
                         select_user_list = task.ws_users[currency_type]
                         # means its the type selector command (either TGJU or CRYPTO)
-                        with open(f"{channel_code}.pkl", "rb") as file:
+                        with open(f"pickles/{currency_type}.pkl", "rb") as file:
                             existing_board = pickle.load(file)
 
-                        data = {currency_type: existing_board.get(currency_type)}
+                        data = {currency_type: existing_board}
                         text_data = json.dumps(data)
                     elif channel_code == "CRYPTO":
                         task.ws_users.setdefault(currency_type, [])
                         # logger.info(f"selected {task.ws_users}")
                         select_user_list = task.users
                         # means its the type selector command (either TGJU or CRYPTO)
-                        with open(f"{channel_code}.pkl", "rb") as file:
+                        with open(f"pickles/{currency_type}.pkl", "rb") as file:
                             existing_board = pickle.load(file)
 
-                        data = {currency_type: existing_board.get(currency_type)}
+                        data = {currency_type: existing_board}
                         text_data = json.dumps(data)
 
                     else:
                         select_user_list = task.users
                         # is_crypto = task.args.currency_info.get("is_crypto")
+                        with open(f"pickles/{currency_type}.pkl", "rb") as file:
+                            board = pickle.load(file)
                         text_data = None
                         if task.lastprice:
-                            text_data = baked_data(task.lastprice)
+                            text_data = json.dumps(board)
 
                 # read the parsed data
                 match parse_command["command"]:
@@ -178,6 +199,7 @@ async def websocket_endpoint(websocket: WebSocket):
                             channels_subbed_in.append(user_obj.get("type"))
 
                         # return a list of their codes to the user
+                        print(channels_subbed_in)
                         await websocket.send_text(str(channels_subbed_in))
 
                     # returns the number of active tasks in the server
@@ -207,12 +229,12 @@ async def websocket_endpoint(websocket: WebSocket):
         else:
             logger.info(log_message)
 
-    except Exception as e:
-        logger.error(
-            f"Custome Exception Occurred: {e}\nException from client {websocket.client.host}:{websocket.client.port}\ncheck the logs to see who that was"
-        )
-        await websocket.send_text(str(e))
-        await websocket.close(1012)
+    # except Exception as e:
+    #    logger.error(
+    #        f"Custome Exception Occurred: {e}\nException from client {websocket.client.host}:{websocket.client.port}\ncheck the logs to see who that was"
+    #    )
+    #    await websocket.send_text(str(e))
+    #    await websocket.close(1012)
 
     # general exception handler simply print the error
     # and return it to the user and close the connection
