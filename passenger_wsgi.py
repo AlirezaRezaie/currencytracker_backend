@@ -13,6 +13,6 @@ for process in psutil.process_iter(attrs=["pid", "name"]):
 if not server_proc_exist:
     script_path = "run_server.sh"
     print("creating a new uvicorn process")
-    subprocess.call(["sh", script_path])
+    subprocess.Popen(["sh", script_path])
 
 application = ASGIMiddleware(app)
