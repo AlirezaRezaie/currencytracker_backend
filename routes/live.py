@@ -4,7 +4,7 @@ from starlette.websockets import WebSocketDisconnect
 import asyncio
 from logs import logger
 from tasks import *
-from utils import get_port, get_tgju_data
+from utils import get_tgju_data, get_pickle_data
 
 router = APIRouter()
 
@@ -99,7 +99,6 @@ async def websocket_endpoint(websocket: WebSocket):
                         task_code = "TGJU"
                         currency_type = tgju_eq_code
 
-
                 if channel_code:
                     # get the task if exists
                     task = get_task(task_code)
@@ -130,8 +129,7 @@ async def websocket_endpoint(websocket: WebSocket):
                         # logger.info(f"selected {task.ws_users}")
                         select_user_list = task.ws_users[currency_type]
                         # means its the type selector command (either TGJU or CRYPTO)
-                        with open(f"pickles/{currency_type}.pkl", "rb") as file:
-                            existing_board = pickle.load(file)
+                        existing_board = get_pickle_data(currency_type)
 
                         data = {currency_type: existing_board}
                         text_data = json.dumps(data)
@@ -140,8 +138,7 @@ async def websocket_endpoint(websocket: WebSocket):
                         # logger.info(f"selected {task.ws_users}")
                         select_user_list = task.users
                         # means its the type selector command (either TGJU or CRYPTO)
-                        with open(f"pickles/{currency_type}.pkl", "rb") as file:
-                            existing_board = pickle.load(file)
+                        existing_board = get_pickle_data(currency_type)
 
                         data = {currency_type: existing_board}
                         text_data = json.dumps(data)
@@ -149,8 +146,8 @@ async def websocket_endpoint(websocket: WebSocket):
                     else:
                         select_user_list = task.users
                         # is_crypto = task.args.currency_info.get("is_crypto")
-                        with open(f"pickles/{currency_type}.pkl", "rb") as file:
-                            board = pickle.load(file)
+                        board = get_pickle_data(currency_type)
+
                         text_data = None
                         if task.lastprice:
                             text_data = json.dumps(board)

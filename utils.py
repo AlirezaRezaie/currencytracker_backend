@@ -96,6 +96,15 @@ def add_price_to_pickle(pickle_name, price, scope_type=None):
     return select_board
 
 
+def get_pickle_data(pickle_file_name):
+    try:
+        with open(f"pickles/{pickle_file_name}.pkl", "rb") as file:
+            existing_board = pickle.load(file)
+            return existing_board
+    except:
+        return {}
+
+
 def get_tgju_data(asset_type, currency_symbol, data=None):
     defaults_data = None
     if hasattr(local, "default_channels"):
