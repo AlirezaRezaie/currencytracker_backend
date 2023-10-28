@@ -31,8 +31,15 @@ class priceInfo:
             self.posttime = int(time.time() % 86_400)
             self.text = raw_price_obj
             self.persian_name = local.args.currency_info["name"]
+            info = local.channel_info["currency_list"]
+            self.full_name = info[local.args.code]["fullname"]
             self.rate_of_change = None
             self.price = float(raw_price_obj["price"])
+
+            self.image_link = local.channel_info["image_link"].format(
+                full_name=self.full_name,
+                symbol=local.args.code,
+            )
 
         elif local.channel_info["type"] == "tg":
             self.postnumber = raw_price_obj["number"]
@@ -40,6 +47,7 @@ class priceInfo:
             self.text = raw_price_obj["text"]
             self.persian_name = local.args.currency_info["name"]
             self.rate_of_change = None
+            self.image_link = f"/static/currency_images/{local.args.code}.png"
             parsed = self.parse_price_info(raw_price_obj["text"])
 
             # if its a valid price text
@@ -77,7 +85,7 @@ class priceInfo:
             "action": self.action,
             "price": self.price,
             "persian_name": self.persian_name,
-            "image_link": f"/static/currency_images/{local.args.code}.png",
+            "image_link": self.image_link,
             "exchtype": self.exchtype,
             "posttime": self.posttime,
             "rateofchange": self.rate_of_change,

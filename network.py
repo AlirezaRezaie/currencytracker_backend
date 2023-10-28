@@ -7,7 +7,7 @@ from logs import logger
 from locals import local
 from requests import Session
 import json
-import websocket
+from time import sleep
 
 session = Session()
 

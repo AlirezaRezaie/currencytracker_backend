@@ -1,5 +1,4 @@
 import threading
-from locals import local
 import json
 from modes import run_live, run_websocket
 from logs import logger
@@ -10,6 +9,7 @@ from utils import (
 )
 import asyncio
 from queue import Queue
+import websockets.exceptions  # Import the specific exception
 
 # this is the global board every currency update gets saved to this board
 global_board = {"latests": [], "limit": 20}
@@ -196,6 +196,17 @@ def disconnect_websocket(websocket, user_type=None, user_list=None):
 
 async def send_to_all(error_msg, all_clients):
     tasks = [client.send_text(error_msg) for client in all_clients]
+
+    try:
+        # Your asynchronous code here
+        await asyncio.gather(*tasks)
+    except websockets.exceptions.ConnectionClosedError as e:
+        # Handle the error, log it, or perform any necessary actions
+        print(f"Connection closed error: {e}")
+    except Exception as e:
+        # Handle other exceptions if needed
+        print(f"An error occurred: {e}")
+
     await asyncio.gather(*tasks)
 
 
@@ -222,7 +233,7 @@ def crypto_call_back(price, type):
 
 def ws_call_back(price, type):
     task = get_task("TGJU")
-    currency_code = tjgu_symbol_map[type]
+    currency_code = price["code"]
     select_board = add_price_to_pickle(type, price, code=currency_code)
 
     # we should also create a task that saves the entry inside the sqlite for later usage

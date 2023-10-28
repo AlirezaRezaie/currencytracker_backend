@@ -29,7 +29,7 @@ app.include_router(calculator.router, prefix="/calculator", tags=["calculator"])
 
 @app.on_event("startup")
 async def startup_event():
-    # network_stability_check()
+    network_stability_check()
     # start the default channels on startup
     local.default_channels = get_defaults()
     currencies = local.default_channels
@@ -72,7 +72,6 @@ async def startup_event():
 async def shutdown_event():
     print("shutting down please wait...")
     print(f"closing {len(tasks)} tasks...")
-
     # loop through all running tasks
     for task in tasks.copy():
         # set the stop event (it will break the task while loop therefore exit the task)

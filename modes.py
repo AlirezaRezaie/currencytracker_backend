@@ -4,6 +4,7 @@ from logs import logger
 from locals import local
 from utils import push_in_board, convert_tgju_data, Arg
 import threading
+import websocket
 
 # How To Use:
 
@@ -45,12 +46,24 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg, sym_m
 
         for item in data:
             name, price = item.split("|||")
-            _, id, channel = name.split("|")
-            for key, values in currency_list.items():
-                if any(item["code"] == channel for item in values):
-                    get_symbol = sym_map[item["code"]]
-                    data = convert_tgju_data(get_symbol, item["name"], None, price)
-                    success_callback(price, channel)
+            _, _, channel = name.split("|")
+            for values in currency_list.values():
+                for value in values:
+                    code = value["code"]
+                    value = value if code == channel else None
+                if value:
+                    symbol = sym_map.get(channel)
+                    get_symbol = symbol if symbol else channel
+                    if code == "CRYPTO":
+                        image_link = args.channel_info["image_link"].format(
+                            symbol=item["currency_symbol"]
+                        )
+                    else:
+                        image_link = ""
+                    data = convert_tgju_data(
+                        get_symbol, value["name"], image_link, price
+                    )
+                    success_callback(data, channel)
 
     def on_error(ws, error):
         # print(f"Error: {error}")
@@ -74,6 +87,7 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg, sym_m
                 endpoint,
                 on_message=on_message,
                 on_close=on_close,
+                on_error=on_error,
                 on_open=on_open,
             )
             terminator = threading.Thread(
