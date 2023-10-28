@@ -73,12 +73,13 @@
         "type": "api",
         "endpoint": "https://api.binance.com/api/v3/ticker/price?symbol={code}USDT",
         "channel_name": "dollar_tehran3bze",
+        "image_link": "https://static.tgju.org/images/crypto/icons/{full_name}_{symbol}.png",
         "regex": "(فردایی|نقدی|نـــقـدی|نـــقـدۍ).*?(\\d{1,3}(?:,\\d{3})*).*?(خـرید|فروش)",
         "nonstop": true,
         "currency_list": {
-          "BTC": "بیتکوین",
-          "DOGE": "دوج کوین",
-          "ETH": "اتریوم"
+          "BTC": { "name": "بیتکوین", "fullname": "bitcoin" },
+          "DOGE": { "name": "دوج کوین", "fullname": "dogecoin" },
+          "ETH": { "name": "اتریوم", "fullname": "ethereum" }
         }
       }
     ],
@@ -90,6 +91,7 @@
         "type": "wbsock",
         "endpoint": "wss://stream.tgju.org/connection/websocket",
         "channel_name": "dollar_tehran3bze",
+        "image_link": "https://www.tgju.org/images/flags/4x3/{symbol}.svg",
         "nonstop": true,
         "currency_list": {
           "GOLD": [
@@ -195,7 +197,9 @@
         }
       }
     ],
-    "currency_info": { "name": "وب سوکت" }
+    "currency_info": {
+      "name": "وب سوکت"
+    }
   },
   "VPN": {
     "list_of_channels": [
