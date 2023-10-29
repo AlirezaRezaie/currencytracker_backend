@@ -3,7 +3,7 @@ from fastapi.staticfiles import StaticFiles
 
 from network import network_stability_check
 from logs import logger
-from tasks import Task, tasks, symbol_tgju_map, tjgu_symbol_map
+from tasks import Task, tasks, symbol_tgju_map
 from utils import *
 import locale
 
@@ -29,7 +29,7 @@ app.include_router(calculator.router, prefix="/calculator", tags=["calculator"])
 
 @app.on_event("startup")
 async def startup_event():
-    # network_stability_check()
+    network_stability_check()
     # start the default channels on startup
     local.default_channels = get_defaults()
     currencies = local.default_channels
@@ -38,7 +38,6 @@ async def startup_event():
     ]
     for currency in tgju_currencies:
         symbol_tgju_map[currency["currency_symbol"]] = currency["code"]
-        tjgu_symbol_map[currency["code"]] = currency["currency_symbol"]
 
     for currency_code, currency_obj in currencies.items():
         if not currency_obj or not type(currency_obj) == dict:

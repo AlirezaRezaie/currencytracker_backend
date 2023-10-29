@@ -5,6 +5,7 @@ from locals import local
 from utils import push_in_board, convert_tgju_data, Arg
 import threading
 import websocket
+import itertools
 
 # How To Use:
 
@@ -28,9 +29,19 @@ def get_fetch_function():
 
 
 # the type websocket needs a whole another task for itself
-def run_websocket(success_callback, error_callback, stop_event, args: Arg, sym_map):
+def run_websocket(success_callback, error_callback, stop_event, args: Arg):
     endpoint = args.channel_info["endpoint"]
     currency_list = args.channel_info["currency_list"]
+
+    gold_map = {}
+    currency_map = {}
+
+    tgju_currencies = currency_list["CURRENCY"]
+    tgju_golds = currency_list["GOLD"]
+
+    for currency, gold in zip(tgju_currencies, tgju_golds):
+        currency_map[currency["code"]] = currency["currency_symbol"]
+        gold_map[gold["code"]] = gold["name"]
 
     def websocket_terminator_sub_task(event, ws):
         while True:
@@ -47,23 +58,23 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg, sym_m
         for item in data:
             name, price = item.split("|||")
             _, _, channel = name.split("|")
-            for values in currency_list.values():
-                for value in values:
-                    code = value["code"]
-                    value = value if code == channel else None
-                if value:
-                    symbol = sym_map.get(channel)
-                    get_symbol = symbol if symbol else channel
-                    if code == "CRYPTO":
-                        image_link = args.channel_info["image_link"].format(
-                            symbol=item["currency_symbol"]
-                        )
-                    else:
-                        image_link = ""
-                    data = convert_tgju_data(
-                        get_symbol, value["name"], image_link, price
-                    )
-                    success_callback(data, channel)
+            print(channel)
+
+            currency_symbol = currency_map.get(channel)
+            gold_name = gold_map.get(channel)
+            if currency_symbol:
+                symbol = currency_symbol
+                name = channel
+            elif gold_name:
+                symbol = channel
+                name = gold_name
+            else:
+                symbol = None
+
+            print(symbol, name)
+            if symbol and name:
+                data = convert_tgju_data(symbol, name, "", price)
+                success_callback(data, channel)
 
     def on_error(ws, error):
         # print(f"Error: {error}")

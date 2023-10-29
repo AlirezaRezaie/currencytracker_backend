@@ -16,7 +16,6 @@ global_board = {"latests": [], "limit": 20}
 crypto_board = {}
 ws_boards = {}
 symbol_tgju_map = {}
-tjgu_symbol_map = {}
 
 # since every task (thread) might change the value of global_board
 # we will create a lock to ensure no conflict
@@ -75,7 +74,6 @@ class Task:
                     error_callback,
                     self.stop_event,
                     self.args,
-                    tjgu_symbol_map,
                 )
             case "CRYPTO":
                 mode = run_live
