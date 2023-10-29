@@ -15,7 +15,8 @@ import websockets.exceptions  # Import the specific exception
 global_board = {"latests": [], "limit": 20}
 crypto_board = {}
 ws_boards = {}
-symbol_tgju_map = {}
+
+# initializing the symbol map
 
 # since every task (thread) might change the value of global_board
 # we will create a lock to ensure no conflict
@@ -197,15 +198,13 @@ async def send_to_all(error_msg, all_clients):
 
     try:
         # Your asynchronous code here
-        await asyncio.gather(*tasks)
+        await asyncio.gather(*tasks, return_exceptions=True)
     except websockets.exceptions.ConnectionClosedError as e:
         # Handle the error, log it, or perform any necessary actions
         print(f"Connection closed error: {e}")
     except Exception as e:
         # Handle other exceptions if needed
         print(f"An error occurred: {e}")
-
-    await asyncio.gather(*tasks)
 
 
 def error_callback(code):

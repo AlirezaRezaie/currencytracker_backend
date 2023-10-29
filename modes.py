@@ -5,7 +5,11 @@ from locals import local
 from utils import push_in_board, convert_tgju_data, Arg
 import threading
 import websocket
-import itertools
+
+
+gold_map = {}
+currency_map = {}
+currency_map_rev = {}
 
 # How To Use:
 
@@ -33,14 +37,12 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
     endpoint = args.channel_info["endpoint"]
     currency_list = args.channel_info["currency_list"]
 
-    gold_map = {}
-    currency_map = {}
-
     tgju_currencies = currency_list["CURRENCY"]
     tgju_golds = currency_list["GOLD"]
 
     for currency, gold in zip(tgju_currencies, tgju_golds):
         currency_map[currency["code"]] = currency["currency_symbol"]
+        currency_map_rev[currency["currency_symbol"]] = currency["code"]
         gold_map[gold["code"]] = gold["name"]
 
     def websocket_terminator_sub_task(event, ws):
@@ -58,7 +60,6 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
         for item in data:
             name, price = item.split("|||")
             _, _, channel = name.split("|")
-            print(channel)
 
             currency_symbol = currency_map.get(channel)
             gold_name = gold_map.get(channel)
@@ -71,7 +72,6 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
             else:
                 symbol = None
 
-            print(symbol, name)
             if symbol and name:
                 data = convert_tgju_data(symbol, name, "", price)
                 success_callback(data, channel)
@@ -80,7 +80,7 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
         # print(f"Error: {error}")
         # print(error)
         # error_callback(args.code)
-        print(error)
+        pass
 
     def on_close(ws, close_status_code, close_msg):
         logger.info("Websocket Connection Closed")

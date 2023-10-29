@@ -101,7 +101,7 @@ def add_price_to_pickle(pickle_name, price, code=None):
         with open(f"pickles/{pickle_name}.pkl", "rb") as file:
             board = pickle.load(file)
     except:
-        board = {"code": code}
+        board = {}
 
     board.setdefault(code, [])
     select_board = board.get(code)
