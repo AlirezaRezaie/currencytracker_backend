@@ -79,9 +79,8 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
 
     def on_error(ws, error):
         # print(f"Error: {error}")
-        # print(error)
+        logger.error(error)
         # error_callback(args.code)
-        pass
 
     def on_close(ws, close_status_code, close_msg):
         logger.info("Websocket Connection Closed")
