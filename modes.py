@@ -50,6 +50,7 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
             if event.is_set():
                 ws.close()
                 break
+
             elif ws.has_done_teardown:
                 break
 
@@ -84,6 +85,7 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
 
     def on_close(ws, close_status_code, close_msg):
         logger.info("Websocket Connection Closed")
+        logger.info(f"close code: {close_status_code}, close message: {close_msg}")
 
     def on_open(ws):
         logger.info("Connected to WebSocket")
@@ -109,6 +111,7 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
             terminator.join()
         except:
             print("error accoured in webscoket task")
+    print("exit websocket")
 
 
 # run live task the main inner workings of the app is in here

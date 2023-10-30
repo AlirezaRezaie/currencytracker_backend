@@ -190,12 +190,10 @@ async def websocket_endpoint(websocket: WebSocket):
                     case "CHANNELS":
                         channels_subbed_in = []
                         lists_user_joined = get_lists_user_joined(websocket)
-                        print(lists_user_joined)
                         for user_obj in lists_user_joined:
                             channels_subbed_in.append(user_obj.get("type"))
 
                         # return a list of their codes to the user
-                        print(channels_subbed_in)
                         await websocket.send_text(str(channels_subbed_in))
 
                     # returns the number of active tasks in the server
