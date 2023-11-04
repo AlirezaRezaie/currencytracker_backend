@@ -6,11 +6,11 @@ WORKDIR /app
 
 RUN apt-get update && \
     apt-get install -y locales && \
+    locale-gen fa_IR.UTF-8 && \
     sed -i -e 's/# fa_IR.UTF-8 UTF-8/fa_IR.UTF-8 UTF-8/' /etc/locale.gen && \
-    dpkg-reconfigure --frontend=noninteractive locales && \
-    locale-gen fa_IR.UTF-8
+    dpkg-reconfigure --frontend=noninteractive locales
 
-ENV LANG fa_IR.UTF-8
+# Set the locale to fa_IR.UTF-8
 ENV LC_ALL fa_IR.UTF-8
 
 # Copy the requirements file into the container

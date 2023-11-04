@@ -1,8 +1,10 @@
 from modes import run_counter
 from fastapi import APIRouter
-from utils import get_defaults, get_tgju_data, get_running_tg_obj
+from utils import get_defaults, get_tgju_data
 from tasks import Arg
+from modes import currency_map_rev
 import pickle
+
 
 default_currencies = get_defaults()
 router = APIRouter()
@@ -15,11 +17,13 @@ def get_live_counter(code: str, channel: int, count: int) -> list[dict] | list[s
 
     Retruns:
         the last `count` of the specified channel `code`
-
     """
 
     # only for tgju related ones
-    pickle_name = get_tgju_data("CURRENCY", code, default_currencies)
+    try:
+        pickle_name = currency_map_rev[code]
+    except KeyError:
+        pickle_name = None
 
     # only for telegram ones
     currency_obj = default_currencies.get(code)
@@ -29,7 +33,7 @@ def get_live_counter(code: str, channel: int, count: int) -> list[dict] | list[s
         try:
             with open(f"pickles/{pickle_name}.pkl", "rb") as file:
                 read_pickle = pickle.load(file)
-                return read_pickle[pickle_name]
+                return read_pickle[code]
         except:
             return ["error pickle data not found"]
     # and if telegram we run the counter function that fetches from telegram

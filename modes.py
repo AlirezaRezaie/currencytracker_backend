@@ -48,10 +48,12 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
     def websocket_terminator_sub_task(event, ws):
         while True:
             if event.is_set():
+                print("tear down")
                 ws.close()
                 break
 
             elif ws.has_done_teardown:
+                ws.close()
                 break
 
     def on_message(ws, message):
@@ -110,7 +112,7 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
             terminator.join()
         except:
             print("error accoured in webscoket task")
-    print("exit websocket")
+    # print("exit websocket")
 
 
 # run live task the main inner workings of the app is in here
