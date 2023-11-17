@@ -47,12 +47,8 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
 
     def websocket_terminator_sub_task(event, ws):
         while True:
-            if event.is_set():
+            if event.is_set() or ws.has_done_teardown:
                 print("tear down")
-                ws.close()
-                break
-
-            elif ws.has_done_teardown:
                 ws.close()
                 break
 
@@ -101,7 +97,7 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
                 endpoint,
                 on_message=on_message,
                 on_close=on_close,
-                on_error=on_error,
+                # on_error=on_error,
                 on_open=on_open,
             )
             terminator = threading.Thread(

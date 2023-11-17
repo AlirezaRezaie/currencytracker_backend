@@ -3,8 +3,9 @@ from fastapi import APIRouter, WebSocket
 from starlette.websockets import WebSocketDisconnect
 import asyncio
 from logs import logger
-from tasks import *
+from tasks import disconnect_websocket,Task,tasks,get_lists_user_joined,global_users,get_task
 from utils import get_tgju_data, get_pickle_data
+import json
 
 router = APIRouter()
 
@@ -51,6 +52,7 @@ async def websocket_endpoint(websocket: WebSocket):
     # send an initial test (it is used to check the websocket connection in the frontend)
     await websocket.send_text("CONNECTED")
     logger.info(f"client {websocket.client.host}:{websocket.client.port} connected 🔌🔌")
+    global_users.append(websocket)
 
     # getting the event loop that router.websocket made because
     # we want to use it to pass data to multiple users
@@ -59,6 +61,8 @@ async def websocket_endpoint(websocket: WebSocket):
     #   ultimetly gets set to an exsisting Task object
     #   if not no data will be broadcasted to the users
     loop = asyncio.get_event_loop()
+    Task.global_loop = loop
+
     # the currenct task that is started
     task = None
     try:
@@ -210,6 +214,7 @@ async def websocket_endpoint(websocket: WebSocket):
     # Socket Exceptions
     # dissconnect exception handler
     except WebSocketDisconnect:
+        global_users.remove(websocket)
         log_message = (
             f"client {websocket.client.host}:{websocket.client.port} disconnected ❌❌"
         )
@@ -220,6 +225,7 @@ async def websocket_endpoint(websocket: WebSocket):
 
             if len(task.users) < 1 and not task.args.channel_info["nonstop"]:
                 task.stop()
+                task.task.join()
         else:
             logger.info(log_message)
 

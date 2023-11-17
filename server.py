@@ -29,7 +29,7 @@ app.include_router(calculator.router, prefix="/calculator", tags=["calculator"])
 
 @app.on_event("startup")
 async def startup_event():
-    # network_stability_check()
+    network_stability_check()
     # start the default channels on startup
     local.default_channels = get_defaults()
     currencies = local.default_channels
@@ -84,7 +84,7 @@ if __name__ == "__main__":
         logger.info(f"env port is set to: {get_port()}")
         uvicorn.run(
             "server:app",
-            host=get_host(),
+            host="localhost",
             port=get_port(),
             # reload=True
         )

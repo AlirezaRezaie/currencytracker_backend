@@ -25,6 +25,8 @@ lock = threading.Lock()
 # all running tasks list
 tasks = []
 
+# all users 
+global_users = []
 
 class Task:
     """
@@ -32,7 +34,7 @@ class Task:
     upon creation it will create and start a thread\n
     it also has a `users` list to have more control on it
     """
-
+    global_loop = None
     def __init__(
         self, code, currency_obj, channel_code=None, loop=None, channel_index=0
     ):
@@ -128,7 +130,11 @@ def get_all_user_list():
     all_user_lists = []
     for task in tasks:
         if task.users:
-            all_user_lists.append({"type": f"{task.args.code}", "users": task.users})
+            all_user_lists.append(
+                {
+                    "type": f"{task.args.code}",
+                    "users": task.users}
+                )
         elif task.ws_users:
             for channel_name, channel_list in task.ws_users.items():
                 all_user_lists.append(
@@ -194,10 +200,10 @@ def disconnect_websocket(websocket, user_type=None, user_list=None):
 
 
 async def send_to_all(error_msg, all_clients):
+    
     tasks = [client.send_text(error_msg) for client in all_clients]
 
     try:
-        # Your asynchronous code here
         await asyncio.gather(*tasks, return_exceptions=True)
     except websockets.exceptions.ConnectionClosedError as e:
         # Handle the error, log it, or perform any necessary actions
@@ -213,8 +219,8 @@ def error_callback(code):
     # disconnect_websocket(,task=task)
     # task.stop()
 
-    if task.main_loop:
-        task.main_loop.create_task(send_to_all("wrong id bruh", task.users))
+    if Task.global_loop:
+        Task.global_loop.create_task(send_to_all("wrong id bruh", task.users))
 
 
 def crypto_call_back(price, type):
@@ -224,8 +230,14 @@ def crypto_call_back(price, type):
 
     json_data = {type: select_board}
     data = json.dumps(json_data)
-    if task.main_loop:
-        task.main_loop.create_task(send_to_all(data, task.users))
+    global_data = json.dumps({"global":json_data})
+    if Task.global_loop:
+
+        Task.global_loop.create_task(send_to_all(data, task.users))
+        # send to global update
+
+        Task.global_loop.create_task(send_to_all(global_data,global_users))
+        
 
 
 def ws_call_back(price, type):
@@ -236,10 +248,14 @@ def ws_call_back(price, type):
     # we should also create a task that saves the entry inside the sqlite for later usage
     json_data = {currency_code: select_board}
     data = json.dumps(json_data)
-
+    
     # task.ws_users.setdefault(type,[])
-    if task.main_loop:
-        task.main_loop.create_task(send_to_all(data, task.ws_users[type]))
+    global_data = json.dumps({"global":json_data})
+
+    if Task.global_loop:
+        # send to channel subscribed users
+        Task.global_loop.create_task(send_to_all(data, task.ws_users[type]))
+        Task.global_loop.create_task(send_to_all(global_data,global_users))
 
 
 def success_callback(local_board, channel):
@@ -257,8 +273,13 @@ def success_callback(local_board, channel):
     # global_board = add_price_to_pickle("GLOBAL", new_price, code="global")
     json_data = {channel: select_board}
     data = json.dumps(json_data)
-    if task.main_loop:
-        task.main_loop.create_task(send_to_all(data, users))
+
+    global_data = json.dumps({"global":json_data})
+
+    if Task.global_loop:
+        Task.global_loop.create_task(send_to_all(data, users))
+        # send to global update
+        Task.global_loop.create_task(send_to_all(global_data,global_users))
     else:
         logger.debug("new data recieved but there is to give it to ")
     # this was the previous approach use this if the current one conflicts
