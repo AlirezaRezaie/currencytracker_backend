@@ -58,15 +58,17 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
         for item in data:
             name, price = item.split("|||")
             _, _, channel = name.split("|")
-            
+
             currency_symbol = currency_map.get(channel)
             gold_name = gold_map.get(channel)
+
             if currency_symbol:
+                for obj in tgju_currencies:
+                    if obj.get("code") == channel: currency_info = obj
+
                 symbol = currency_symbol
-                name = channel
-                image_link =  args.channel_info["image_link"].format(
-                            symbol=item["currency_symbol"]
-                        )
+                name = currency_info["name"]
+                image_link =  args.channel_info["image_link"]
             elif gold_name:
                 symbol = channel
                 name = gold_name
