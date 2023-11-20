@@ -32,13 +32,13 @@
         "type": "tg",
         "channel_name": "DHS_Dirham",
         "regex": "",
-        "nonstop": false
+        "nonstop": true
       },
       {
         "type": "tg",
         "channel_name": "testderham",
         "regex": "",
-        "nonstop": true
+        "nonstop": false
       }
     ],
     "currency_info": { "name": "درهم" }
