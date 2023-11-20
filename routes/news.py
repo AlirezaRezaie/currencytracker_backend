@@ -41,8 +41,8 @@ else:
 
 # Define a function to check user credentials
 def authenticate_user(credentials: HTTPBasicCredentials = Depends(security)):
-    correct_username = "bachekhoob"  # Replace with your desired username
-    correct_password = "kirkhar92"  # Replace with your desired password
+    correct_username = ADMIN_USERNAME  # Replace with your desired username
+    correct_password = ADMIN_PASSWORD  # Replace with your desired password
 
     # simple authentication
     if (
