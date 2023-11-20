@@ -191,7 +191,8 @@ def convert_tgju_data(code, persian_name, image_link, data):
     parsed_data = data.split("|")
 
     price = float(parsed_data[1].replace(",", ""))
-    rate_of_change = parsed_data[6]
+    rate_of_change = float(parsed_data[6])
+    print(price,rate_of_change)
     change = parsed_data[7]
     time = parsed_data[8]
 
