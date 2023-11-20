@@ -138,10 +138,14 @@ def get_pickle_data(pickle_file_name):
         return {}
     
 def get_all_pickles():
+    except_crypto = list(local.default_channels["CRYPTO"]["list_of_channels"][0]["currency_list"].keys())
+    print("GGGG")
     all_pickle_files = glob.glob("pickles/*.pkl")
     all_pickles_data = []
     # Read each file one by one
     for file_name in all_pickle_files:
+        only_name = os.path.splitext(os.path.basename(file_name))[0]
+        if only_name in except_crypto: continue
         with open(file_name, 'rb') as file:
             data = pickle.load(file)
             # Do something with the data from the file

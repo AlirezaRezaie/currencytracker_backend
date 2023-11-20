@@ -6,6 +6,7 @@ from logs import logger
 from tasks import Task, tasks
 from utils import *
 import locale
+import sys
 
 # import each router to include them
 from routes import counter, live, news, utils, calculator
@@ -89,4 +90,4 @@ if __name__ == "__main__":
             # reload=True
         )
     except KeyboardInterrupt:
-        exit(1)
+        sys.exit()
