@@ -199,9 +199,9 @@ def disconnect_websocket(websocket, user_type=None, user_list=None):
         )
 
 
-async def send_to_all(error_msg, all_clients):
-    
-    tasks = [client.send_text(error_msg) for client in all_clients]
+async def send_to_all(msg, all_clients):
+    data = json.dumps(msg)
+    tasks = [client.send_text(data) for client in all_clients]
 
     try:
         await asyncio.gather(*tasks, return_exceptions=True)
@@ -220,23 +220,18 @@ def error_callback(code):
     # task.stop()
 
     if Task.global_loop:
-        Task.global_loop.create_task(send_to_all("wrong id bruh", task.users))
+        Task.global_loop.create_task(send_to_all("wrong id", task.users))
 
 
 def crypto_call_back(price, type):
     task = get_task(type)
-
     select_board = add_price_to_pickle(type, price)
 
     json_data = {type: select_board}
-    data = json.dumps(json_data)
-    global_data = json.dumps({"global":json_data})
+
     if Task.global_loop:
-
-        Task.global_loop.create_task(send_to_all(data, task.users))
-        # send to global update
-
-        Task.global_loop.create_task(send_to_all(global_data,global_users))
+        Task.global_loop.create_task(send_to_all(json_data, task.users))
+        Task.global_loop.create_task(send_to_all(select_board[-1],global_users))
         
 
 
@@ -247,15 +242,11 @@ def ws_call_back(price, type):
 
     # we should also create a task that saves the entry inside the sqlite for later usage
     json_data = {currency_code: select_board}
-    data = json.dumps(json_data)
-    
-    # task.ws_users.setdefault(type,[])
-    global_data = json.dumps({"global":json_data})
 
     if Task.global_loop:
         # send to channel subscribed users
-        Task.global_loop.create_task(send_to_all(data, task.ws_users[type]))
-        Task.global_loop.create_task(send_to_all(global_data,global_users))
+        Task.global_loop.create_task(send_to_all(json_data, task.ws_users[type]))
+        Task.global_loop.create_task(send_to_all(select_board[-1],global_users))
 
 
 def success_callback(local_board, channel):
@@ -271,15 +262,13 @@ def success_callback(local_board, channel):
     # data = json.dumps({"global": global_board, "local": local_board})
     select_board = add_price_to_pickle(channel, new_price)
     # global_board = add_price_to_pickle("GLOBAL", new_price, code="global")
-    json_data = {channel: select_board}
-    data = json.dumps(json_data)
+    
 
-    global_data = json.dumps({"global":json_data})
+    json_data = {channel: select_board}
 
     if Task.global_loop:
-        Task.global_loop.create_task(send_to_all(data, users))
-        # send to global update
-        Task.global_loop.create_task(send_to_all(global_data,global_users))
+        Task.global_loop.create_task(send_to_all(json_data, users))
+        Task.global_loop.create_task(send_to_all(select_board[-1],global_users))
     else:
         logger.debug("new data recieved but there is to give it to ")
     # this was the previous approach use this if the current one conflicts

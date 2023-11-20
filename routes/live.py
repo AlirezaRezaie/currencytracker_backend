@@ -4,7 +4,7 @@ from starlette.websockets import WebSocketDisconnect
 import asyncio
 from logs import logger
 from tasks import disconnect_websocket,Task,tasks,get_lists_user_joined,global_users,get_task
-from utils import get_tgju_data, get_pickle_data
+from utils import get_tgju_data, get_pickle_data,get_all_pickles
 import json
 
 router = APIRouter()
@@ -52,7 +52,6 @@ async def websocket_endpoint(websocket: WebSocket):
     # send an initial test (it is used to check the websocket connection in the frontend)
     await websocket.send_text("CONNECTED")
     logger.info(f"client {websocket.client.host}:{websocket.client.port} connected 🔌🔌")
-    global_users.append(websocket)
 
     # getting the event loop that router.websocket made because
     # we want to use it to pass data to multiple users
@@ -106,24 +105,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 if channel_code:
                     # get the task if exists
                     task = get_task(task_code)
-                    if not task:
-                        # if it doesn't create a brand new one
-                        # note that we have to pass the websocket event loop
-                        # because we will use it to create notification tasks
-                        # please refer to the notes in the tasks.py file in the
-                        # notify
-                        task = Task(
-                            task_code,
-                            currency_obj=dict(),
-                            loop=loop,
-                            channel_code=channel_code,
-                        )
-                    else:
-                        # log that task exist's
-                        # setting it's loop value to the websocket event loop
-                        # as mentioned why in the loop declaration
-                        task.main_loop = loop
-                        logger.info(f"task {task_code} exists")
+
 
                 # this chain of if statement sets the channel list of the user type
                 # and also sets the text_data (last price of the price type)
@@ -145,6 +127,11 @@ async def websocket_endpoint(websocket: WebSocket):
 
                         data = {currency_type: existing_board}
                         text_data = json.dumps(data)
+                        
+                    elif channel_code == "GLOBAL":
+                        select_user_list = global_users
+                        existing_board = get_all_pickles()
+                        text_data = json.dumps(existing_board)
 
                     else:
                         select_user_list = task.users

@@ -3,11 +3,14 @@ import socket
 import json
 from locals import local
 import pickle
+import datetime
+import glob
 
 # Define a hardcoded admin username and password (for demonstration purposes)
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "admin_password"
 
+time_of_day = 0
 
 def create_json_data(
     code,
@@ -89,10 +92,18 @@ def get_defaults():
 
 
 def add_price_to_pickle(pickle_name, price, code=None):
+    global time_of_day
     """
     adds a price to the specified pickle file
     returns the latest changed pickle object
     """
+    
+    # reset the usd pickle if day changed
+    new_day = datetime.datetime.today().weekday()
+    if new_day > time_of_day:
+        # means the day changed so we reset the pickle
+        os.remove("pickles/USD.pkl")
+        time_of_day = new_day
 
     if not code:
         code = pickle_name
@@ -125,6 +136,20 @@ def get_pickle_data(pickle_file_name):
             return existing_board
     except:
         return {}
+    
+def get_all_pickles():
+    all_pickle_files = glob.glob("pickles/*.pkl")
+    all_pickles_data = []
+    # Read each file one by one
+    for file_name in all_pickle_files:
+        with open(file_name, 'rb') as file:
+            data = pickle.load(file)
+            # Do something with the data from the file
+            # For example, print it or process it further
+            all_pickles_data.append(data)
+            
+    return  all_pickles_data
+
 
 
 def get_tgju_data(asset_type, currency_symbol, data=None):
