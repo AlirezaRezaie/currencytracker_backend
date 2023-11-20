@@ -6,7 +6,6 @@ from utils import push_in_board, convert_tgju_data, Arg
 import threading
 import websocket
 
-
 gold_map = {}
 currency_map = {}
 currency_map_rev = {}
@@ -59,20 +58,25 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
         for item in data:
             name, price = item.split("|||")
             _, _, channel = name.split("|")
-
+            
             currency_symbol = currency_map.get(channel)
             gold_name = gold_map.get(channel)
             if currency_symbol:
                 symbol = currency_symbol
                 name = channel
+                image_link =  args.channel_info["image_link"].format(
+                            symbol=item["currency_symbol"]
+                        )
             elif gold_name:
                 symbol = channel
                 name = gold_name
+                image_link = ""
             else:
                 symbol = None
+                image_link = ""
 
             if symbol and name:
-                data = convert_tgju_data(symbol, name, "", price)
+                data = convert_tgju_data(symbol, name, image_link, price)
                 success_callback(data, channel)
 
     def on_error(ws, error):
@@ -137,6 +141,7 @@ def run_live(success_callback, error_callback, stop_event, only_price, args: Arg
     last_price = None
     # search patience its an integer that determines how much to search the channel for a price
     patience = 4
+
     while not stop_event.is_set():
         # we use this to reset the fetch function every time to fetch the latest cause its live
         local.last_post_number = 0
