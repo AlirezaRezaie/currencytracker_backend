@@ -83,7 +83,7 @@ class priceInfo:
         data = {
             "code": local.args.code,
             "action": self.action,
-            "price": self.price,
+            "price": self.price * 10,
             "persian_name": self.persian_name,
             "image_link": self.image_link,
             "exchtype": self.exchtype,
