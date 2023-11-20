@@ -127,11 +127,12 @@ async def websocket_endpoint(websocket: WebSocket):
 
                         data = {currency_type: existing_board}
                         text_data = json.dumps(data)
-                        
+
                     elif channel_code == "GLOBAL":
                         select_user_list = global_users
                         existing_board = get_all_pickles()
-                        text_data = json.dumps(existing_board)
+                        board = {"global":existing_board}
+                        text_data = json.dumps(board)
 
                     else:
                         select_user_list = task.users

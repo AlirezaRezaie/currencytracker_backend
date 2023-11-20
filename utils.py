@@ -146,8 +146,9 @@ def get_all_pickles():
             data = pickle.load(file)
             # Do something with the data from the file
             # For example, print it or process it further
-            all_pickles_data.append(data)
-            
+
+            all_pickles_data.append(list(data.values())[0][-1])
+
     return  all_pickles_data
 
 

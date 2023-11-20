@@ -240,11 +240,11 @@ def ws_call_back(price, type):
 
     # we should also create a task that saves the entry inside the sqlite for later usage
     json_data = {currency_code: select_board}
-
+    global_data ={"global":[select_board[-1]]}
     if Task.global_loop:
         # send to channel subscribed users
+        Task.global_loop.create_task(send_to_all(global_data,global_users))
         Task.global_loop.create_task(send_to_all(json_data, task.ws_users[type]))
-        Task.global_loop.create_task(send_to_all(select_board[-1],global_users))
 
 
 def success_callback(local_board, channel):
@@ -259,14 +259,14 @@ def success_callback(local_board, channel):
 
     # data = json.dumps({"global": global_board, "local": local_board})
     select_board = add_price_to_pickle(channel, new_price)
-    # global_board = add_price_to_pickle("GLOBAL", new_price, code="global")
-    
 
     json_data = {channel: select_board}
+    global_data ={"global":[select_board[-1]]}
+    
 
     if Task.global_loop:
+        Task.global_loop.create_task(send_to_all(global_data,global_users))
         Task.global_loop.create_task(send_to_all(json_data, users))
-        Task.global_loop.create_task(send_to_all(select_board[-1],global_users))
     else:
         logger.debug("new data recieved but there is to give it to ")
     # this was the previous approach use this if the current one conflicts
