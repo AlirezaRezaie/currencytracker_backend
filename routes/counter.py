@@ -1,6 +1,6 @@
 from modes import run_counter
 from fastapi import APIRouter
-from utils import get_defaults, get_tgju_data
+from utils import get_defaults
 from tasks import Arg
 from modes import currency_map_rev
 import pickle
@@ -75,7 +75,7 @@ def get_supported(q: str = None) -> dict | list[dict]:
     formatted = {}
     for code, obj in default_currencies.items():
         if (not code in not_cur) and (
-            not get_tgju_data("CURRENCY", code, default_currencies)
+            not currency_map_rev.get(code)
         ):
             formatted[code] = obj["currency_info"]
 

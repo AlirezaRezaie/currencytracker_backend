@@ -139,7 +139,6 @@ def get_pickle_data(pickle_file_name):
     
 def get_all_pickles():
     except_crypto = list(local.default_channels["CRYPTO"]["list_of_channels"][0]["currency_list"].keys())
-    print("GGGG")
     all_pickle_files = glob.glob("pickles/*.pkl")
     all_pickles_data = []
     # Read each file one by one
@@ -154,31 +153,6 @@ def get_all_pickles():
             all_pickles_data.append(list(data.values())[0][-1])
 
     return  all_pickles_data
-
-
-
-def get_tgju_data(asset_type, currency_symbol, data=None):
-    defaults_data = None
-    if hasattr(local, "default_channels"):
-        defaults_data = local.default_channels
-    elif data:
-        defaults_data = data
-    else:
-        raise ValueError(
-            "please specify the default data since there is no data in local"
-        )
-
-    tgju_currency_list = defaults_data["TGJU"]["list_of_channels"][0]["currency_list"][
-        asset_type
-    ]
-
-    currency_data = defaults_data.get(currency_symbol)
-    if (currency_data and not currency_data["list_of_channels"]) or (not currency_data):
-        for currency in tgju_currency_list:
-            if currency.get("currency_symbol") == currency_symbol:
-                return currency.get("code")
-
-    return None
 
 
 def get_running_tg_obj(currency_data):

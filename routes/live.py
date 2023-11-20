@@ -3,8 +3,9 @@ from fastapi import APIRouter, WebSocket
 from starlette.websockets import WebSocketDisconnect
 import asyncio
 from logs import logger
-from tasks import disconnect_websocket,Task,tasks,get_lists_user_joined,global_users,get_task
-from utils import get_tgju_data, get_pickle_data,get_all_pickles
+from tasks import *
+from utils import get_pickle_data,get_all_pickles
+from modes import currency_map_rev
 import json
 
 router = APIRouter()
@@ -95,8 +96,9 @@ async def websocket_endpoint(websocket: WebSocket):
                         task_code = channel_code
                         # currency_obj = local.default_channels[]
 
-                    # converting a normal telegram command to a tgju command (its brilliant i know :))
-                    tgju_eq_code = get_tgju_data("CURRENCY", currency_type)
+                    # converting a normal telegram command to a tgju command
+                    tgju_eq_code = currency_map_rev[currency_type]
+
                     if tgju_eq_code:
                         channel_code = "TGJU"
                         task_code = "TGJU"
