@@ -231,8 +231,6 @@ def crypto_call_back(price, type):
 
     if Task.global_loop:
         Task.global_loop.create_task(send_to_all(json_data, task.users))
-        Task.global_loop.create_task(send_to_all(select_board[-1],global_users))
-        
 
 
 def ws_call_back(price, type):
