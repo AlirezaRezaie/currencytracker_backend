@@ -9,16 +9,9 @@ import pickle
 default_currencies = get_defaults()
 router = APIRouter()
 
-
-@router.get("/get_last/{code}/{channel}/{count}")
-def get_live_counter(code: str, channel: int, count: int) -> list[dict] | list[str]:
-    """
-    run the counter with the user specified arguments
-
-    Retruns:
-        the last `count` of the specified channel `code`
-    """
-
+def get_data(code,channel,count):
+    
+    default_currencies = get_defaults()
     # only for tgju related ones
     try:
         pickle_name = currency_map_rev[code]
@@ -33,7 +26,7 @@ def get_live_counter(code: str, channel: int, count: int) -> list[dict] | list[s
         try:
             with open(f"pickles/{pickle_name}.pkl", "rb") as file:
                 read_pickle = pickle.load(file)
-                return read_pickle[code]
+                return read_pickle[code][:count]
         except:
             return ["error pickle data not found"]
     # and if telegram we run the counter function that fetches from telegram
@@ -43,6 +36,17 @@ def get_live_counter(code: str, channel: int, count: int) -> list[dict] | list[s
 
     else:
         return ["error code not found anywhere"]
+
+@router.get("/get_last/{code}/{channel}/{count}")
+def get_live_counter(code: str, channel: int, count: int) -> list[dict] | list[str]:
+    """
+    run the counter with the user specified arguments
+
+    Retruns:
+        the last `count` of the specified channel `code`
+    """
+
+    return get_data(code,channel,count)
 
 
 @router.get("/get_supported")
