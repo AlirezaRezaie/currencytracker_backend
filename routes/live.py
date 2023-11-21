@@ -97,7 +97,7 @@ async def websocket_endpoint(websocket: WebSocket):
                         # currency_obj = local.default_channels[]
 
                     # converting a normal telegram command to a tgju command
-                    tgju_eq_code = currency_map_rev[currency_type]
+                    tgju_eq_code = currency_map_rev.get(currency_type)
 
                     if tgju_eq_code:
                         channel_code = "TGJU"
