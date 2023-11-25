@@ -12,7 +12,7 @@ import sys
 from routes import counter, live, news, utils, calculator
 
 
-#locale.setlocale(locale.LC_ALL, "fa_IR")
+locale.setlocale(locale.LC_ALL, "fa_IR")
 
 # main fastapi app instance
 app = FastAPI()

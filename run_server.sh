@@ -1,4 +1,4 @@
-source /home/aryasweb/virtualenv/currency_tracker/3.11/bin/activate && cd /home/aryasweb/currency_tracker
+source /home/ariascod/virtualenv/currency_tracker/3.11/bin/activate && cd /home/ariascod/currency_tracker
 
 git pull
 
