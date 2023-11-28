@@ -67,7 +67,7 @@ class Arg:
 
         try:
             self.currency_info = currency_obj.get("currency_info")
-            self.channel_info = currency_obj.get("list_of_channels", [])[channel_index]
+            self.channel_info = currency_obj
             self.channel_id = self.channel_info.get("channel_name")
 
         except IndexError:
@@ -141,7 +141,7 @@ def get_pickle_data(pickle_file_name):
         return {}
     
 def get_all_pickles():
-    except_crypto = list(local.default_channels["CRYPTO"]["list_of_channels"][0]["currency_list"].keys())
+    except_crypto = list(local.default_channels["CRYPTO"]["currency_list"].keys())
     all_pickle_files = glob.glob("pickles/*.pkl")
     all_pickles_data = []
     # Read each file one by one
@@ -156,16 +156,6 @@ def get_all_pickles():
             all_pickles_data.append(list(data.values())[0][-1])
 
     return  all_pickles_data
-
-
-def get_running_tg_obj(currency_data):
-    if not currency_data:
-        return None
-    channel_list = currency_data.get("list_of_channels", [])
-    for obj in channel_list:
-        if obj["nonstop"] and obj["type"] == "tg":
-            return obj
-    return None
 
 
 def convert_tgju_data(code, persian_name, image_link, data):

@@ -204,7 +204,8 @@ async def websocket_endpoint(websocket: WebSocket):
     # Socket Exceptions
     # dissconnect exception handler
     except WebSocketDisconnect:
-        global_users.remove(websocket)
+        if websocket in global_users:
+            global_users.remove(websocket)
         log_message = (
             f"client {websocket.client.host}:{websocket.client.port} disconnected ❌❌"
         )

@@ -61,6 +61,9 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
 
             currency_symbol = currency_map.get(channel)
             gold_name = gold_map.get(channel)
+            
+            if gold_name:
+                print(gold_name)
 
             if currency_symbol:
                 for obj in tgju_currencies:

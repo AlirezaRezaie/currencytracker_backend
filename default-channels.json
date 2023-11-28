@@ -1,215 +1,128 @@
 {
-  "USD": {
-    "list_of_channels": [
-      {
-        "type": "tg",
-        "channel_name": "nerkhedollarr",
-        "regex": "(فردایی|نقدی|نـــقـدی|نـــقـدۍ|پایان معاملات).*?(\\d{1,3}(?:,\\d{3})*).(\\w*)",
-        "nonstop": false
-      },
-      {
-        "type": "tg",
-        "channel_name": "dollar_tehran3bze",
-        "regex": "(فردایی|نقدی|نـــقـدی|نـــقـدۍ).*?(\\d{1,3}(?:,\\d{3})*).*?(خـرید|فروش)",
-        "nonstop": true
-      },
-      {
-        "type": "tg",
-        "channel_name": "sarafha_rate",
-        "regex": "",
-        "nonstop": false
-      }
-    ],
-    "currency_info": { "name": "دلار آمریکا" }
-  },
-  "EUR": {
-    "list_of_channels": [],
-    "currency_info": { "name": "یورو" }
-  },
-  "DHS": {
-    "list_of_channels": [
-      {
-        "type": "tg",
-        "channel_name": "DHS_Dirham",
-        "regex": "",
-        "nonstop": true
-      },
-      {
-        "type": "tg",
-        "channel_name": "testderham",
-        "regex": "",
-        "nonstop": false
-      }
-    ],
-    "currency_info": { "name": "درهم" }
-  },
-  "CNY": {
-    "list_of_channels": [],
-    "currency_info": { "name": "یوآن چین" }
-  },
-  "GBP": {
-    "list_of_channels": [],
-    "currency_info": { "name": "پوند" }
-  },
-  "AED": {
-    "list_of_channels": [],
-    "currency_info": { "name": "درهم امارات" }
-  },
-  "TRY": {
-    "list_of_channels": [],
-    "currency_info": { "name": "لیر ترکیه" }
-  },
-  "RUB": {
-    "list_of_channels": [],
-    "currency_info": { "name": "روبل روسیه" }
-  },
-  "IQD": {
-    "list_of_channels": [],
-    "currency_info": { "name": "دینار عراق" }
-  },
   "CRYPTO": {
-    "list_of_channels": [
-      {
-        "type": "api",
-        "endpoint": "https://api.binance.com/api/v3/ticker/price?symbol={code}USDT",
-        "channel_name": "dollar_tehran3bze",
-        "image_link": "https://static.tgju.org/images/crypto/icons/{full_name}_{symbol}.png",
-        "regex": "(فردایی|نقدی|نـــقـدی|نـــقـدۍ).*?(\\d{1,3}(?:,\\d{3})*).*?(خـرید|فروش)",
-        "nonstop": true,
-        "currency_list": {
-          "BTC": { "name": "بیتکوین", "fullname": "bitcoin" },
-          "DOGE": { "name": "دوج کوین", "fullname": "dogecoin" },
-          "ETH": { "name": "اتریوم", "fullname": "ethereum" }
-        }
-      }
-    ],
+    "type": "api",
+    "endpoint": "https://api.binance.com/api/v3/ticker/price?symbol={code}USDT",
+    "channel_name": "dollar_tehran3bze",
+    "image_link": "https://static.tgju.org/images/crypto/icons/{full_name}_{symbol}.png",
+    "regex": "(فردایی|نقدی|نـــقـدی|نـــقـدۍ).*?(\\d{1,3}(?:,\\d{3})*).*?(خـرید|فروش)",
+    "nonstop": true,
+    "currency_list": {
+      "BTC": { "name": "بیتکوین", "fullname": "bitcoin" },
+      "DOGE": { "name": "دوج کوین", "fullname": "dogecoin" },
+      "ETH": { "name": "اتریوم", "fullname": "ethereum" }
+    },
     "currency_info": { "name": "رمز ارز", "is_crypto": true }
   },
   "TGJU": {
-    "list_of_channels": [
-      {
-        "type": "wbsock",
-        "endpoint": "wss://stream.tgju.org/connection/websocket",
-        "channel_name": "dollar_tehran3bze",
-        "image_link": "https://www.tgju.org/images/flags/4x3/{symbol}.svg",
-        "nonstop": true,
-        "currency_list": {
-          "GOLD": [
-            {
-              "code": "gold_740k",
-              "name": "طلای 18 عیار / 750"
-            },
-            {
-              "code": "gold_17",
-              "name": "مثقال / بدون حباب"
-            },
-            {
-              "code": "gold_world_futures",
-              "name": "آبشده کمتر از کیلو"
-            },
-            {
-              "code": "gold_melted_wholesale",
-              "name": "آبشده بنکداری"
-            },
-            {
-              "code": "sekee_real",
-              "name": "سکه واقعی"
-            },
-            {
-              "code": "geram24",
-              "name": "طلای 24 عیار"
-            },
-            {
-              "code": "gold_mini_size",
-              "name": "طلای دست دوم"
-            },
-            {
-              "code": "gold_17_transfer",
-              "name": "حباب آبشده"
-            },
-            {
-              "code": "gold_futures",
-              "name": "آبشده نقدی"
-            }
-          ],
-          "CURRENCY": [
-            {
-              "currency_symbol": "USD",
-              "code": "price_dollar_pw",
-              "name": "دلار پی دبلیو"
-            },
-            {
-              "currency_symbol": "USD",
-              "code": "price_dollar_rl",
-              "name": "دلار"
-            },
-            {
-              "currency_symbol": "EUR",
-              "code": "price_eur",
-              "name": "یورو"
-            },
-            {
-              "currency_symbol": "AED",
-              "code": "price_aed",
-              "name": "درهم امارات"
-            },
-            {
-              "currency_symbol": "GBP",
-              "code": "price_gbp",
-              "name": "پوند انگلیس"
-            },
-            {
-              "currency_symbol": "TRY",
-              "code": "price_try",
-              "name": "لیر ترکیه"
-            },
-            {
-              "currency_symbol": "CHF",
-              "code": "price_chf",
-              "name": "فرانک سوئیس"
-            },
-            {
-              "currency_symbol": "CNY",
-              "code": "price_cny",
-              "name": "یوان چین"
-            },
-            {
-              "currency_symbol": "JPY",
-              "code": "price_jpy",
-              "name": "ین ژاپن"
-            },
-            {
-              "currency_symbol": "KRW",
-              "code": "price_krw",
-              "name": "وون کره جنوبی"
-            },
-            {
-              "currency_symbol": "CAD",
-              "code": "price_cad",
-              "name": "دلار کانادا"
-            },
-            {
-              "currency_symbol": "AUD",
-              "code": "price_aud",
-              "name": "دلار استرالیا"
-            }
-          ]
+    "type": "wbsock",
+    "endpoint": "wss://stream.tgju.org/connection/websocket",
+    "channel_name": "dollar_tehran3bze",
+    "image_link": "https://www.tgju.org/images/flags/4x3/{symbol}.svg",
+    "nonstop": true,
+    "currency_list": {
+      "GOLD": [
+        {
+          "code": "gold_740k",
+          "name": "طلای 18 عیار / 750"
+        },
+        {
+          "code": "gold_17",
+          "name": "مثقال / بدون حباب"
+        },
+        {
+          "code": "gold_world_futures",
+          "name": "آبشده کمتر از کیلو"
+        },
+        {
+          "code": "gold_melted_wholesale",
+          "name": "آبشده بنکداری"
+        },
+        {
+          "code": "sekee_real",
+          "name": "سکه واقعی"
+        },
+        {
+          "code": "geram24",
+          "name": "طلای 24 عیار"
+        },
+        {
+          "code": "gold_mini_size",
+          "name": "طلای دست دوم"
+        },
+        {
+          "code": "gold_17_transfer",
+          "name": "حباب آبشده"
+        },
+        {
+          "code": "gold_futures",
+          "name": "آبشده نقدی"
         }
-      }
-    ],
+      ],
+      "CURRENCY": [
+        {
+          "currency_symbol": "USD",
+          "code": "price_dollar_pw",
+          "name": "دلار پی دبلیو"
+        },
+        {
+          "currency_symbol": "USD",
+          "code": "price_dollar_rl",
+          "name": "دلار"
+        },
+        {
+          "currency_symbol": "EUR",
+          "code": "price_eur",
+          "name": "یورو"
+        },
+        {
+          "currency_symbol": "AED",
+          "code": "price_aed",
+          "name": "درهم امارات"
+        },
+        {
+          "currency_symbol": "GBP",
+          "code": "price_gbp",
+          "name": "پوند انگلیس"
+        },
+        {
+          "currency_symbol": "TRY",
+          "code": "price_try",
+          "name": "لیر ترکیه"
+        },
+        {
+          "currency_symbol": "CHF",
+          "code": "price_chf",
+          "name": "فرانک سوئیس"
+        },
+        {
+          "currency_symbol": "CNY",
+          "code": "price_cny",
+          "name": "یوان چین"
+        },
+        {
+          "currency_symbol": "JPY",
+          "code": "price_jpy",
+          "name": "ین ژاپن"
+        },
+        {
+          "currency_symbol": "KRW",
+          "code": "price_krw",
+          "name": "وون کره جنوبی"
+        },
+        {
+          "currency_symbol": "CAD",
+          "code": "price_cad",
+          "name": "دلار کانادا"
+        },
+        {
+          "currency_symbol": "AUD",
+          "code": "price_aud",
+          "name": "دلار استرالیا"
+        }
+      ]
+    },
     "currency_info": {
       "name": "وب سوکت"
     }
-  },
-  "VPN": {
-    "list_of_channels": [
-      {
-        "type": "tg",
-        "channel_name": "melov2ray",
-        "regex": "vless://[^\n]+",
-        "findall": true,
-        "nonstop": false
-      }
-    ]
   }
 }

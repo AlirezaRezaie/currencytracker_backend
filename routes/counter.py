@@ -55,7 +55,7 @@ def get_supported(q: str = None) -> dict | list[dict]:
     # and returns a json of information about each channel supportivity
     if q == "CRYPTO":
         data = {}
-        crypto_supported = default_currencies.get("CRYPTO")["list_of_channels"][0][
+        crypto_supported = default_currencies.get("CRYPTO")[
             "currency_list"
         ]
         for symbol, name in crypto_supported.items():
@@ -79,7 +79,7 @@ def get_supported(q: str = None) -> dict | list[dict]:
         ):
             formatted[code] = obj["currency_info"]
 
-    tgju_obj = default_currencies.get("TGJU")["list_of_channels"][0]["currency_list"][
+    tgju_obj = default_currencies.get("TGJU")["currency_list"][
         "CURRENCY"
     ]
 
