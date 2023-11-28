@@ -64,30 +64,23 @@ def get_supported(q: str = None) -> dict | list[dict]:
 
     elif q == "GOLD":
         data = {}
-        gold_supported = default_currencies.get("TGJU")["list_of_channels"][0][
+        gold_supported = default_currencies.get("TGJU")[
             "currency_list"
         ]["GOLD"]
         for currency in gold_supported:
             data[currency["code"]] = currency["name"]
         return data
+    
+    else:
+        data = {}
+        currency_supported = default_currencies.get("TGJU")["currency_list"][
+            "CURRENCY"
+        ]
 
-    not_cur = ("TGJU", "CRYPTO", "VPN")
-    formatted = {}
-    for code, obj in default_currencies.items():
-        if (not code in not_cur) and (
-            not currency_map_rev.get(code)
-        ):
-            formatted[code] = obj["currency_info"]
-
-    tgju_obj = default_currencies.get("TGJU")["currency_list"][
-        "CURRENCY"
-    ]
-
-    for currency in tgju_obj:
-        print(currency)
-        formatted[currency["currency_symbol"]] = currency
-        formatted[currency["currency_symbol"]]["link"] = default_currencies.get("TGJU")["image_link"].format(
-                            symbol=currency['currency_symbol'][:-1].lower()
-                        )
-
-    return formatted
+        for currency in currency_supported:
+            print(currency)
+            data[currency["currency_symbol"]] = currency
+            data[currency["currency_symbol"]]["link"] = default_currencies.get("TGJU")["image_link"].format(
+                                symbol=currency['currency_symbol'][:-1].lower()
+                            )
+        return data
