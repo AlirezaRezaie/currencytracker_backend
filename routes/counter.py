@@ -84,6 +84,10 @@ def get_supported(q: str = None) -> dict | list[dict]:
     ]
 
     for currency in tgju_obj:
+        print(currency)
         formatted[currency["currency_symbol"]] = currency
+        formatted[currency["currency_symbol"]]["link"] = default_currencies.get("TGJU")["image_link"].format(
+                            symbol=currency['currency_symbol'][:-1].lower()
+                        )
 
     return formatted
