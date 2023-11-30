@@ -79,6 +79,7 @@ def get_supported(q: str = None) -> dict | list[dict]:
 
         for currency in currency_supported:
             print(currency)
-            data[currency["currency_symbol"]] = currency
-            data[currency["currency_symbol"]]["link"] = f"http://aryasweb.ir/static/images/{currency}.png"
+            symbol = currency["currency_symbol"]
+            data[symbol] = currency
+            data[symbol]["link"] = f"http://aryasweb.ir/static/images/{symbol}.png"
         return data
