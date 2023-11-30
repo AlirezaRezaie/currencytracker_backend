@@ -36,7 +36,7 @@ class Task:
     """
     global_loop = None
     def __init__(
-        self, code, currency_obj, channel_code=None, loop=None, channel_index=0
+        self, code, currency_obj, channel_code=None, loop=None
     ):
         """
         TODO : this might return error or None as memory limit reaches
@@ -47,7 +47,6 @@ class Task:
             currency_obj,
             channel_code=channel_code,
             loop=loop,
-            channel_index=channel_index,
         )
 
         self.ws_users = {}
