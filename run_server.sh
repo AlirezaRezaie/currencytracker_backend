@@ -11,4 +11,4 @@ fi
 echo "Creating a new uvicorn process"
 
 # Run uvicorn with your desired parameters
-nohup uvicorn server:app --host 0.0.0.0 --port 5000 &
+nohup uvicorn server:app --host 0.0.0.0 --port 5228 &
