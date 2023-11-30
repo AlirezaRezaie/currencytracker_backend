@@ -44,7 +44,6 @@ class Arg:
         code,
         currency_obj,
         channel_code=None,
-        channel_index=0,
         loop=None,
         count=None,
         timeout=None,
@@ -80,7 +79,7 @@ def get_host():
 
 
 def get_port():
-    return os.getenv("PORT", default=5000)
+    return os.getenv("PORT", default=5228)
 
 
 def get_defaults():

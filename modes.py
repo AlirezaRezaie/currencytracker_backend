@@ -74,11 +74,12 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
                 image_link = args.channel_info["image_link"].format(
                             symbol=symbol[:-1].lower()
                         )
-                print(image_link)
+                print(symbol)
             elif gold_name:
                 symbol = channel
                 name = gold_name
                 image_link = ""
+                print(symbol)
             else:
                 symbol = None
                 image_link = ""
