@@ -66,11 +66,11 @@ if __name__ == "__main__":
     try:
         # a simple net check test for unstable networks
         network_stability_check()
-        logger.info(f"env port is set to: {get_port()}")
+        logger.info(f"env port is set to: {5228}")
         uvicorn.run(
             "server:app",
             host="localhost",
-            port=get_port(),
+            port=5228,
             # reload=True
         )
     except KeyboardInterrupt:
