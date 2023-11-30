@@ -71,10 +71,8 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
 
                 symbol = currency_symbol
                 name = currency_info["name"]
-                image_link = args.channel_info["image_link"].format(
-                            symbol=symbol[:-1].lower()
-                        )
-                print(symbol)
+                image_link = "http://aryasweb.ir/static/images/{symbol}.png"
+                print(symbol,image_link)
             elif gold_name:
                 symbol = channel
                 name = gold_name

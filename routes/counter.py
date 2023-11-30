@@ -80,7 +80,5 @@ def get_supported(q: str = None) -> dict | list[dict]:
         for currency in currency_supported:
             print(currency)
             data[currency["currency_symbol"]] = currency
-            data[currency["currency_symbol"]]["link"] = default_currencies.get("TGJU")["image_link"].format(
-                                symbol=currency['currency_symbol'][:-1].lower()
-                            )
+            data[currency["currency_symbol"]]["link"] = "http://aryasweb.ir/static/images/{currency}.png"
         return data
