@@ -38,7 +38,7 @@ def get_data(code,count):
         return "error code not found anywhere"
 
 @router.get("/get_last/{code}/{count}")
-def get_live_counter(code: str, channel: int, count: int) -> list[dict] | list[str]:
+def get_live_counter(code: str, count: int) -> list[dict] | list[str]:
     """
     run the counter with the user specified arguments
 
