@@ -102,7 +102,8 @@ def add_price_to_pickle(pickle_name, price, code=None):
     if new_day > time_of_day:
         # means the day changed so we reset the pickle
         try:
-            os.remove("pickles/USD.pkl")
+            os.remove("pickles/price_dollar_rl.pkl")
+            os.remove("pickles/price_dollar_pw.pkl")
         except:
             print("doesnt exist")
         time_of_day = new_day
