@@ -164,7 +164,7 @@ def convert_tgju_data(code, persian_name, image_link, data):
     rate_of_change = float(parsed_data[6])
     change = parsed_data[7]
     time = parsed_data[8]
-
+    print(time)
     json_data = create_json_data(
         code, price, persian_name, image_link, time, rate_of_change, change=change
     )

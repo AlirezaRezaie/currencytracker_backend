@@ -26,7 +26,9 @@ def get_data(code,count):
         try:
             with open(f"pickles/{pickle_name}.pkl", "rb") as file:
                 read_pickle = pickle.load(file)
-                return read_pickle[code][:count]
+                print(read_pickle[code])
+                print(count)
+                return read_pickle[code]
         except:
             return ["error pickle data not found"]
     # and if telegram we run the counter function that fetches from telegram
