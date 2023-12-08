@@ -3,6 +3,7 @@ from price import extract_prices
 from logs import logger
 from locals import local
 from utils import push_in_board, convert_tgju_data, Arg
+from datetime import datetime
 import threading
 import websocket
 
@@ -50,6 +51,16 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
                 print("tear down")
                 ws.close()
                 break
+            
+            current_time = datetime.now()
+            hour = current_time.hour
+            if hour == 23:
+                try:
+                    os.remove("pickles/price_dollar_rl.pkl")
+                    os.remove("pickles/price_dollar_pw.pkl")
+                except:
+                    print("doesnt exist")
+
 
     def on_message(ws, message):
         json_data = json.loads(message)

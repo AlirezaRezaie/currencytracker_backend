@@ -91,22 +91,10 @@ def get_defaults():
 
 
 def add_price_to_pickle(pickle_name, price, code=None):
-    global time_of_day
     """
     adds a price to the specified pickle file
     returns the latest changed pickle object
     """
-    
-    # reset the usd pickle if day changed
-    new_day = datetime.datetime.today().weekday()
-    if new_day > time_of_day:
-        # means the day changed so we reset the pickle
-        try:
-            os.remove("pickles/price_dollar_rl.pkl")
-            os.remove("pickles/price_dollar_pw.pkl")
-        except:
-            print("doesnt exist")
-        time_of_day = new_day
 
     if not code:
         code = pickle_name
