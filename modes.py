@@ -6,7 +6,7 @@ from utils import push_in_board, convert_tgju_data, Arg
 from datetime import datetime
 import threading
 import websocket
-
+import pickle
 gold_map = {}
 currency_map = {}
 currency_map_rev = {}
@@ -55,12 +55,16 @@ def run_websocket(success_callback, error_callback, stop_event, args: Arg):
             current_time = datetime.now()
             hour = current_time.hour
             if hour == 23:
+                dollar_pickle = "pickles/price_dollar_rl.pkl"
                 try:
-                    os.remove("pickles/price_dollar_rl.pkl")
-                    os.remove("pickles/price_dollar_pw.pkl")
+                    with open(dollar_pickle, "rb") as file:
+                        board = pickle.load(file)
+                        board = board[-1:]
+                    with open(dollar_pickle, "wb") as file:
+                        pickle.dump(board, file)
                 except:
-                    print("doesnt exist")
-
+                    board = {}
+                # Save the updated data back to the file
 
     def on_message(ws, message):
         json_data = json.loads(message)
