@@ -61,6 +61,11 @@
       "CURRENCY": [
         {
           "currency_symbol": "USD",
+          "code": "price_dollar_pw",
+          "name": "دلار پی دبلیو"
+        },
+        {
+          "currency_symbol": "USD",
           "code": "price_dollar_rl",
           "name": "دلار"
         },
